@@ -1,0 +1,5 @@
+@extends('errors.minimal')
+@section('kode', '403')
+@section('ikon', 'bi-shield-lock')
+@section('judul', 'Akses Ditolak')
+@section('pesan', $exception?->getMessage() ?: 'Anda tidak memiliki hak akses untuk halaman ini.')

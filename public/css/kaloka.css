@@ -1,0 +1,156 @@
+/* ============================================================
+   KALOKA - Tema Identitas Visual
+   Dipakai bersama oleh tampilan publik & admin agar konsisten,
+   dan diselaraskan dengan SLiMS supaya terasa satu sistem.
+   ============================================================ */
+
+:root {
+    /* Palet terinspirasi Waduk Cengklik: hijau danau & biru air */
+    --kaloka-primary: #1f7a53;      /* hijau perpustakaan/alam */
+    --kaloka-primary-dark: #155c3e;
+    --kaloka-accent: #0f766e;       /* teal air danau (selaras dengan hijau) */
+    --kaloka-accent-dark: #0b5e57;
+    --kaloka-light: #f4f8f5;
+    --kaloka-muted: #6c757d;
+
+    /* Selaraskan warna bawaan Bootstrap (buang biru default) */
+    --bs-primary: #1f7a53;
+    --bs-primary-rgb: 31, 122, 83;
+    --bs-link-color: #1f7a53;
+    --bs-link-color-rgb: 31, 122, 83;
+    --bs-link-hover-color: #155c3e;
+    --bs-link-hover-color-rgb: 21, 92, 62;
+    --bs-focus-ring-color: rgba(31, 122, 83, .25);
+
+    /* Paginasi */
+    --bs-pagination-color: #1f7a53;
+    --bs-pagination-hover-color: #155c3e;
+    --bs-pagination-focus-color: #155c3e;
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(31, 122, 83, .25);
+    --bs-pagination-active-bg: #1f7a53;
+    --bs-pagination-active-border-color: #1f7a53;
+}
+
+/* Cincin fokus input juga hijau (bukan biru) */
+.form-control:focus,
+.form-select:focus {
+    border-color: #4fae85;
+    box-shadow: 0 0 0 .25rem rgba(31, 122, 83, .2);
+}
+
+/* Tautan teks biasa mengikuti tema */
+a { color: var(--kaloka-primary); }
+a:hover { color: var(--kaloka-primary-dark); }
+
+/* Paginasi: pastikan halaman aktif hijau (override variabel lokal .pagination) */
+.pagination {
+    --bs-pagination-color: var(--kaloka-primary);
+    --bs-pagination-hover-color: var(--kaloka-primary-dark);
+    --bs-pagination-active-bg: var(--kaloka-primary);
+    --bs-pagination-active-border-color: var(--kaloka-primary);
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(31, 122, 83, .25);
+}
+.page-link { color: var(--kaloka-primary); }
+.page-item.active .page-link {
+    background-color: var(--kaloka-primary) !important;
+    border-color: var(--kaloka-primary) !important;
+    color: #fff !important;
+}
+
+body {
+    background-color: var(--kaloka-light);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* ---- Navbar ---- */
+.navbar-kaloka {
+    background: linear-gradient(90deg, var(--kaloka-primary), var(--kaloka-primary-dark));
+}
+.navbar-kaloka .navbar-brand,
+.navbar-kaloka .nav-link {
+    color: #ffffff !important;
+}
+.navbar-kaloka .nav-link:hover {
+    color: #d9f2e6 !important;
+}
+.navbar-brand-logo {
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+/* ---- Tombol ---- */
+.btn-kaloka {
+    background-color: var(--kaloka-primary);
+    border-color: var(--kaloka-primary);
+    color: #fff;
+}
+.btn-kaloka:hover {
+    background-color: var(--kaloka-primary-dark);
+    border-color: var(--kaloka-primary-dark);
+    color: #fff;
+}
+.btn-outline-kaloka {
+    color: var(--kaloka-primary);
+    border-color: var(--kaloka-primary);
+}
+.btn-outline-kaloka:hover {
+    background-color: var(--kaloka-primary);
+    color: #fff;
+}
+
+/* ---- Kartu menu beranda ---- */
+.kartu-menu {
+    transition: transform .15s ease, box-shadow .15s ease;
+    border: none;
+    border-radius: 1rem;
+    height: 100%;
+}
+.kartu-menu:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 .75rem 1.5rem rgba(0, 0, 0, .12);
+}
+.kartu-menu .ikon {
+    font-size: 2.5rem;
+    color: var(--kaloka-primary);
+}
+
+/* ---- Hero ---- */
+.hero-kaloka {
+    background: linear-gradient(120deg, var(--kaloka-primary), var(--kaloka-accent));
+    color: #fff;
+    border-radius: 1rem;
+}
+
+/* ---- Sidebar admin ---- */
+.sidebar-admin {
+    background-color: #ffffff;
+    border-right: 1px solid #e3e8e5;
+    min-height: calc(100vh - 56px);
+}
+.sidebar-admin .nav-link {
+    color: #344;
+    border-radius: .5rem;
+    margin-bottom: .15rem;
+}
+.sidebar-admin .nav-link.active,
+.sidebar-admin .nav-link:hover {
+    background-color: var(--kaloka-primary);
+    color: #fff;
+}
+
+/* ---- Footer ---- */
+.footer-kaloka {
+    background-color: var(--kaloka-primary-dark);
+    color: #e8f3ec;
+}
+.footer-kaloka a {
+    color: #cdeada;
+    text-decoration: none;
+}
+.footer-kaloka a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Lencana status */
+.badge-dimensi { background-color: var(--kaloka-accent); }

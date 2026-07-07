@@ -1,0 +1,114 @@
+@extends('layouts.publik')
+
+@section('judul', 'Beranda')
+
+@section('konten')
+    {{-- ===== Hero / Header penyatu ===== --}}
+    <section class="hero-kaloka p-4 p-md-5 mb-5">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="fw-bold mb-2">{{ $situs['nama'] ?? 'KALOKA' }}</h1>
+                <p class="lead mb-4">{{ $situs['sambutan'] ?? 'Kearifan dan Literasi Lokal Desa Sobokerto.' }}</p>
+                <form action="{{ route('cari') }}" method="GET" class="row g-2">
+                    <div class="col-sm-8 col-lg-6">
+                        <input type="text" name="q" class="form-control form-control-lg"
+                               placeholder="Cari koleksi, kearifan lokal, wisata...">
+                    </div>
+                    <div class="col-sm-4 col-lg-3 d-grid">
+                        <button class="btn btn-light btn-lg text-success fw-semibold">
+                            <i class="bi bi-search me-1"></i>Cari
+                        </button>
+                    </div>
+                </form>
+                <small class="d-block mt-2 opacity-75">Satu pencarian untuk katalog pustaka, kearifan lokal, &amp; wisata sekaligus.</small>
+            </div>
+            <div class="col-md-4 text-center d-none d-md-block">
+                <i class="bi bi-book-half" style="font-size:7rem;opacity:.85;"></i>
+            </div>
+        </div>
+    </section>
+
+    {{-- ===== Tiga layanan utama ===== --}}
+    <h2 class="h4 mb-3 text-center">Akses Layanan</h2>
+    <div class="row g-4 mb-5 justify-content-center">
+        <div class="col-sm-6 col-lg-4">
+            <a href="{{ $situs['url_opac'] ?? '#' }}" target="_blank" rel="noopener" class="text-decoration-none text-dark">
+                <div class="card kartu-menu shadow-sm text-center p-4 h-100">
+                    <div class="ikon mb-2"><i class="bi bi-search"></i></div>
+                    <h3 class="h5 mb-1">Katalog Pustaka</h3>
+                    <p class="small text-muted mb-0">Telusuri & pinjam koleksi melalui katalog SLiMS.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <a href="{{ route('kearifan.index') }}" class="text-decoration-none text-dark">
+                <div class="card kartu-menu shadow-sm text-center p-4 h-100">
+                    <div class="ikon mb-2"><i class="bi bi-bank"></i></div>
+                    <h3 class="h5 mb-1">Kearifan Lokal</h3>
+                    <p class="small text-muted mb-0">Repositori warisan, tradisi & budaya desa.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <a href="{{ route('wisata.index') }}" class="text-decoration-none text-dark">
+                <div class="card kartu-menu shadow-sm text-center p-4 h-100">
+                    <div class="ikon mb-2"><i class="bi bi-geo-alt"></i></div>
+                    <h3 class="h5 mb-1">Info Wisata</h3>
+                    <p class="small text-muted mb-0">Pesona Waduk Cengklik & potensi wisata desa.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    {{-- ===== Cuplikan Kearifan Lokal terbaru ===== --}}
+    @if ($kearifanTerbaru->isNotEmpty())
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4 mb-0"><i class="bi bi-bank me-2"></i>Kearifan Lokal Terbaru</h2>
+            <a href="{{ route('kearifan.index') }}" class="btn btn-sm btn-outline-kaloka">Lihat semua</a>
+        </div>
+        <div class="row g-4 mb-5">
+            @foreach ($kearifanTerbaru as $e)
+                <div class="col-sm-6 col-lg-4">
+                    <a href="{{ route('kearifan.show', $e) }}" class="text-decoration-none text-dark">
+                        <div class="card kartu-menu shadow-sm h-100">
+                            @if ($e->jenis_media === 'Foto' && $e->urlMedia())
+                                <img src="{{ $e->urlMedia() }}" class="card-img-top" style="height:150px;object-fit:cover;border-radius:1rem 1rem 0 0;">
+                            @endif
+                            <div class="card-body">
+                                <span class="badge badge-dimensi text-white mb-2">{{ $e->dimensi }}</span>
+                                <h3 class="h6">{{ $e->judul }}</h3>
+                                <p class="small text-muted mb-0">{{ \Illuminate\Support\Str::limit(strip_tags($e->deskripsi), 80) }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    {{-- ===== Cuplikan Wisata ===== --}}
+    @if ($wisataTerbaru->isNotEmpty())
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4 mb-0"><i class="bi bi-geo-alt me-2"></i>Jelajah Wisata</h2>
+            <a href="{{ route('wisata.index') }}" class="btn btn-sm btn-outline-kaloka">Lihat semua</a>
+        </div>
+        <div class="row g-4 mb-4">
+            @foreach ($wisataTerbaru as $w)
+                <div class="col-sm-6 col-lg-4">
+                    <a href="{{ route('wisata.show', $w) }}" class="text-decoration-none text-dark">
+                        <div class="card kartu-menu shadow-sm h-100">
+                            @if ($w->fotoUtama())
+                                <img src="{{ $w->fotoUtama() }}" class="card-img-top" style="height:150px;object-fit:cover;border-radius:1rem 1rem 0 0;">
+                            @endif
+                            <div class="card-body">
+                                <span class="badge bg-{{ $w->warnaKategori() }} mb-2">{{ $w->kategori }}</span>
+                                <h3 class="h6">{{ $w->nama_spot }}</h3>
+                                <p class="small text-muted mb-0">{{ \Illuminate\Support\Str::limit(strip_tags($w->deskripsi), 80) }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    @endif
+@endsection

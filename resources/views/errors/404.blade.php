@@ -1,0 +1,5 @@
+@extends('errors.minimal')
+@section('kode', '404')
+@section('ikon', 'bi-compass')
+@section('judul', 'Halaman Tidak Ditemukan')
+@section('pesan', 'Maaf, halaman yang Anda cari tidak tersedia atau telah dipindahkan.')
