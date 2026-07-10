@@ -3,30 +3,47 @@
 @section('judul', 'Beranda')
 
 @section('konten')
-    {{-- ===== Hero / Header penyatu ===== --}}
-    <section class="hero-kaloka p-4 p-md-5 mb-5">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="fw-bold mb-2">{{ $situs['nama'] ?? 'KALOKA' }}</h1>
-                <p class="lead mb-4">{{ $situs['sambutan'] ?? 'Kearifan dan Literasi Lokal Desa Sobokerto.' }}</p>
-                <form action="{{ route('cari') }}" method="GET" class="row g-2">
-                    <div class="col-sm-8 col-lg-6">
-                        <input type="text" name="q" class="form-control form-control-lg"
-                               placeholder="Cari koleksi, kearifan lokal, wisata...">
-                    </div>
-                    <div class="col-sm-4 col-lg-3 d-grid">
-                        <button class="btn btn-light btn-lg text-success fw-semibold">
-                            <i class="bi bi-search me-1"></i>Cari
-                        </button>
-                    </div>
-                </form>
-                <small class="d-block mt-2 opacity-75">Satu pencarian untuk katalog pustaka, kearifan lokal, &amp; wisata sekaligus.</small>
-            </div>
-            <div class="col-md-4 text-center d-none d-md-block">
-                <i class="bi bi-book-half" style="font-size:7rem;opacity:.85;"></i>
-            </div>
+  {{-- ===== Hero / Header penyatu ===== --}}
+<section class="hero-kaloka p-4 p-md-5 mb-5">
+    <div class="row align-items-center">
+
+        <div class="col-lg-7">
+            <h1 class="fw-bold display-3 mb-3">
+                {{ $situs['nama'] ?? 'KALOKA — Perpustakaan Desa Sobokerto' }}
+            </h1>
+
+            <p class="lead mb-4">
+                {{ $situs['sambutan'] ?? 'Selamat datang di portal Kearifan dan Literasi Lokal Desa Sobokerto.' }}
+            </p>
+
+        <form action="{{ route('cari') }}" method="GET" class="search-box mt-4">
+
+    <i class="bi bi-search search-icon"></i>
+
+    <input
+        type="text"
+        name="q"
+        placeholder="Cari koleksi, kearifan lokal, wisata..."
+    >
+
+    <button type="submit">
+        Cari
+    </button>
+
+</form>
+
+            <small class="text-white opacity-75">
+                Satu pencarian untuk katalog pustaka, kearifan lokal, & wisata sekaligus.
+            </small>
+
         </div>
-    </section>
+
+        <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+            <i class="bi bi-book-half hero-book"></i>
+        </div>
+
+    </div>
+</section>
 
     {{-- ===== Dua layanan utama (custom KALOKA) ===== --}}
     <h2 class="h4 mb-3 text-center">Akses Layanan</h2>
