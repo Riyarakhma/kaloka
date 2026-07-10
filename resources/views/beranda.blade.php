@@ -28,19 +28,10 @@
         </div>
     </section>
 
-    {{-- ===== Tiga layanan utama ===== --}}
+    {{-- ===== Dua layanan utama (custom KALOKA) ===== --}}
     <h2 class="h4 mb-3 text-center">Akses Layanan</h2>
     <div class="row g-4 mb-5 justify-content-center">
-        <div class="col-sm-6 col-lg-4">
-            <a href="{{ $situs['url_opac'] ?? '#' }}" target="_blank" rel="noopener" class="text-decoration-none text-dark">
-                <div class="card kartu-menu shadow-sm text-center p-4 h-100">
-                    <div class="ikon mb-2"><i class="bi bi-search"></i></div>
-                    <h3 class="h5 mb-1">Katalog Pustaka</h3>
-                    <p class="small text-muted mb-0">Telusuri & pinjam koleksi melalui katalog SLiMS.</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-sm-6 col-lg-4">
+        <div class="col-sm-6 col-lg-6">
             <a href="{{ route('kearifan.index') }}" class="text-decoration-none text-dark">
                 <div class="card kartu-menu shadow-sm text-center p-4 h-100">
                     <div class="ikon mb-2"><i class="bi bi-bank"></i></div>
@@ -49,7 +40,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-sm-6 col-lg-4">
+        <div class="col-sm-6 col-lg-6">
             <a href="{{ route('wisata.index') }}" class="text-decoration-none text-dark">
                 <div class="card kartu-menu shadow-sm text-center p-4 h-100">
                     <div class="ikon mb-2"><i class="bi bi-geo-alt"></i></div>
