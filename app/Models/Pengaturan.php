@@ -16,7 +16,7 @@ class Pengaturan extends Model
         'nama_situs'      => ['label' => 'Nama Situs', 'nilai' => 'KALOKA — Perpustakaan Desa Sobokerto'],
         'kontak'          => ['label' => 'Kontak Desa', 'nilai' => 'Pemerintah Desa Sobokerto, Ngemplak, Boyolali'],
         'teks_sambutan'   => ['label' => 'Teks Sambutan Beranda', 'nilai' => 'Selamat datang di portal Kearifan dan Literasi Lokal Desa Sobokerto.'],
-        'url_opac_slims'  => ['label' => 'URL OPAC SLiMS (katalog)', 'nilai' => 'http://localhost/SLIMS2026/umum_desa'],
+        'url_opac_slims'  => ['label' => 'URL OPAC SLiMS (katalog)', 'nilai' => 'https://desa.perpus.id'],
         'logo'            => ['label' => 'Logo Situs', 'nilai' => null],
     ];
 
