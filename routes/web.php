@@ -20,8 +20,10 @@ use Illuminate\Support\Facades\Route;
 | Katalog ditangani oleh SLiMS (aplikasi terpisah) — ditautkan, bukan dibangun di sini.
 */
 
-// Beranda / Portal publik
-Route::get('/', [PortalController::class, 'index'])->name('beranda');
+// Beranda / Portal publik (React SPA)
+Route::get('/', function () {
+    return view('app');
+})->name('beranda');
 
 // Pencarian terpadu (Katalog SLiMS + Kearifan Lokal + Wisata)
 Route::get('/cari', [PencarianController::class, 'index'])->name('cari');
@@ -31,11 +33,18 @@ Route::get('/cari', [PencarianController::class, 'index'])->name('cari');
 | Halaman Publik (hanya-baca, tanpa login)
 |--------------------------------------------------------------------------
 */
-Route::get('/kearifan-lokal', [PublikKearifan::class, 'index'])->name('kearifan.index');
-Route::get('/kearifan-lokal/{kearifan}', [PublikKearifan::class, 'show'])->name('kearifan.show');
-
-Route::get('/wisata', [PublikWisata::class, 'index'])->name('wisata.index');
-Route::get('/wisata/{wisata}', [PublikWisata::class, 'show'])->name('wisata.show');
+Route::get('/kearifan-lokal', function () {
+    return view('app');
+});
+Route::get('/kearifan-lokal/{kearifan}', function () {
+    return view('app');
+});
+Route::get('/wisata', function () {
+    return view('app');
+});
+Route::get('/wisata/{wisata}', function () {
+    return view('app');
+});
 
 // Autentikasi (login/logout). Registrasi publik DINONAKTIFKAN — akun dibuat admin.
 Auth::routes(['register' => false]);
