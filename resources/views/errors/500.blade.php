@@ -1,0 +1,5 @@
+@extends('errors.minimal')
+@section('kode', '500')
+@section('ikon', 'bi-exclamation-octagon')
+@section('judul', 'Terjadi Kesalahan')
+@section('pesan', 'Maaf, terjadi kesalahan pada server. Silakan coba beberapa saat lagi.')

@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../js/**/*.jsx';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+
+    --color-primary: oklch(0.35 0.09 155);
+    --color-primary-foreground: oklch(0.98 0.01 155);
+    --color-primary-soft: oklch(0.94 0.04 155);
+
+    --color-background: oklch(0.99 0.005 100);
+    --color-foreground: oklch(0.2 0.02 155);
+    --color-muted-foreground: oklch(0.45 0.02 155);
+
+    --color-card: oklch(1 0 0);
+    --color-border: oklch(0.9 0.01 155);
+
+    --color-leaf: oklch(0.55 0.12 145);
+    --color-earth: oklch(0.5 0.1 60);
+    --color-water: oklch(0.55 0.1 220);
+    --color-sun: oklch(0.75 0.13 80);
+}
+
+@layer components {
+    .container-page {
+        @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+    }
+
+    .card-soft {
+        @apply rounded-2xl border border-border bg-card shadow-sm transition hover:shadow-md;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-base font-semibold text-primary-foreground transition hover:opacity-90;
+    }
+
+    .btn-outline {
+        @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary px-5 py-2.5 text-base font-semibold text-primary transition hover:bg-primary-soft;
+    }
+
+    .font-display {
+        font-family: var(--font-display);
+    }
+}

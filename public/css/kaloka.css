@@ -1,0 +1,484 @@
+/* ============================================================
+   KALOKA - Tema Identitas Visual
+   Dipakai bersama oleh tampilan publik & admin agar konsisten,
+   dan diselaraskan dengan SLiMS supaya terasa satu sistem.
+   ============================================================ */
+
+:root {
+    /* Palet terinspirasi Waduk Cengklik: hijau danau & biru air */
+    --kaloka-primary: #1f7a53;      /* hijau perpustakaan/alam */
+    --kaloka-primary-dark: #155c3e;
+    --kaloka-accent: #0f766e;       /* teal air danau (selaras dengan hijau) */
+    --kaloka-accent-dark: #0b5e57;
+    --kaloka-light: #f4f8f5;
+    --kaloka-muted: #6c757d;
+
+    /* Selaraskan warna bawaan Bootstrap (buang biru default) */
+    --bs-primary: #1f7a53;
+    --bs-primary-rgb: 31, 122, 83;
+    --bs-link-color: #1f7a53;
+    --bs-link-color-rgb: 31, 122, 83;
+    --bs-link-hover-color: #155c3e;
+    --bs-link-hover-color-rgb: 21, 92, 62;
+    --bs-focus-ring-color: rgba(31, 122, 83, .25);
+
+    /* Paginasi */
+    --bs-pagination-color: #1f7a53;
+    --bs-pagination-hover-color: #155c3e;
+    --bs-pagination-focus-color: #155c3e;
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(31, 122, 83, .25);
+    --bs-pagination-active-bg: #1f7a53;
+    --bs-pagination-active-border-color: #1f7a53;
+}
+
+/* Cincin fokus input juga hijau (bukan biru) */
+.form-control:focus,
+.form-select:focus {
+    border-color: #4fae85;
+    box-shadow: 0 0 0 .25rem rgba(31, 122, 83, .2);
+}
+
+/* Tautan teks biasa mengikuti tema */
+a { color: var(--kaloka-primary); }
+a:hover { color: var(--kaloka-primary-dark); }
+
+/* Paginasi: pastikan halaman aktif hijau (override variabel lokal .pagination) */
+.pagination {
+    --bs-pagination-color: var(--kaloka-primary);
+    --bs-pagination-hover-color: var(--kaloka-primary-dark);
+    --bs-pagination-active-bg: var(--kaloka-primary);
+    --bs-pagination-active-border-color: var(--kaloka-primary);
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(31, 122, 83, .25);
+}
+.page-link { color: var(--kaloka-primary); }
+.page-item.active .page-link {
+    background-color: var(--kaloka-primary) !important;
+    border-color: var(--kaloka-primary) !important;
+    color: #fff !important;
+}
+
+body {
+    background-color: var(--kaloka-light);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* ---- Navbar ---- */
+.navbar-kaloka {
+    background: linear-gradient(90deg, var(--kaloka-primary), var(--kaloka-primary-dark));
+}
+.navbar-kaloka .navbar-brand,
+.navbar-kaloka .nav-link {
+    color: #ffffff !important;
+}
+.navbar-kaloka .nav-link:hover {
+    color: #d9f2e6 !important;
+}
+.navbar-brand-logo {
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+/* ---- Tombol ---- */
+.btn-kaloka {
+    background-color: var(--kaloka-primary);
+    border-color: var(--kaloka-primary);
+    color: #fff;
+}
+.btn-kaloka:hover {
+    background-color: var(--kaloka-primary-dark);
+    border-color: var(--kaloka-primary-dark);
+    color: #fff;
+}
+.btn-outline-kaloka {
+    color: var(--kaloka-primary);
+    border-color: var(--kaloka-primary);
+}
+.btn-outline-kaloka:hover {
+    background-color: var(--kaloka-primary);
+    color: #fff;
+}
+
+/* ---- Kartu menu beranda ---- */
+.kartu-menu {
+    transition: transform .15s ease, box-shadow .15s ease;
+    border: none;
+    border-radius: 1rem;
+    height: 100%;
+}
+.kartu-menu:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 .75rem 1.5rem rgba(0, 0, 0, .12);
+}
+.kartu-menu .ikon {
+    font-size: 2.5rem;
+    color: var(--kaloka-primary);
+}
+
+/* ==========================
+   HERO
+========================== */
+
+.hero-kaloka{
+    background:
+        linear-gradient(
+            rgba(20,95,63,.65),
+            rgba(15,118,110,.60)
+        ),
+        url("/images/background-sobokerto.jpeg");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    color:#fff;
+
+    border-radius:24px;
+
+    padding:5rem 4rem !important;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.18);
+}
+
+/* ---- Sidebar admin ---- */
+.sidebar-admin {
+    background-color: #ffffff;
+    border-right: 1px solid #e3e8e5;
+    min-height: calc(100vh - 56px);
+}
+.sidebar-admin .nav-link {
+    color: #344;
+    border-radius: .5rem;
+    margin-bottom: .15rem;
+}
+.sidebar-admin .nav-link.active,
+.sidebar-admin .nav-link:hover {
+    background-color: var(--kaloka-primary);
+    color: #fff;
+}
+
+/* ---- Footer ---- */
+.footer-kaloka {
+    background-color: var(--kaloka-primary-dark);
+    color: #e8f3ec;
+}
+.footer-kaloka a {
+    color: #cdeada;
+    text-decoration: none;
+}
+.footer-kaloka a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Lencana status */
+.badge-dimensi { background-color: var(--kaloka-accent); }
+/* ===== Polishing tampilan publik, tanpa ubah fitur ===== */
+
+main.container {
+    max-width: 1280px;
+}
+
+.hero-kaloka {
+    border-radius: 1.25rem;
+    padding: 4rem 3rem !important;
+    box-shadow: 0 1rem 2.5rem rgba(21, 92, 62, .12);
+}
+
+.hero-kaloka h1 {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    letter-spacing: -.03em;
+}
+
+.hero-kaloka .lead {
+    max-width: 760px;
+}
+
+.hero-kaloka .form-control,
+.hero-kaloka .btn {
+    border-radius: .7rem;
+}
+
+.navbar-kaloka {
+    padding-top: .85rem;
+    padding-bottom: .85rem;
+}
+
+.navbar-kaloka .nav-link {
+    font-weight: 600;
+    opacity: .95;
+    padding-left: .9rem !important;
+    padding-right: .9rem !important;
+}
+
+.kartu-menu {
+    border: 1px solid rgba(31, 122, 83, .06);
+    box-shadow: 0 .45rem 1.25rem rgba(0, 0, 0, .055) !important;
+}
+
+.kartu-menu:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 .8rem 1.8rem rgba(0, 0, 0, .09) !important;
+}
+
+.kartu-menu .card-body {
+    padding: 1.25rem;
+}
+
+.kartu-menu .ikon {
+    font-size: 3rem;
+    margin-bottom: 1rem !important;
+}
+
+.card-img-top {
+    height: 170px !important;
+    object-fit: cover;
+}
+
+.badge {
+    border-radius: .45rem;
+    font-weight: 600;
+}
+
+h2.h4 {
+    font-weight: 700;
+    letter-spacing: -.02em;
+}
+
+.btn-outline-kaloka {
+    border-radius: .5rem;
+    font-weight: 600;
+}
+
+.footer-kaloka {
+    margin-top: 4rem !important;
+}
+
+@media (max-width: 768px) {
+    .hero-kaloka {
+        padding: 2.5rem 1.5rem !important;
+    }
+
+    .hero-kaloka h1 {
+        font-size: 2rem;
+    }
+
+    .navbar-brand span {
+        display: none !important;
+    }
+}
+/* ===== MOBILE ADMIN & PENGELOLA FIX ===== */
+@media (max-width: 991.98px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .navbar-kaloka {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+  }
+
+  .navbar-kaloka .container-fluid {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .navbar-brand {
+    font-size: 22px !important;
+    max-width: 42%;
+    white-space: nowrap;
+  }
+
+  .navbar-kaloka .dropdown-toggle {
+    max-width: 52vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  aside,
+  .sidebar,
+  .sidebar-admin {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 12px 16px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #e5e7eb;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  aside .nav,
+  .sidebar .nav,
+  .sidebar-admin .nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 8px;
+  }
+
+  aside .nav-link,
+  .sidebar .nav-link,
+  .sidebar-admin .nav-link {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    margin: 0 !important;
+    padding: 10px 14px !important;
+    border-radius: 999px !important;
+    font-size: 14px !important;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+  }
+
+  aside .nav-link.active,
+  .sidebar .nav-link.active,
+  .sidebar-admin .nav-link.active {
+    color: #fff !important;
+  }
+
+  aside hr,
+  .sidebar hr,
+  .sidebar-admin hr {
+    display: none;
+  }
+
+  main,
+  .main-content,
+  .content {
+    width: 100% !important;
+    padding: 24px 18px !important;
+  }
+
+  main h1,
+  .main-content h1,
+  .content h1 {
+    font-size: 32px !important;
+    line-height: 1.15;
+  }
+
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .row > * {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  .card {
+    border-radius: 14px !important;
+  }
+
+  .card-body {
+    padding: 18px 14px !important;
+  }
+
+  .card .h2,
+  .card h2 {
+    font-size: 34px !important;
+  }
+
+  .card .small,
+  .card p,
+  .card .text-muted {
+    font-size: 15px !important;
+    line-height: 1.35;
+  }
+
+  .list-group-item {
+    padding: 14px 16px !important;
+    font-size: 15px;
+  }
+
+  .badge {
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  .table-responsive {
+    border-radius: 12px;
+  }
+}
+/* ==========================
+   HERO SEARCH BAR
+========================== */
+
+.search-box{
+    display:flex;
+    align-items:center;
+
+    width:100%;
+    max-width:760px;
+    height:70px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+
+.search-icon{
+    font-size:1.5rem;
+    color:#7b7b7b;
+
+    margin-left:24px;
+    margin-right:18px;
+}
+
+.search-box input{
+
+    flex:1;
+
+    height:100%;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    font-size:1.2rem;
+}
+
+.search-box input::placeholder{
+    color:#888;
+}
+
+.search-box button{
+
+    height:100%;
+
+    padding:0 35px;
+
+    border:none;
+
+    background:#176c49;
+
+    color:#fff;
+
+    font-size:1.1rem;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.search-box button:hover{
+    background:#0f5d3f;
+}
+
+.hero-book{
+
+    font-size:7rem;
+
+    color:white;
+
+    opacity:.9;
+}
