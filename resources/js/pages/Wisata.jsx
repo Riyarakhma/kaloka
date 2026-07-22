@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
+    Check,
+    ChevronDown,
     Mountain,
     Search,
 } from 'lucide-react';
@@ -12,31 +14,34 @@ import {
     KATEGORI_WISATA,
 } from '../lib/wisata-api';
 
-function FilterChip({ active, onClick, label }) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className={`rounded-full border-2 px-5 py-2.5 text-base font-semibold transition ${
-                active
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-border bg-card text-foreground hover:border-primary hover:text-primary'
-            }`}
-        >
-            {label}
-        </button>
-    );
-}
-
 export default function Wisata() {
     const [filter, setFilter] = useState('semua');
     const [search, setSearch] = useState('');
+    const [categoryOpen, setCategoryOpen] = useState(false);
 
     const {
         data: items = [],
         isLoading,
         isError,
     } = useWisataItems(filter);
+
+    const categoryOptions = useMemo(
+        () => [
+            {
+                id: 'semua',
+                label: 'Semua Kategori',
+            },
+            ...KATEGORI_WISATA.map((kategori) => ({
+                id: kategori,
+                label: kategori,
+            })),
+        ],
+        [],
+    );
+
+    const selectedCategory =
+        categoryOptions.find((kategori) => kategori.id === filter) ??
+        categoryOptions[0];
 
     const itemsTersaring = useMemo(() => {
         const kata = search.trim().toLowerCase();
@@ -65,7 +70,7 @@ export default function Wisata() {
         <div className="min-h-screen bg-background">
             <Navbar />
 
-            {/* ===== HEADER HALAMAN ===== */}
+            {/* Header halaman */}
             <section className="border-b border-border bg-primary-soft/60">
                 <div className="container-page py-14 md:py-20">
                     <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
@@ -111,23 +116,84 @@ export default function Wisata() {
                 </div>
             </section>
 
-            {/* ===== FILTER DAN CARD ===== */}
-            <section className="container-page mt-10">
-                <div className="flex flex-wrap gap-2">
-                    <FilterChip
-                        active={filter === 'semua'}
-                        onClick={() => setFilter('semua')}
-                        label="Semua"
-                    />
+            {/* Filter dan card */}
+            <section className="container-page py-10 md:py-14">
+                <div className="relative w-full max-w-md">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setCategoryOpen((previousValue) => !previousValue)
+                        }
+                        className={`flex w-full items-center justify-between gap-4 rounded-xl border bg-background px-4 py-3 text-left transition ${
+                            categoryOpen
+                                ? 'border-primary'
+                                : 'border-border hover:border-primary'
+                        }`}
+                        aria-haspopup="listbox"
+                        aria-expanded={categoryOpen}
+                    >
+                        <span className="truncate text-base font-medium text-foreground">
+                            {selectedCategory.label}
+                        </span>
 
-                    {KATEGORI_WISATA.map((kategori) => (
-                        <FilterChip
-                            key={kategori}
-                            active={filter === kategori}
-                            onClick={() => setFilter(kategori)}
-                            label={kategori}
+                        <ChevronDown
+                            className={`size-5 shrink-0 text-muted-foreground transition-transform duration-200 ${
+                                categoryOpen ? 'rotate-180' : ''
+                            }`}
+                            strokeWidth={2}
                         />
-                    ))}
+                    </button>
+
+                    {categoryOpen && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => setCategoryOpen(false)}
+                                className="fixed inset-0 z-30 cursor-default"
+                                aria-label="Tutup pilihan kategori"
+                            />
+
+                            <div
+                                className="absolute left-0 top-full z-40 mt-2 w-full overflow-hidden rounded-xl border border-border bg-background p-1 shadow-lg"
+                                role="listbox"
+                                aria-label="Pilihan kategori wisata"
+                            >
+                                {categoryOptions.map((kategori) => {
+                                    const isActive =
+                                        kategori.id === filter;
+
+                                    return (
+                                        <button
+                                            key={kategori.id}
+                                            type="button"
+                                            onClick={() => {
+                                                setFilter(kategori.id);
+                                                setCategoryOpen(false);
+                                            }}
+                                            className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                                                isActive
+                                                    ? 'bg-primary-soft font-medium text-primary'
+                                                    : 'text-foreground hover:bg-primary-soft/60'
+                                            }`}
+                                            role="option"
+                                            aria-selected={isActive}
+                                        >
+                                            <span className="truncate">
+                                                {kategori.label}
+                                            </span>
+
+                                            {isActive && (
+                                                <Check
+                                                    className="size-4 shrink-0 text-primary"
+                                                    strokeWidth={2.2}
+                                                />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {isLoading ? (
@@ -156,7 +222,7 @@ export default function Wisata() {
 
                         <p className="mt-2 text-muted-foreground">
                             Tidak ada spot wisata yang sesuai dengan pencarian
-                            Anda.
+                            atau kategori yang dipilih.
                         </p>
                     </div>
                 ) : (
