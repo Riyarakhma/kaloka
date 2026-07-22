@@ -1,204 +1,267 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import {
+    ArrowRight,
+    Leaf,
+    Search,
+} from 'lucide-react';
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-const categories = [
-    'Semua',
-    'Ekologi Waduk Cengklik',
-    'Pertanian & Pangan Lokal',
-    'Tradisi Lisan & Sejarah',
-    'Wisata Berbasis Komunitas',
+const KEARIFAN_ITEMS = [
+    {
+        slug: 'ekosistem-waduk-cengklik',
+        judul: 'Ekosistem Waduk Cengklik',
+        kategori: 'ekologi',
+        deskripsi:
+            'Mengenal kondisi lingkungan, sumber daya air, dan kehidupan masyarakat di sekitar Waduk Cengklik.',
+        foto: 'https://placehold.co/600x400',
+    },
+    {
+        slug: 'menjaga-lingkungan-waduk',
+        judul: 'Menjaga Lingkungan Waduk',
+        kategori: 'ekologi',
+        deskripsi:
+            'Upaya sederhana masyarakat dalam menjaga kebersihan dan kelestarian lingkungan Waduk Cengklik.',
+        foto: 'https://placehold.co/600x400',
+    },
+    {
+        slug: 'budidaya-padi-sobokerto',
+        judul: 'Budidaya Padi di Sobokerto',
+        kategori: 'pertanian',
+        deskripsi:
+            'Kegiatan pertanian padi yang menjadi bagian penting dari kehidupan masyarakat Desa Sobokerto.',
+        foto: 'https://placehold.co/600x400',
+    },
+    {
+        slug: 'hasil-pertanian-warga',
+        judul: 'Hasil Pertanian Warga',
+        kategori: 'pertanian',
+        deskripsi:
+            'Beragam hasil pertanian lokal yang dibudidayakan dan dimanfaatkan oleh masyarakat Sobokerto.',
+        foto: 'https://placehold.co/600x400',
+    },
+    {
+        slug: 'sejarah-desa-sobokerto',
+        judul: 'Sejarah Desa Sobokerto',
+        kategori: 'sejarah',
+        deskripsi:
+            'Cerita mengenai perkembangan Desa Sobokerto yang diwariskan melalui penuturan masyarakat.',
+        foto: 'https://placehold.co/600x400',
+    },
+    {
+        slug: 'cerita-warga-tepian-waduk',
+        judul: 'Cerita Warga Tepian Waduk',
+        kategori: 'sejarah',
+        deskripsi:
+            'Kisah kehidupan warga yang tumbuh dan menjalani aktivitas sehari-hari di sekitar Waduk Cengklik.',
+        foto: 'https://placehold.co/600x400',
+    },
+    {
+        slug: 'wisata-waduk-cengklik',
+        judul: 'Wisata Waduk Cengklik',
+        kategori: 'wisata',
+        deskripsi:
+            'Potensi wisata alam Waduk Cengklik yang dapat dikembangkan bersama masyarakat sekitar.',
+        foto: 'https://placehold.co/600x400',
+    },
+    {
+        slug: 'peran-warga-dalam-wisata',
+        judul: 'Peran Warga dalam Wisata',
+        kategori: 'wisata',
+        deskripsi:
+            'Keterlibatan masyarakat dalam pelayanan, pengelolaan, dan pengembangan wisata desa.',
+        foto: 'https://placehold.co/600x400',
+    },
 ];
 
-const kearifanItems = [
+const KATEGORI = [
     {
-        id: 1,
-        slug: 'ekosistem-waduk-cengklik',
-        title: 'Ekosistem Waduk Cengklik',
-        category: 'Ekologi Waduk Cengklik',
-        description:
-            'Mengenal kondisi lingkungan, sumber daya air, dan kehidupan masyarakat di sekitar Waduk Cengklik.',
+        id: 'ekologi',
+        label: 'Ekologi Waduk Cengklik',
     },
     {
-        id: 2,
-        slug: 'menjaga-lingkungan-waduk',
-        title: 'Menjaga Lingkungan Waduk',
-        category: 'Ekologi Waduk Cengklik',
-        description:
-            'Upaya sederhana masyarakat dalam menjaga kebersihan dan kelestarian lingkungan Waduk Cengklik.',
+        id: 'pertanian',
+        label: 'Pertanian & Pangan Lokal',
     },
     {
-        id: 3,
-        slug: 'budidaya-padi-sobokerto',
-        title: 'Budidaya Padi di Sobokerto',
-        category: 'Pertanian & Pangan Lokal',
-        description:
-            'Kegiatan pertanian padi yang menjadi bagian penting dari kehidupan masyarakat Desa Sobokerto.',
+        id: 'sejarah',
+        label: 'Tradisi Lisan & Sejarah',
     },
     {
-        id: 4,
-        slug: 'hasil-pertanian-warga',
-        title: 'Hasil Pertanian Warga',
-        category: 'Pertanian & Pangan Lokal',
-        description:
-            'Beragam hasil pertanian lokal yang dibudidayakan dan dimanfaatkan oleh masyarakat Sobokerto.',
-    },
-    {
-        id: 5,
-        slug: 'sejarah-desa-sobokerto',
-        title: 'Sejarah Desa Sobokerto',
-        category: 'Tradisi Lisan & Sejarah',
-        description:
-            'Cerita mengenai perkembangan Desa Sobokerto yang diwariskan melalui penuturan masyarakat.',
-    },
-    {
-        id: 6,
-        slug: 'cerita-warga-tepian-waduk',
-        title: 'Cerita Warga Tepian Waduk',
-        category: 'Tradisi Lisan & Sejarah',
-        description:
-            'Kisah kehidupan warga yang tumbuh dan menjalani aktivitas sehari-hari di sekitar Waduk Cengklik.',
-    },
-    {
-        id: 7,
-        slug: 'wisata-waduk-cengklik',
-        title: 'Wisata Waduk Cengklik',
-        category: 'Wisata Berbasis Komunitas',
-        description:
-            'Potensi wisata alam Waduk Cengklik yang dapat dikembangkan bersama masyarakat sekitar.',
-    },
-    {
-        id: 8,
-        slug: 'peran-warga-dalam-wisata',
-        title: 'Peran Warga dalam Wisata',
-        category: 'Wisata Berbasis Komunitas',
-        description:
-            'Keterlibatan masyarakat dalam pelayanan, pengelolaan, dan pengembangan wisata desa.',
+        id: 'wisata',
+        label: 'Wisata Berbasis Komunitas',
     },
 ];
+
+function FilterChip({ active, onClick, label }) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            className={`rounded-full border-2 px-5 py-2.5 text-base font-semibold transition ${
+                active
+                    ? 'border-primary bg-primary text-primary-foreground'
+                    : 'border-border bg-card text-foreground hover:border-primary hover:text-primary'
+            }`}
+        >
+            {label}
+        </button>
+    );
+}
+
+function KearifanCard({ item }) {
+    const kategoriLabel =
+        KATEGORI.find((kategori) => kategori.id === item.kategori)?.label ??
+        item.kategori;
+
+    return (
+        <article className="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <img
+                src={item.foto}
+                alt={item.judul}
+                className="aspect-[3/2] w-full object-cover"
+            />
+
+            <div className="p-6">
+                <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+                    {kategoriLabel}
+                </span>
+
+                <h2 className="mt-4 font-display text-2xl leading-tight text-foreground">
+                    {item.judul}
+                </h2>
+
+                <p className="mt-3 min-h-[84px] text-base leading-7 text-muted-foreground">
+                    {item.deskripsi}
+                </p>
+
+                <button
+                    type="button"
+                    className="mt-6 inline-flex items-center gap-2 font-semibold text-primary transition group-hover:gap-3"
+                >
+                    Baca selengkapnya
+                    <ArrowRight className="size-5" />
+                </button>
+            </div>
+        </article>
+    );
+}
 
 export default function KearifanLokal() {
-    const [activeCategory, setActiveCategory] = useState('Semua');
+    const [filter, setFilter] = useState('semua');
+    const [query, setQuery] = useState('');
 
-    const filteredItems = useMemo(() => {
-        if (activeCategory === 'Semua') {
-            return kearifanItems;
-        }
+    const items = useMemo(() => {
+        const q = query.trim().toLowerCase();
 
-        return kearifanItems.filter(
-            (item) => item.category === activeCategory,
-        );
-    }, [activeCategory]);
+        return KEARIFAN_ITEMS.filter((item) => {
+            if (filter !== 'semua' && item.kategori !== filter) {
+                return false;
+            }
 
-    const getCategoryCount = (category) => {
-        if (category === 'Semua') {
-            return kearifanItems.length;
-        }
+            if (!q) {
+                return true;
+            }
 
-        return kearifanItems.filter(
-            (item) => item.category === category,
-        ).length;
-    };
+            const kategoriLabel =
+                KATEGORI.find(
+                    (kategori) => kategori.id === item.kategori,
+                )?.label ?? '';
+
+            return (
+                item.judul.toLowerCase().includes(q) ||
+                item.deskripsi.toLowerCase().includes(q) ||
+                kategoriLabel.toLowerCase().includes(q)
+            );
+        });
+    }, [filter, query]);
 
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
 
-            {/* ===== HEADER HALAMAN ===== */}
-            <section className="border-b border-border bg-primary-soft">
-                <div className="container-page py-16 md:py-20">
-                    <span className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-                        Warisan warga desa
+            <section className="border-b border-border bg-primary-soft/60">
+                <div className="container-page py-14 md:py-20">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
+                        <Leaf className="size-4" />
+                        Warisan Warga Desa
                     </span>
 
-                    <h1 className="mt-3 max-w-3xl font-display text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+                    <h1 className="mt-4 font-display text-4xl md:text-5xl">
                         Kearifan Lokal Sobokerto
                     </h1>
 
-                    <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
+                    <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
                         Jelajahi pengetahuan lokal, kehidupan masyarakat,
                         pertanian, sejarah, serta potensi lingkungan Desa
                         Sobokerto.
                     </p>
+
+                    <form
+                        className="mt-8 flex items-center gap-3 rounded-2xl border border-border bg-background p-2 shadow-sm"
+                        onSubmit={(event) => event.preventDefault()}
+                        role="search"
+                    >
+                        <Search className="ml-3 size-6 shrink-0 text-primary" />
+
+                        <input
+                            type="search"
+                            value={query}
+                            onChange={(event) =>
+                                setQuery(event.target.value)
+                            }
+                            placeholder="Cari kearifan lokal..."
+                            className="w-full bg-transparent py-3 text-lg text-foreground placeholder:text-muted-foreground focus:outline-none"
+                        />
+                    </form>
                 </div>
             </section>
 
-            {/* ===== FILTER KATEGORI ===== */}
             <section className="container-page mt-10">
-                <div className="flex flex-wrap gap-3">
-                    {categories.map((category) => {
-                        const isActive = activeCategory === category;
+                <div className="flex flex-wrap gap-2">
+                    <FilterChip
+                        active={filter === 'semua'}
+                        onClick={() => setFilter('semua')}
+                        label={`Semua (${KEARIFAN_ITEMS.length})`}
+                    />
+
+                    {KATEGORI.map((kategori) => {
+                        const count = KEARIFAN_ITEMS.filter(
+                            (item) => item.kategori === kategori.id,
+                        ).length;
 
                         return (
-                            <button
-                                key={category}
-                                type="button"
-                                onClick={() => setActiveCategory(category)}
-                                className={`rounded-full border-2 px-5 py-3 text-sm font-semibold transition md:px-6 md:text-base ${
-                                    isActive
-                                        ? 'border-primary bg-primary text-primary-foreground'
-                                        : 'border-border bg-background text-foreground hover:border-primary hover:text-primary'
-                                }`}
-                            >
-                                {category} ({getCategoryCount(category)})
-                            </button>
+                            <FilterChip
+                                key={kategori.id}
+                                active={filter === kategori.id}
+                                onClick={() => setFilter(kategori.id)}
+                                label={`${kategori.label} (${count})`}
+                            />
                         );
                     })}
                 </div>
-            </section>
 
-            {/* ===== DAFTAR CARD ===== */}
-            <section className="container-page mt-10 pb-20">
-                {filteredItems.length > 0 ? (
-                    <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-                        {filteredItems.map((item) => (
-                            <article
-                                key={item.id}
-                                className="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
-                            >
-                                {/* Placeholder gambar dummy */}
-                                <div className="grid aspect-[3/2] place-items-center bg-muted">
-                                    <span className="text-3xl font-medium text-muted-foreground/50">
-                                        600 × 400
-                                    </span>
-                                </div>
+                {items.length === 0 ? (
+                    <div className="mt-12 rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+                        <Leaf className="mx-auto mb-4 size-12 text-primary" />
 
-                                <div className="p-6">
-                                    <span className="inline-flex rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-                                        {item.category}
-                                    </span>
-
-                                    <h2 className="mt-4 font-display text-2xl font-semibold leading-tight text-foreground">
-                                        {item.title}
-                                    </h2>
-
-                                    <p className="mt-3 min-h-[84px] text-base leading-7 text-muted-foreground">
-                                        {item.description}
-                                    </p>
-
-                                    <button
-                                        type="button"
-                                        className="mt-6 inline-flex items-center gap-2 font-semibold text-primary transition group-hover:gap-3"
-                                    >
-                                        Baca selengkapnya
-                                        <ArrowRight className="size-5" />
-                                    </button>
-                                </div>
-                            </article>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="rounded-3xl border border-dashed border-border p-12 text-center">
-                        <h2 className="font-display text-2xl font-semibold">
-                            Belum ada konten
-                        </h2>
+                        <h3 className="text-xl font-semibold">
+                            Kearifan lokal tidak ditemukan
+                        </h3>
 
                         <p className="mt-2 text-muted-foreground">
-                            Konten untuk kategori ini masih dalam proses
-                            pengembangan.
+                            Tidak ada konten yang sesuai dengan pencarian Anda.
                         </p>
+                    </div>
+                ) : (
+                    <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {items.map((item) => (
+                            <KearifanCard
+                                key={item.slug}
+                                item={item}
+                            />
+                        ))}
                     </div>
                 )}
             </section>

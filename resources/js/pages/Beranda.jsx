@@ -74,11 +74,11 @@ export default function Beranda() {
                             <div className="flex items-center gap-3 px-3">
                                 <Search className="size-6 shrink-0 text-primary" />
 
-                                <input
-                                    id="cari"
-                                    type="search"
-                                    placeholder=""
-                                    className="w-full bg-transparent py-2 text-lg text-foreground focus:outline-none"
+                <input
+    id="cari"
+    type="search"
+    placeholder="Cari buku, cerita, wisata, atau UMKM..."
+    className="w-full bg-transparent py-2 text-lg text-foreground placeholder:text-muted-foreground/60 focus:outline-none"
                                 />
                             </div>
                         </form>
