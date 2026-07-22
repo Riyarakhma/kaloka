@@ -1,5 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Search, Store } from 'lucide-react';
+import {
+    Check,
+    ChevronDown,
+    Search,
+    Store,
+} from 'lucide-react';
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -25,27 +30,27 @@ const KATEGORI = [
     },
 ];
 
-function FilterChip({ active, onClick, label }) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className={`rounded-full border-2 px-5 py-2.5 text-base font-semibold transition ${
-                active
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-border bg-card text-foreground hover:border-primary hover:text-primary'
-            }`}
-        >
-            {label}
-        </button>
-    );
-}
-
 export default function UMKM() {
     const { data: UMKM_ITEMS = [], isLoading } = useUmkmItems();
 
     const [filter, setFilter] = useState('semua');
     const [query, setQuery] = useState('');
+    const [categoryOpen, setCategoryOpen] = useState(false);
+
+    const categoryOptions = useMemo(
+        () => [
+            {
+                id: 'semua',
+                label: 'Semua Kategori',
+            },
+            ...KATEGORI,
+        ],
+        [],
+    );
+
+    const selectedCategory =
+        categoryOptions.find((kategori) => kategori.id === filter) ??
+        categoryOptions[0];
 
     const items = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -59,10 +64,17 @@ export default function UMKM() {
                 return true;
             }
 
-            return (
-                item.nama.toLowerCase().includes(q) ||
-                item.deskripsi.toLowerCase().includes(q)
-            );
+            const teks = [
+                item.nama,
+                item.judul,
+                item.deskripsi,
+                item.kategori,
+            ]
+                .filter(Boolean)
+                .join(' ')
+                .toLowerCase();
+
+            return teks.includes(q);
         });
     }, [UMKM_ITEMS, filter, query]);
 
@@ -98,21 +110,32 @@ export default function UMKM() {
                     </h1>
 
                     <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-                        Jelajahi berbagai produk unggulan UMKM Desa Sobokerto mulai
-                        dari kerajinan, kuliner, pertanian, hingga budidaya.
+                        Jelajahi berbagai produk unggulan UMKM Desa Sobokerto
+                        mulai dari kerajinan, kuliner, pertanian, hingga
+                        budidaya.
                     </p>
 
                     <form
                         className="mt-8 flex items-center gap-3 rounded-2xl border border-border bg-background p-2 shadow-sm"
-                        onSubmit={(e) => e.preventDefault()}
+                        onSubmit={(event) => event.preventDefault()}
                         role="search"
                     >
                         <Search className="ml-3 size-6 shrink-0 text-primary" />
 
+                        <label
+                            htmlFor="pencarian-umkm"
+                            className="sr-only"
+                        >
+                            Cari produk UMKM
+                        </label>
+
                         <input
+                            id="pencarian-umkm"
                             type="search"
                             value={query}
-                            onChange={(e) => setQuery(e.target.value)}
+                            onChange={(event) =>
+                                setQuery(event.target.value)
+                            }
                             placeholder="Cari produk UMKM..."
                             className="w-full bg-transparent py-3 text-lg text-foreground placeholder:text-muted-foreground focus:outline-none"
                         />
@@ -120,28 +143,83 @@ export default function UMKM() {
                 </div>
             </section>
 
-            <section className="container-page mt-10">
-                <div className="flex flex-wrap gap-2">
-                    <FilterChip
-                        active={filter === 'semua'}
-                        onClick={() => setFilter('semua')}
-                        label={`Semua (${UMKM_ITEMS.length})`}
-                    />
+            <section className="container-page py-10 md:py-14">
+                <div className="relative w-full max-w-md">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setCategoryOpen((previousValue) => !previousValue)
+                        }
+                        className={`flex w-full items-center justify-between gap-4 rounded-xl border bg-background px-4 py-3 text-left transition ${
+                            categoryOpen
+                                ? 'border-primary'
+                                : 'border-border hover:border-primary'
+                        }`}
+                        aria-haspopup="listbox"
+                        aria-expanded={categoryOpen}
+                    >
+                        <span className="truncate text-base font-medium text-foreground">
+                            {selectedCategory.label}
+                        </span>
 
-                    {KATEGORI.map((k) => {
-                        const count = UMKM_ITEMS.filter(
-                            (i) => i.kategori === k.id
-                        ).length;
+                        <ChevronDown
+                            className={`size-5 shrink-0 text-muted-foreground transition-transform duration-200 ${
+                                categoryOpen ? 'rotate-180' : ''
+                            }`}
+                            strokeWidth={2}
+                        />
+                    </button>
 
-                        return (
-                            <FilterChip
-                                key={k.id}
-                                active={filter === k.id}
-                                onClick={() => setFilter(k.id)}
-                                label={`${k.label} (${count})`}
+                    {categoryOpen && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => setCategoryOpen(false)}
+                                className="fixed inset-0 z-30 cursor-default"
+                                aria-label="Tutup pilihan kategori"
                             />
-                        );
-                    })}
+
+                            <div
+                                className="absolute left-0 top-full z-40 mt-2 w-full overflow-hidden rounded-xl border border-border bg-background p-1 shadow-lg"
+                                role="listbox"
+                                aria-label="Pilihan kategori UMKM"
+                            >
+                                {categoryOptions.map((kategori) => {
+                                    const isActive =
+                                        kategori.id === filter;
+
+                                    return (
+                                        <button
+                                            key={kategori.id}
+                                            type="button"
+                                            onClick={() => {
+                                                setFilter(kategori.id);
+                                                setCategoryOpen(false);
+                                            }}
+                                            className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                                                isActive
+                                                    ? 'bg-primary-soft font-medium text-primary'
+                                                    : 'text-foreground hover:bg-primary-soft/60'
+                                            }`}
+                                            role="option"
+                                            aria-selected={isActive}
+                                        >
+                                            <span className="truncate">
+                                                {kategori.label}
+                                            </span>
+
+                                            {isActive && (
+                                                <Check
+                                                    className="size-4 shrink-0 text-primary"
+                                                    strokeWidth={2.2}
+                                                />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {items.length === 0 ? (
@@ -153,14 +231,15 @@ export default function UMKM() {
                         </h3>
 
                         <p className="mt-2 text-muted-foreground">
-                            Tidak ada produk UMKM yang sesuai dengan pencarian Anda.
+                            Tidak ada produk UMKM yang sesuai dengan pencarian
+                            atau kategori yang dipilih.
                         </p>
                     </div>
                 ) : (
                     <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {items.map((item) => (
                             <UMKMCard
-                                key={item.slug}
+                                key={item.slug ?? item.id}
                                 item={item}
                             />
                         ))}
