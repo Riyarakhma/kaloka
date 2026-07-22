@@ -1,0 +1,213 @@
+import wisataCengklik from '../assets/wisata-cengklik.jpg';
+
+export const KATEGORI_WISATA = [
+    {
+        id: 'Destinasi',
+        label: 'Destinasi',
+    },
+    {
+        id: 'Kuliner',
+        label: 'Kuliner',
+    },
+    {
+        id: 'Kerajinan',
+        label: 'Kerajinan',
+    },
+    {
+        id: 'Event',
+        label: 'Event',
+    },
+];
+
+export const WISATA_ITEMS = [
+    {
+        id: 1,
+        slug: 'waduk-cengklik',
+        nama_spot: 'Waduk Cengklik',
+        kategori: 'Destinasi',
+        deskripsi:
+            'Waduk Cengklik merupakan destinasi wisata air yang menawarkan pemandangan alam, suasana tenang, dan aktivitas masyarakat di sekitar perairan.',
+        lokasi: 'Desa Sobokerto, Kecamatan Ngemplak, Kabupaten Boyolali',
+        koordinat: '-7.5172, 110.7168',
+        jam_operasional: '06.00–18.00 WIB',
+        kontak: 'Pemerintah Desa Sobokerto',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Waduk Cengklik merupakan salah satu destinasi wisata yang berada di kawasan Kecamatan Ngemplak, Kabupaten Boyolali. Kawasan ini dikenal dengan suasana perairan yang tenang serta pemandangan alam yang menarik.',
+            'Pengunjung dapat menikmati pemandangan waduk, melihat aktivitas nelayan, bersantai bersama keluarga, dan menikmati suasana matahari terbenam.',
+            'Keberadaan Waduk Cengklik juga berperan penting bagi kehidupan masyarakat, terutama dalam mendukung kegiatan perikanan, pertanian, dan usaha wisata lokal.',
+        ],
+    },
+    {
+        id: 2,
+        slug: 'waduk-cengklik-park',
+        nama_spot: 'Waduk Cengklik Park',
+        kategori: 'Destinasi',
+        deskripsi:
+            'Kawasan wisata keluarga di sekitar Waduk Cengklik dengan berbagai wahana, ruang bersantai, dan pemandangan waduk.',
+        lokasi: 'Kawasan Waduk Cengklik, Boyolali',
+        koordinat: '-7.5168, 110.7171',
+        jam_operasional: '08.00–17.00 WIB',
+        kontak: 'Pengelola Waduk Cengklik Park',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Waduk Cengklik Park merupakan kawasan rekreasi keluarga yang dikembangkan di sekitar Waduk Cengklik.',
+            'Tempat ini menawarkan pemandangan perairan, area bersantai, spot foto, dan berbagai kegiatan rekreasi untuk pengunjung.',
+            'Kawasan wisata ini cocok dikunjungi bersama keluarga maupun kelompok pada akhir pekan.',
+        ],
+    },
+    {
+        id: 3,
+        slug: 'spot-sunset-dan-mancing-tepi-waduk',
+        nama_spot: 'Spot Sunset dan Mancing Tepi Waduk',
+        kategori: 'Destinasi',
+        deskripsi:
+            'Tempat menikmati matahari terbenam dan aktivitas memancing di tepian Waduk Cengklik.',
+        lokasi: 'Tepi Waduk Cengklik, Desa Sobokerto',
+        koordinat: '-7.5180, 110.7155',
+        jam_operasional: '05.30–18.30 WIB',
+        kontak: 'Masyarakat sekitar Waduk Cengklik',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Tepian Waduk Cengklik menjadi salah satu tempat favorit masyarakat untuk menikmati matahari terbenam.',
+            'Selain menikmati pemandangan, pengunjung juga dapat melakukan aktivitas memancing di beberapa bagian tepian waduk.',
+            'Pengunjung diharapkan menjaga kebersihan dan tidak meninggalkan sampah di sekitar perairan.',
+        ],
+    },
+    {
+        id: 4,
+        slug: 'warung-apung-ikan-bakar-cengklik',
+        nama_spot: 'Warung Apung Ikan Bakar Cengklik',
+        kategori: 'Kuliner',
+        deskripsi:
+            'Wisata kuliner ikan bakar dengan suasana khas perairan Waduk Cengklik.',
+        lokasi: 'Kawasan Kuliner Waduk Cengklik, Boyolali',
+        koordinat: '-7.5175, 110.7162',
+        jam_operasional: '09.00–21.00 WIB',
+        kontak: 'Pengelola Warung Apung',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Warung Apung Ikan Bakar Cengklik menawarkan pengalaman menikmati kuliner ikan dengan suasana khas tepian waduk.',
+            'Menu yang tersedia umumnya menggunakan ikan air tawar yang diolah dengan cara dibakar, digoreng, atau dimasak menggunakan bumbu tradisional.',
+            'Tempat ini menjadi salah satu pilihan bagi wisatawan yang ingin menikmati makanan bersama keluarga.',
+        ],
+    },
+    {
+        id: 5,
+        slug: 'sentra-olahan-ikan',
+        nama_spot: 'Sentra Olahan Ikan (Abon dan Keripik)',
+        kategori: 'Kuliner',
+        deskripsi:
+            'Sentra produk olahan ikan masyarakat berupa abon, keripik, dan makanan ringan khas kawasan Waduk Cengklik.',
+        lokasi: 'Desa Sobokerto, Kecamatan Ngemplak',
+        koordinat: '-7.5190, 110.7148',
+        jam_operasional: '08.00–16.00 WIB',
+        kontak: 'Kelompok UMKM Desa Sobokerto',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Masyarakat Desa Sobokerto mengembangkan berbagai produk makanan berbahan dasar ikan.',
+            'Produk tersebut antara lain abon ikan, keripik ikan, dan beragam makanan ringan yang dapat dijadikan oleh-oleh.',
+            'Pengembangan produk olahan ikan membantu meningkatkan nilai ekonomi hasil perikanan masyarakat.',
+        ],
+    },
+    {
+        id: 6,
+        slug: 'sentra-kerajinan-anyaman-bambu',
+        nama_spot: 'Sentra Kerajinan Anyaman Bambu',
+        kategori: 'Kerajinan',
+        deskripsi:
+            'Tempat produksi kerajinan bambu yang dibuat oleh perajin lokal Desa Sobokerto.',
+        lokasi: 'Desa Sobokerto, Kabupaten Boyolali',
+        koordinat: '-7.5201, 110.7139',
+        jam_operasional: '08.00–16.00 WIB',
+        kontak: 'Kelompok Perajin Bambu Sobokerto',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Sentra Kerajinan Anyaman Bambu menjadi ruang produksi bagi masyarakat yang memiliki keterampilan mengolah bambu.',
+            'Produk yang dihasilkan dapat berupa keranjang, tempat penyimpanan, hiasan, dan berbagai kebutuhan rumah tangga.',
+            'Kerajinan ini menjadi bagian dari kreativitas sekaligus sumber pendapatan masyarakat lokal.',
+        ],
+    },
+    {
+        id: 7,
+        slug: 'paket-wisata-edukasi-mina-padi',
+        nama_spot: 'Paket Wisata Edukasi Mina Padi',
+        kategori: 'Destinasi',
+        deskripsi:
+            'Wisata edukasi yang mengenalkan sistem budidaya padi dan ikan dalam satu area pertanian.',
+        lokasi: 'Area Persawahan Desa Sobokerto',
+        koordinat: '-7.5213, 110.7127',
+        jam_operasional: '08.00–15.00 WIB',
+        kontak: 'Kelompok Tani Desa Sobokerto',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Paket Wisata Edukasi Mina Padi mengenalkan sistem pertanian yang menggabungkan budidaya padi dan ikan dalam satu lahan.',
+            'Pengunjung dapat mempelajari proses pengolahan lahan, penanaman padi, pemeliharaan ikan, hingga masa panen.',
+            'Kegiatan ini cocok digunakan sebagai sarana pembelajaran bagi siswa, keluarga, dan kelompok masyarakat.',
+        ],
+    },
+    {
+        id: 8,
+        slug: 'festival-sedekah-waduk',
+        nama_spot: 'Festival Sedekah Waduk (Bersih Desa)',
+        kategori: 'Event',
+        deskripsi:
+            'Kegiatan budaya masyarakat sebagai ungkapan syukur sekaligus upaya menjaga kebersihan kawasan waduk.',
+        lokasi: 'Kawasan Waduk Cengklik dan Desa Sobokerto',
+        koordinat: '-7.5172, 110.7168',
+        jam_operasional: 'Sesuai jadwal pelaksanaan acara',
+        kontak: 'Pemerintah Desa Sobokerto',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Festival Sedekah Waduk merupakan kegiatan masyarakat yang dilaksanakan sebagai bentuk rasa syukur atas sumber daya alam yang tersedia.',
+            'Kegiatan biasanya disertai dengan tradisi masyarakat, pertunjukan seni, kegiatan sosial, serta kerja bakti membersihkan lingkungan.',
+            'Festival ini menjadi bagian dari upaya menjaga tradisi sekaligus memperkuat kebersamaan masyarakat.',
+        ],
+    },
+    {
+        id: 9,
+        slug: 'dermaga-dan-perahu-wisata-cengklik',
+        nama_spot: 'Dermaga dan Perahu Wisata Cengklik',
+        kategori: 'Destinasi',
+        deskripsi:
+            'Fasilitas wisata perahu yang membawa pengunjung menikmati suasana dan pemandangan Waduk Cengklik.',
+        lokasi: 'Dermaga Waduk Cengklik, Boyolali',
+        koordinat: '-7.5169, 110.7164',
+        jam_operasional: '07.00–17.00 WIB',
+        kontak: 'Pengelola Perahu Wisata Cengklik',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Dermaga Waduk Cengklik menjadi titik keberangkatan bagi pengunjung yang ingin menikmati wisata perahu.',
+            'Pengunjung dapat melihat kawasan waduk dari sisi perairan dan menikmati pemandangan di sekitarnya.',
+            'Keselamatan pengunjung perlu menjadi perhatian utama dengan menggunakan perlengkapan keselamatan selama perjalanan.',
+        ],
+    },
+    {
+        id: 10,
+        slug: 'camping-ground-tepi-waduk',
+        nama_spot: 'Camping Ground Tepi Waduk',
+        kategori: 'Destinasi',
+        deskripsi:
+            'Area berkemah di tepian waduk dengan suasana alam terbuka dan pemandangan perairan.',
+        lokasi: 'Tepi Waduk Cengklik, Desa Sobokerto',
+        koordinat: '-7.5185, 110.7150',
+        jam_operasional: '24 jam dengan reservasi',
+        kontak: 'Pengelola Camping Ground',
+        foto_utama: wisataCengklik,
+        status_tampil: true,
+        isi: [
+            'Camping Ground Tepi Waduk menyediakan area berkemah dengan suasana terbuka dan pemandangan Waduk Cengklik.',
+            'Tempat ini dapat digunakan untuk kegiatan keluarga, komunitas, organisasi, maupun kegiatan pendidikan.',
+            'Pengunjung perlu melakukan reservasi serta mematuhi ketentuan kebersihan dan keamanan kawasan.',
+        ],
+    },
+];
