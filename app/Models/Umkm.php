@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Umkm extends Model
 {
+    protected $table = 'umkms';
+
     protected $fillable = [
         'nama_umkm',
         'kategori',
@@ -14,7 +16,7 @@ class Umkm extends Model
         'alamat',
         'kontak',
         'foto',
-        'status_tampil'
+        'status_tampil',
     ];
 
     protected $casts = [

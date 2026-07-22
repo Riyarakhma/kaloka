@@ -122,7 +122,7 @@ export default function Beranda() {
                     </Link>
 
                     <Link
-                        to="/"
+                        to="/umkm"
                         className="card-soft group flex items-start gap-5 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                     >
                         <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-[oklch(0.94_0.08_55)] text-[oklch(0.45_0.16_55)]">

@@ -1,53 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Search, Store } from 'lucide-react';
+
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import UMKMCard from '../components/UMKMCard';
-
-const UMKM_ITEMS = [
-    {
-        slug: 'ecoprint',
-        nama: 'Batik Ecoprint Sobokerto',
-        kategori: 'kerajinan',
-        deskripsi: 'Produk kain ecoprint dengan motif daun alami khas Desa Sobokerto.',
-        foto: 'https://placehold.co/600x400',
-    },
-    {
-        slug: 'stik-kangkung',
-        nama: 'Stik Kangkung',
-        kategori: 'kuliner',
-        deskripsi: 'Olahan camilan berbahan dasar kangkung dengan cita rasa gurih.',
-        foto: 'https://placehold.co/600x400',
-    },
-    {
-        slug: 'keripik-tulang-ikan',
-        nama: 'Keripik Tulang Ikan',
-        kategori: 'kuliner',
-        deskripsi: 'Camilan bergizi berbahan dasar tulang ikan yang diolah menjadi keripik.',
-        foto: 'https://placehold.co/600x400',
-    },
-    {
-        slug: 'pupuk-eceng-gondok',
-        nama: 'Pupuk Organik Eceng Gondok',
-        kategori: 'pertanian',
-        deskripsi: 'Pupuk organik hasil pemanfaatan eceng gondok menjadi produk bernilai ekonomi.',
-        foto: 'https://placehold.co/600x400',
-    },
-    {
-        slug: 'budidaya-lele',
-        nama: 'Budidaya Lele',
-        kategori: 'budidaya',
-        deskripsi: 'Usaha budidaya ikan lele sebagai salah satu potensi ekonomi masyarakat.',
-        foto: 'https://placehold.co/600x400',
-    },
-    {
-        slug: 'budidaya-maggot',
-        nama: 'Budidaya Maggot',
-        kategori: 'budidaya',
-        deskripsi: 'Budidaya maggot sebagai pakan ternak sekaligus pengolah limbah organik.',
-        foto: 'https://placehold.co/600x400',
-    },
-];
+import { useUmkmItems } from '../lib/umkm-api';
 
 const KATEGORI = [
     {
@@ -85,6 +42,8 @@ function FilterChip({ active, onClick, label }) {
 }
 
 export default function UMKM() {
+    const { data: UMKM_ITEMS = [], isLoading } = useUmkmItems();
+
     const [filter, setFilter] = useState('semua');
     const [query, setQuery] = useState('');
 
@@ -92,16 +51,36 @@ export default function UMKM() {
         const q = query.trim().toLowerCase();
 
         return UMKM_ITEMS.filter((item) => {
-            if (filter !== 'semua' && item.kategori !== filter) return false;
+            if (filter !== 'semua' && item.kategori !== filter) {
+                return false;
+            }
 
-            if (!q) return true;
+            if (!q) {
+                return true;
+            }
 
             return (
                 item.nama.toLowerCase().includes(q) ||
                 item.deskripsi.toLowerCase().includes(q)
             );
         });
-    }, [filter, query]);
+    }, [UMKM_ITEMS, filter, query]);
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background">
+                <Navbar />
+
+                <div className="container-page py-20 text-center">
+                    <p className="text-lg text-muted-foreground">
+                        Memuat data UMKM...
+                    </p>
+                </div>
+
+                <Footer />
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-background">
@@ -180,7 +159,10 @@ export default function UMKM() {
                 ) : (
                     <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {items.map((item) => (
-                            <UMKMCard key={item.slug} item={item} />
+                            <UMKMCard
+                                key={item.slug}
+                                item={item}
+                            />
                         ))}
                     </div>
                 )}

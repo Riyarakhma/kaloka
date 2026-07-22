@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PengaturanSeeder::class,
             KearifanLokalSeeder::class,
             WisataSeeder::class,
+            UmkmSeeder::class,
         ]);
     }
 }
