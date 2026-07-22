@@ -1,10 +1,20 @@
 import { NavLink, Link } from 'react-router-dom';
-import { Menu, X, BookOpen, Leaf, Mountain, LogIn, ExternalLink } from 'lucide-react';
+import {
+    Menu,
+    X,
+    BookOpen,
+    Leaf,
+    Mountain,
+    ShoppingBag,
+    LogIn,
+    ExternalLink,
+} from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
     { to: '/kearifan-lokal', label: 'Kearifan Lokal', icon: Leaf },
     { to: '/wisata', label: 'Info Wisata', icon: Mountain },
+    { to: '/umkm', label: 'Galeri UMKM', icon: ShoppingBag },
 ];
 
 const SLIMS_URL = 'https://desa.perpus.id';
@@ -24,8 +34,12 @@ export default function Navbar() {
                     <div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
                         <Leaf className="size-6" strokeWidth={2.2} />
                     </div>
+
                     <div className="min-w-0 leading-tight">
-                        <div className="font-display text-xl font-bold text-primary">KALOKA</div>
+                        <div className="font-display text-xl font-bold text-primary">
+                            KALOKA
+                        </div>
+
                         <div className="truncate text-xs text-muted-foreground">
                             Portal Literasi Desa Sobokerto
                         </div>
@@ -43,12 +57,18 @@ export default function Navbar() {
                         Katalog Pustaka
                         <ExternalLink className="size-4 opacity-60" />
                     </a>
+
                     {navItems.map((item) => (
-                        <NavLink key={item.to} to={item.to} className={linkClass}>
+                        <NavLink
+                            key={item.to}
+                            to={item.to}
+                            className={linkClass}
+                        >
                             <item.icon className="size-5" />
                             {item.label}
                         </NavLink>
                     ))}
+
                     <a
                         href="/login"
                         className="ml-2 inline-flex items-center gap-2 rounded-full border-2 border-primary px-4 py-2 text-base font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
@@ -65,7 +85,11 @@ export default function Navbar() {
                     aria-label="Buka menu"
                     aria-expanded={open}
                 >
-                    {open ? <X className="size-6" /> : <Menu className="size-6" />}
+                    {open ? (
+                        <X className="size-6" />
+                    ) : (
+                        <Menu className="size-6" />
+                    )}
                 </button>
             </div>
 
@@ -83,6 +107,7 @@ export default function Navbar() {
                             Katalog Pustaka
                             <ExternalLink className="ml-auto size-4 opacity-60" />
                         </a>
+
                         {navItems.map((item) => (
                             <NavLink
                                 key={item.to}
@@ -94,6 +119,7 @@ export default function Navbar() {
                                 {item.label}
                             </NavLink>
                         ))}
+
                         <a
                             href="/login"
                             onClick={() => setOpen(false)}
