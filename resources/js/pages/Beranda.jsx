@@ -3,8 +3,9 @@ import {
     Search,
     Leaf,
     Mountain,
-    ShoppingBag,
     ArrowRight,
+    ShoppingBag,
+    PlayCircle,
 } from 'lucide-react';
 
 import Navbar from '../components/Navbar';
@@ -17,13 +18,14 @@ import wisataCengklik from '../assets/wisata-cengklik.jpg';
 
 export default function Beranda() {
     const { data: kearifanItems, isLoading } = useKearifanItems();
+
     const kearifanTerbaru = kearifanItems?.slice(0, 3) ?? [];
 
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
 
-            {/* Hero */}
+            {/* ===== HERO ===== */}
             <section className="relative overflow-hidden">
                 <div className="absolute inset-0">
                     <img
@@ -51,28 +53,32 @@ export default function Beranda() {
                         </h1>
 
                         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-primary-foreground/90 md:text-xl">
-                            Selamat datang di <strong>KALOKA</strong>, rumah digital
-                            Perpustakaan Desa Sobokerto. Temukan buku, cerita warga, dan
-                            pesona Waduk Cengklik dalam satu tempat.
+                            Selamat datang di <strong>KALOKA</strong>, rumah
+                            digital Perpustakaan Desa Sobokerto. Temukan buku,
+                            cerita warga, wisata, dan UMKM desa dalam satu
+                            tempat.
                         </p>
 
                         <form
-                            className="mt-8 flex items-center rounded-2xl bg-background p-3 shadow-xl"
+                            className="mt-8 rounded-2xl bg-background p-3 shadow-xl"
                             onSubmit={(e) => e.preventDefault()}
                             role="search"
                         >
-                            <label htmlFor="cari" className="sr-only">
+                            <label
+                                htmlFor="cari"
+                                className="sr-only"
+                            >
                                 Cari buku, kearifan, wisata, atau produk UMKM
                             </label>
 
-                            <div className="flex flex-1 items-center gap-3 px-3">
+                            <div className="flex items-center gap-3 px-3">
                                 <Search className="size-6 shrink-0 text-primary" />
 
                                 <input
                                     id="cari"
                                     type="search"
-                                    placeholder="Cari buku, cerita, wisata, atau produk UMKM…"
-                                    className="w-full bg-transparent py-2 text-lg text-foreground placeholder:text-muted-foreground focus:outline-none"
+                                    placeholder=""
+                                    className="w-full bg-transparent py-2 text-lg text-foreground focus:outline-none"
                                 />
                             </div>
                         </form>
@@ -80,7 +86,7 @@ export default function Beranda() {
                 </div>
             </section>
 
-            {/* Menu utama */}
+            {/* ===== MENU UTAMA ===== */}
             <section className="container-page relative z-10 -mt-14">
                 <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                     <Link
@@ -116,7 +122,7 @@ export default function Beranda() {
                             </h3>
 
                             <p className="mt-1 text-base leading-relaxed text-muted-foreground">
-                                Jelajahi keindahan Waduk Cengklik &amp; sekitarnya.
+                                Jelajahi keindahan Waduk Cengklik dan sekitarnya.
                             </p>
                         </div>
                     </Link>
@@ -135,59 +141,75 @@ export default function Beranda() {
                             </h3>
 
                             <p className="mt-1 text-base leading-relaxed text-muted-foreground">
-                                Temukan produk lokal berkualitas hasil karya masyarakat Desa
-                                Sobokerto.
+                                Lihat berbagai hasil usaha dan produk buatan
+                                warga Desa Sobokerto.
                             </p>
                         </div>
                     </Link>
                 </div>
             </section>
 
-            {/* Video profil desa */}
-            <section className="container-page mt-24">
-                <div className="mx-auto max-w-3xl text-center">
-                    <span className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">
-                        Profil Desa
-                    </span>
+            {/* ===== PROFIL DESA ===== */}
+            <section className="container-page mt-28">
+                <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+                    {/* Teks kiri */}
+                    <div className="max-w-xl">
+                        <span className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.24em] text-primary">
+                            <span className="size-2 rounded-full bg-primary" />
+                            Profil Desa
+                        </span>
 
-                    <h2 className="mt-3 font-display text-3xl leading-tight md:text-5xl">
-                        Mengenal Sobokerto Lebih Dekat
-                    </h2>
+                        <div className="mt-4 h-0.5 w-10 rounded-full bg-[oklch(0.75_0.15_80)]" />
 
-                    <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                        Saksikan kisah, potensi, budaya, dan kehidupan masyarakat Desa
-                        Sobokerto melalui video profil desa.
-                    </p>
-                </div>
+                        <h2 className="mt-7 font-display text-4xl font-semibold leading-[1.08] tracking-[-0.03em] text-foreground sm:text-5xl lg:text-[58px]">
+                            Mengenal
+                            <br />
 
-                <div className="mt-10 overflow-hidden rounded-3xl bg-black shadow-2xl">
-                    <div className="aspect-video">
-                        <iframe
-                            className="h-full w-full"
-                            src="https://www.youtube.com/embed/SAPOqu-06NI"
-                            title="Video Profil Desa Sobokerto"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerPolicy="strict-origin-when-cross-origin"
-                            allowFullScreen
-                        />
+                            <span className="text-primary">
+                                Sobokerto
+                            </span>
+
+                            <br />
+                            Lebih Dekat
+                        </h2>
+
+                        <div className="mt-6 h-0.5 w-12 rounded-full bg-primary" />
+
+                        <p className="mt-6 max-w-lg text-base leading-8 text-muted-foreground sm:text-lg">
+                            Saksikan kisah, potensi, budaya, dan kehidupan
+                            masyarakat Desa Sobokerto melalui video profil desa.
+                        </p>
+
+                        <a
+                            href="https://youtu.be/SAPOqu-06NI"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-primary mt-8 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold sm:text-base"
+                        >
+                            <PlayCircle className="size-5" />
+                            Tonton selengkapnya
+                            <ArrowRight className="size-4" />
+                        </a>
                     </div>
-                </div>
 
-                <div className="mt-6 flex justify-center">
-                    <a
-    href="https://youtu.be/SAPOqu-06NI?si=dtM470fSbmxSqh7A"
-    target="_blank"
-    rel="noreferrer"
-    className="inline-flex items-center gap-2 font-semibold text-primary transition hover:opacity-70"
->
-    Tonton di YouTube
-    <ArrowRight className="size-4" />
-</a>
+                    {/* Video kanan */}
+                    <div className="w-full max-w-3xl justify-self-end">
+                        <div className="overflow-hidden rounded-2xl border border-border bg-black shadow-xl">
+                            <div className="aspect-video">
+                                <iframe
+                                    className="size-full"
+                                    src="https://www.youtube.com/embed/SAPOqu-06NI?rel=0"
+                                    title="Video Profil Desa Sobokerto"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            {/* Kearifan lokal terbaru */}
+            {/* ===== KEARIFAN LOKAL TERBARU ===== */}
             <section className="container-page mt-24">
                 <div className="flex flex-wrap items-end justify-between gap-4">
                     <div>
@@ -200,12 +222,15 @@ export default function Beranda() {
                         </h2>
 
                         <p className="mt-2 max-w-2xl text-base text-muted-foreground md:text-lg">
-                            Cerita, tradisi, dan pengetahuan yang dijaga warga Sobokerto
-                            dari generasi ke generasi.
+                            Cerita, tradisi, dan pengetahuan yang dijaga warga
+                            Sobokerto dari generasi ke generasi.
                         </p>
                     </div>
 
-                    <Link to="/kearifan-lokal" className="btn-outline">
+                    <Link
+                        to="/kearifan-lokal"
+                        className="btn-outline"
+                    >
                         Lihat semua
                         <ArrowRight className="size-5" />
                     </Link>
@@ -227,12 +252,12 @@ export default function Beranda() {
                 </div>
             </section>
 
-            {/* Wisata */}
+            {/* ===== WISATA ===== */}
             <section className="container-page mt-24">
                 <div className="grid items-center gap-10 overflow-hidden rounded-3xl border border-border bg-primary-soft md:grid-cols-2">
                     <div className="p-8 md:p-12">
                         <span className="text-sm font-semibold uppercase tracking-wide text-earth">
-                            Info wisata
+                            Info Wisata
                         </span>
 
                         <h2 className="mt-2 font-display text-3xl md:text-4xl">
@@ -240,12 +265,15 @@ export default function Beranda() {
                         </h2>
 
                         <p className="mt-4 text-base leading-relaxed text-foreground md:text-lg">
-                            Nikmati matahari terbit di atas air, mencicipi ikan bakar hasil
-                            tangkapan warga, dan berkeliling naik perahu bersama pemandu
-                            setempat.
+                            Nikmati matahari terbit di atas air, mencicipi ikan
+                            bakar hasil tangkapan warga, dan berkeliling naik
+                            perahu bersama pemandu setempat.
                         </p>
 
-                        <Link to="/wisata" className="btn-primary mt-6">
+                        <Link
+                            to="/wisata"
+                            className="btn-primary mt-6"
+                        >
                             Lihat wisata desa
                             <ArrowRight className="size-5" />
                         </Link>
