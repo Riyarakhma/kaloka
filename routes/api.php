@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\KearifanLokalController;
 use App\Http\Controllers\Api\PengaturanController;
 use App\Http\Controllers\Api\WisataController;
+use App\Http\Controllers\Api\UmkmController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ Route::get('/kearifan-lokal/{kearifanLokal}', [KearifanLokalController::class, '
 Route::get('/pengaturan', [PengaturanController::class, 'index']);
 Route::get('/wisata', [WisataController::class, 'index']);
 Route::get('/wisata/{wisatum}', [WisataController::class, 'show']);
+Route::get('/umkm', [UmkmController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
