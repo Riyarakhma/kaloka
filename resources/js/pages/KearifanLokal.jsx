@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import {
     ArrowRight,
+    Check,
+    ChevronDown,
     Leaf,
     Search,
 } from 'lucide-react';
@@ -94,22 +96,6 @@ const KATEGORI = [
     },
 ];
 
-function FilterChip({ active, onClick, label }) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className={`rounded-full border-2 px-5 py-2.5 text-base font-semibold transition ${
-                active
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-border bg-card text-foreground hover:border-primary hover:text-primary'
-            }`}
-        >
-            {label}
-        </button>
-    );
-}
-
 function KearifanCard({ item }) {
     const kategoriLabel =
         KATEGORI.find((kategori) => kategori.id === item.kategori)?.label ??
@@ -151,16 +137,32 @@ function KearifanCard({ item }) {
 export default function KearifanLokal() {
     const [filter, setFilter] = useState('semua');
     const [query, setQuery] = useState('');
+    const [categoryOpen, setCategoryOpen] = useState(false);
+
+    const categoryOptions = useMemo(
+        () => [
+            {
+                id: 'semua',
+                label: 'Semua Kategori',
+            },
+            ...KATEGORI,
+        ],
+        [],
+    );
+
+    const selectedCategory =
+        categoryOptions.find((kategori) => kategori.id === filter) ??
+        categoryOptions[0];
 
     const items = useMemo(() => {
-        const q = query.trim().toLowerCase();
+        const normalizedQuery = query.trim().toLowerCase();
 
         return KEARIFAN_ITEMS.filter((item) => {
             if (filter !== 'semua' && item.kategori !== filter) {
                 return false;
             }
 
-            if (!q) {
+            if (!normalizedQuery) {
                 return true;
             }
 
@@ -170,9 +172,9 @@ export default function KearifanLokal() {
                 )?.label ?? '';
 
             return (
-                item.judul.toLowerCase().includes(q) ||
-                item.deskripsi.toLowerCase().includes(q) ||
-                kategoriLabel.toLowerCase().includes(q)
+                item.judul.toLowerCase().includes(normalizedQuery) ||
+                item.deskripsi.toLowerCase().includes(normalizedQuery) ||
+                kategoriLabel.toLowerCase().includes(normalizedQuery)
             );
         });
     }, [filter, query]);
@@ -192,7 +194,7 @@ export default function KearifanLokal() {
                         Kearifan Lokal Sobokerto
                     </h1>
 
-                    <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+                    <p className="mt-3 max-w-2xl text-lg leading-8 text-muted-foreground">
                         Jelajahi pengetahuan lokal, kehidupan masyarakat,
                         pertanian, sejarah, serta potensi lingkungan Desa
                         Sobokerto.
@@ -218,40 +220,96 @@ export default function KearifanLokal() {
                 </div>
             </section>
 
-            <section className="container-page mt-10">
-                <div className="flex flex-wrap gap-2">
-                    <FilterChip
-                        active={filter === 'semua'}
-                        onClick={() => setFilter('semua')}
-                        label={`Semua (${KEARIFAN_ITEMS.length})`}
-                    />
+            <section className="container-page py-10 md:py-14">
+                <div className="relative w-full max-w-md">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setCategoryOpen((previousValue) => !previousValue)
+                        }
+                        className={`flex w-full items-center justify-between gap-4 rounded-xl border bg-background px-4 py-3 text-left transition ${
+                            categoryOpen
+                                ? 'border-primary'
+                                : 'border-border hover:border-primary'
+                        }`}
+                        aria-haspopup="listbox"
+                        aria-expanded={categoryOpen}
+                    >
+                        <span className="truncate text-base font-medium text-foreground">
+                            {selectedCategory.label}
+                        </span>
 
-                    {KATEGORI.map((kategori) => {
-                        const count = KEARIFAN_ITEMS.filter(
-                            (item) => item.kategori === kategori.id,
-                        ).length;
+                        <ChevronDown
+                            className={`size-5 shrink-0 text-muted-foreground transition-transform duration-200 ${
+                                categoryOpen ? 'rotate-180' : ''
+                            }`}
+                            strokeWidth={2}
+                        />
+                    </button>
 
-                        return (
-                            <FilterChip
-                                key={kategori.id}
-                                active={filter === kategori.id}
-                                onClick={() => setFilter(kategori.id)}
-                                label={`${kategori.label} (${count})`}
+                    {categoryOpen && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => setCategoryOpen(false)}
+                                className="fixed inset-0 z-30 cursor-default"
+                                aria-label="Tutup pilihan kategori"
                             />
-                        );
-                    })}
+
+                            <div
+                                className="absolute left-0 top-full z-40 mt-2 w-full overflow-hidden rounded-xl border border-border bg-background p-1 shadow-lg"
+                                role="listbox"
+                                aria-label="Pilihan kategori kearifan lokal"
+                            >
+                                {categoryOptions.map((kategori) => {
+                                    const isActive =
+                                        kategori.id === filter;
+
+                                    return (
+                                        <button
+                                            key={kategori.id}
+                                            type="button"
+                                            onClick={() => {
+                                                setFilter(kategori.id);
+                                                setCategoryOpen(false);
+                                            }}
+                                            className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                                                isActive
+                                                    ? 'bg-primary-soft font-medium text-primary'
+                                                    : 'text-foreground hover:bg-primary-soft/60'
+                                            }`}
+                                            role="option"
+                                            aria-selected={isActive}
+                                        >
+                                            <span className="truncate">
+                                                {kategori.label}
+                                            </span>
+
+                                            {isActive && (
+                                                <Check
+                                                    className="size-4 shrink-0 text-primary"
+                                                    strokeWidth={2.2}
+                                                />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {items.length === 0 ? (
-                    <div className="mt-12 rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+                    <div className="mt-12 rounded-3xl border border-dashed border-border bg-card p-10 text-center">
                         <Leaf className="mx-auto mb-4 size-12 text-primary" />
 
-                        <h3 className="text-xl font-semibold">
+                        <h3 className="text-xl font-semibold text-foreground">
                             Kearifan lokal tidak ditemukan
                         </h3>
 
                         <p className="mt-2 text-muted-foreground">
-                            Tidak ada konten yang sesuai dengan pencarian Anda.
+                            Tidak ada konten yang sesuai dengan pencarian atau
+                            kategori yang dipilih.
                         </p>
                     </div>
                 ) : (
