@@ -12,16 +12,36 @@ import {
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { UMKM_ITEMS } from '../data/umkmData';
+import { useQuery } from '@tanstack/react-query';
 
 export default function DetailUMKM() {
     const { slug } = useParams();
 
-    const umkm = UMKM_ITEMS.find(
-        (item) =>
-            item.slug === slug &&
-            item.status_tampil === true,
-    );
+    const { data: umkm, isLoading } = useQuery({
+        queryKey: ['umkm', slug],
+        queryFn: async () => {
+            const res = await fetch(`/api/umkm/${slug}`);
+            if (!res.ok) return null;
+            const json = await res.json();
+            const item = json.data;
+            return {
+                ...item,
+                foto: item.foto?.[0] ? `/storage/${item.foto[0]}` : null,
+            };
+        },
+    });
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background">
+                <Navbar />
+                <div className="container-page py-20 text-center text-muted-foreground">
+                    Memuat...
+                </div>
+                <Footer />
+            </div>
+        );
+    }
 
     if (!umkm) {
         return (

@@ -45,6 +45,12 @@ Route::get('/wisata', function () {
 Route::get('/wisata/{wisata}', function () {
     return view('app');
 });
+Route::get('/umkm', function () {
+    return view('app');
+});
+Route::get('/umkm/{umkm}', function () {
+    return view('app');
+});
 
 // Autentikasi (login/logout). Registrasi publik DINONAKTIFKAN — akun dibuat admin.
 Auth::routes(['register' => false]);

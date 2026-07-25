@@ -10,7 +10,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import UMKMCard from '../components/UMKMCard';
 
-import { UMKM_ITEMS } from '../data/umkmData';
+import { useUmkmItems } from '../lib/umkm-api';
 
 const KATEGORI = [
     {
@@ -35,6 +35,7 @@ export default function UMKM() {
     const [filter, setFilter] = useState('semua');
     const [query, setQuery] = useState('');
     const [categoryOpen, setCategoryOpen] = useState(false);
+    const { data: UMKM_ITEMS = [], isLoading, isError } = useUmkmItems();
 
     const categoryOptions = useMemo(
         () => [
@@ -83,7 +84,7 @@ export default function UMKM() {
 
             return searchableText.includes(normalizedQuery);
         });
-    }, [filter, query]);
+    }, [filter, query, UMKM_ITEMS]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -246,7 +247,18 @@ export default function UMKM() {
                         </p>
                     </div>
 
-                    {items.length === 0 ? (
+                    {isLoading ? (
+                        <div className="mt-12 text-center text-muted-foreground">
+                            Memuat data…
+                        </div>
+                    ) : isError ? (
+                        <div className="mt-12 rounded-2xl border border-dashed border-destructive bg-card p-10 text-center">
+                            <p className="text-lg text-destructive">
+                                Gagal memuat data. Pastikan server API
+                                sedang berjalan.
+                            </p>
+                        </div>
+                    ) : items.length === 0 ? (
                         <div className="mt-12 rounded-3xl border border-dashed border-border bg-card p-10 text-center">
                             <Store className="mx-auto mb-4 size-12 text-primary" />
 

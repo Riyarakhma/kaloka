@@ -17,6 +17,7 @@ Route::get('/pengaturan', [PengaturanController::class, 'index']);
 Route::get('/wisata', [WisataController::class, 'index']);
 Route::get('/wisata/{wisatum}', [WisataController::class, 'show']);
 Route::get('/umkm', [UmkmController::class, 'index']);
+Route::get('/umkm/{umkm}', [UmkmController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {

@@ -11,7 +11,11 @@ class UmkmController extends Controller
     {
         $umkm = Umkm::where('status_tampil', 1)
                     ->paginate(10);
-
         return response()->json($umkm);
+    }
+
+    public function show(Umkm $umkm)
+    {
+        return response()->json(['data' => $umkm]);
     }
 }

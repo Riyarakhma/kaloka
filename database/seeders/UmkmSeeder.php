@@ -10,7 +10,6 @@ class UmkmSeeder extends Seeder
     public function run(): void
     {
         $data = [
-
             [
                 'nama_umkm' => 'Batik Sobokerto',
                 'kategori' => 'Kerajinan',
@@ -18,12 +17,9 @@ class UmkmSeeder extends Seeder
                 'pemilik' => 'Ibu Siti',
                 'alamat' => 'Desa Sobokerto, Ngemplak, Boyolali',
                 'kontak' => '081234567890',
-                'foto' => [
-                    'batik.jpg'
-                ],
+                'foto' => ['umkm/ecoprint.jpg'],
                 'status_tampil' => 1,
             ],
-
             [
                 'nama_umkm' => 'Ecoprint Sobokerto',
                 'kategori' => 'Kerajinan',
@@ -31,12 +27,9 @@ class UmkmSeeder extends Seeder
                 'pemilik' => 'Ibu Rini',
                 'alamat' => 'Dukuh Sobokerto',
                 'kontak' => '082345678901',
-                'foto' => [
-                    'ecoprint.jpg'
-                ],
+                'foto' => ['umkm/ecoprint.jpg'],
                 'status_tampil' => 1,
             ],
-
             [
                 'nama_umkm' => 'Olahan Lele Sobokerto',
                 'kategori' => 'Kuliner',
@@ -44,12 +37,9 @@ class UmkmSeeder extends Seeder
                 'pemilik' => 'Kelompok PKK Desa',
                 'alamat' => 'Desa Sobokerto',
                 'kontak' => '083456789012',
-                'foto' => [
-                    'abon-lele.jpg'
-                ],
+                'foto' => ['umkm/ecoprint.jpg'],
                 'status_tampil' => 1,
             ],
-
             [
                 'nama_umkm' => 'Keripik Belut Sobokerto',
                 'kategori' => 'Kuliner',
@@ -57,12 +47,9 @@ class UmkmSeeder extends Seeder
                 'pemilik' => 'Pak Sumarno',
                 'alamat' => 'Dukuh Ngandong',
                 'kontak' => '084567890123',
-                'foto' => [
-                    'keripik-belut.jpg'
-                ],
+                'foto' => ['umkm/ecoprint.jpg'],
                 'status_tampil' => 1,
             ],
-
             [
                 'nama_umkm' => 'Budidaya Ikan Nila Cengklik',
                 'kategori' => 'Budidaya',
@@ -70,12 +57,9 @@ class UmkmSeeder extends Seeder
                 'pemilik' => 'Kelompok Pembudidaya Ikan',
                 'alamat' => 'Area Waduk Cengklik',
                 'kontak' => '085678901234',
-                'foto' => [
-                    'ikan-nila.jpg'
-                ],
+                'foto' => ['umkm/ecoprint.jpg'],
                 'status_tampil' => 1,
             ],
-
             [
                 'nama_umkm' => 'Pupuk Organik Eceng Gondok',
                 'kategori' => 'Pertanian',
@@ -83,27 +67,18 @@ class UmkmSeeder extends Seeder
                 'pemilik' => 'Kelompok Tani Sobokerto',
                 'alamat' => 'Desa Sobokerto',
                 'kontak' => '086789012345',
-                'foto' => [
-                    'pupuk.jpg'
-                ],
+                'foto' => ['umkm/ecoprint.jpg'],
                 'status_tampil' => 1,
             ],
-
         ];
-
 
         foreach ($data as $item) {
             Umkm::updateOrCreate(
-                [
-                    'nama_umkm' => $item['nama_umkm']
-                ],
+                ['nama_umkm' => $item['nama_umkm']],
                 $item
             );
         }
 
-
-        $this->command->info(
-            'Seeder UMKM berhasil: '.count($data).' data'
-        );
+        $this->command->info('Seeder UMKM berhasil: '.count($data).' data');
     }
 }
