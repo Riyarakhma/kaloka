@@ -31,10 +31,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/wisata', [WisataController::class, 'store']);
     Route::put('/wisata/{wisatum}', [WisataController::class, 'update']);
+    Route::post('/umkm', [UmkmController::class, 'store']);
+    Route::put('/umkm/{umkm}', [UmkmController::class, 'update']);
 
     Route::middleware('peran.api:admin')->group(function () {
         Route::delete('/kearifan-lokal/{kearifanLokal}', [KearifanLokalController::class, 'destroy']);
         Route::put('/pengaturan', [PengaturanController::class, 'update']);
         Route::delete('/wisata/{wisatum}', [WisataController::class, 'destroy']);
+        Route::delete('/umkm/{umkm}', [UmkmController::class, 'destroy']);
     });
 });

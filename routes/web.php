@@ -8,6 +8,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\Pengelola\KearifanLokalController as KelolaKearifan;
 use App\Http\Controllers\Pengelola\WisataController as KelolaWisata;
+use App\Http\Controllers\Pengelola\UmkmController as KelolaUmkm;
 use App\Http\Controllers\Publik\KearifanLokalController as PublikKearifan;
 use App\Http\Controllers\Publik\WisataController as PublikWisata;
 use Illuminate\Support\Facades\Route;
@@ -77,6 +78,9 @@ Route::middleware('auth')->group(function () {
         // Modul Info Wisata
         Route::delete('wisata/{wisata}/foto', [KelolaWisata::class, 'hapusFoto'])->name('wisata.foto.hapus');
         Route::resource('wisata', KelolaWisata::class)->parameters(['wisata' => 'wisata']);
+        
+        // Modul UMKM
+        Route::resource('umkm', KelolaUmkm::class);
     });
 
     // ===== HANYA ADMIN =====

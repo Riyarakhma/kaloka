@@ -1,13 +1,9 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
-
 class Umkm extends Model
 {
     protected $table = 'umkms';
-
     protected $fillable = [
         'nama_umkm',
         'kategori',
@@ -18,8 +14,14 @@ class Umkm extends Model
         'foto',
         'status_tampil',
     ];
-
     protected $casts = [
         'foto' => 'array',
     ];
+
+    public function urlFoto(): array
+    {
+        return collect($this->foto ?? [])
+            ->map(fn ($path) => \Illuminate\Support\Facades\Storage::url($path))
+            ->all();
+    }
 }
