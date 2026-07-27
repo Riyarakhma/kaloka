@@ -11,10 +11,8 @@ import {
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-import {
-    KEARIFAN_ITEMS,
-    KATEGORI_KEARIFAN,
-} from '../data/kearifanData';
+import { KATEGORI_KEARIFAN } from '../data/kearifanData';
+import { useKearifanItems } from '../lib/kearifan-api';
 
 function KearifanCard({ item }) {
     const kategoriLabel =
@@ -54,7 +52,7 @@ function KearifanCard({ item }) {
                 </Link>
 
                 <p className="mt-3 flex-1 text-base leading-7 text-muted-foreground">
-                    {item.deskripsi}
+                    {item.cuplikan}
                 </p>
 
                 <Link
@@ -73,6 +71,12 @@ export default function KearifanLokal() {
     const [filter, setFilter] = useState('semua');
     const [query, setQuery] = useState('');
     const [categoryOpen, setCategoryOpen] = useState(false);
+
+    const {
+        data: kearifanItems = [],
+        isLoading,
+        isError,
+    } = useKearifanItems();
 
     const categoryOptions = useMemo(
         () => [
@@ -93,7 +97,7 @@ export default function KearifanLokal() {
     const filteredItems = useMemo(() => {
         const normalizedQuery = query.trim().toLowerCase();
 
-        return KEARIFAN_ITEMS.filter((item) => {
+        return kearifanItems.filter((item) => {
             const sesuaiKategori =
                 filter === 'semua' || item.kategori === filter;
 
@@ -110,32 +114,11 @@ export default function KearifanLokal() {
                     (kategori) => kategori.id === item.kategori,
                 )?.label ?? '';
 
-            const kataKunci = Array.isArray(item.kataKunci)
-                ? item.kataKunci.join(' ')
-                : '';
-
-            const narasumber =
-                typeof item.narasumber === 'object'
-                    ? [
-                          item.narasumber?.nama,
-                          item.narasumber?.keterangan,
-                          item.narasumber?.asal,
-                      ]
-                          .filter(Boolean)
-                          .join(' ')
-                    : item.narasumber ?? '';
-
             const searchableContent = [
                 item.judul,
-                item.deskripsi,
+                item.cuplikan,
                 kategoriLabel,
-                kataKunci,
-                narasumber,
-                item.lokasi,
-                item.bahasa,
-                item.jenisMedia,
-                item.pendokumentasi,
-                item.sumber,
+                item.narasumber,
             ]
                 .filter(Boolean)
                 .join(' ')
@@ -143,7 +126,7 @@ export default function KearifanLokal() {
 
             return searchableContent.includes(normalizedQuery);
         });
-    }, [filter, query]);
+    }, [filter, query, kearifanItems]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -288,7 +271,15 @@ export default function KearifanLokal() {
                         </p>
                     </div>
 
-                    {filteredItems.length === 0 ? (
+                    {isLoading ? (
+                        <div className="mt-12 rounded-3xl border border-dashed border-border bg-card p-10 text-center text-muted-foreground">
+                            Memuat dokumentasi kearifan lokal...
+                        </div>
+                    ) : isError ? (
+                        <div className="mt-12 rounded-3xl border border-dashed border-destructive bg-card p-10 text-center text-destructive">
+                            Gagal memuat data. Coba muat ulang halaman.
+                        </div>
+                    ) : filteredItems.length === 0 ? (
                         <div className="mt-12 rounded-3xl border border-dashed border-border bg-card p-10 text-center">
                             <Leaf className="mx-auto mb-4 size-12 text-primary" />
 

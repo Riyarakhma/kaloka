@@ -35,22 +35,22 @@ Route::get('/cari', [PencarianController::class, 'index'])->name('cari');
 */
 Route::get('/kearifan-lokal', function () {
     return view('app');
-});
+})->name('kearifan.index');
 Route::get('/kearifan-lokal/{kearifan}', function () {
     return view('app');
-});
+})->name('kearifan.show');
 Route::get('/wisata', function () {
     return view('app');
-});
+})->name('wisata.index');
 Route::get('/wisata/{wisata}', function () {
     return view('app');
-});
+})->name('wisata.show');
 Route::get('/umkm', function () {
     return view('app');
-});
+})->name('umkm.index');
 Route::get('/umkm/{umkm}', function () {
     return view('app');
-});
+})->name('umkm.show');
 
 // Autentikasi (login/logout). Registrasi publik DINONAKTIFKAN — akun dibuat admin.
 Auth::routes(['register' => false]);
