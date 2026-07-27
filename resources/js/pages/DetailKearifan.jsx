@@ -15,10 +15,8 @@ import {
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-import {
-    KEARIFAN_ITEMS,
-    KATEGORI_KEARIFAN,
-} from '../data/kearifanData';
+import { KATEGORI_KEARIFAN } from '../data/kearifanData';
+import { useKearifanDetail } from '../lib/kearifan-api';
 
 function InformationCard({ icon: Icon, title, children }) {
     return (
@@ -50,41 +48,61 @@ function StatusBadge({ children }) {
     );
 }
 
+function NotFound() {
+    return (
+        <div className="min-h-screen bg-background">
+            <Navbar />
+
+            <main className="container-page py-24 text-center">
+                <FileText className="mx-auto size-14 text-primary" />
+
+                <h1 className="mt-5 font-display text-4xl text-foreground">
+                    Artikel tidak ditemukan
+                </h1>
+
+                <p className="mt-3 text-muted-foreground">
+                    Artikel yang kamu cari belum tersedia.
+                </p>
+
+                <Link
+                    to="/kearifan-lokal"
+                    className="mt-8 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-white"
+                >
+                    <ArrowLeft className="size-5" />
+                    Kembali
+                </Link>
+            </main>
+
+            <Footer />
+        </div>
+    );
+}
+
 export default function DetailKearifan() {
     const { slug } = useParams();
 
-    const artikel = KEARIFAN_ITEMS.find(
-        (item) => item.slug === slug,
-    );
+    const {
+        data: artikel,
+        isLoading,
+        isError,
+    } = useKearifanDetail(slug);
 
-    if (!artikel) {
+    if (isLoading) {
         return (
             <div className="min-h-screen bg-background">
                 <Navbar />
 
-                <main className="container-page py-24 text-center">
-                    <FileText className="mx-auto size-14 text-primary" />
-
-                    <h1 className="mt-5 font-display text-4xl text-foreground">
-                        Artikel tidak ditemukan
-                    </h1>
-
-                    <p className="mt-3 text-muted-foreground">
-                        Artikel yang kamu cari belum tersedia.
-                    </p>
-
-                    <Link
-                        to="/kearifan-lokal"
-                        className="mt-8 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-white"
-                    >
-                        <ArrowLeft className="size-5" />
-                        Kembali
-                    </Link>
+                <main className="container-page py-24 text-center text-muted-foreground">
+                    Memuat artikel...
                 </main>
 
                 <Footer />
             </div>
         );
+    }
+
+    if (isError || !artikel) {
+        return <NotFound />;
     }
 
     const kategoriLabel =
@@ -124,69 +142,62 @@ export default function DetailKearifan() {
                                 {artikel.judul}
                             </h1>
 
-                            <p className="mt-4 text-lg leading-8 text-muted-foreground">
-                                {artikel.deskripsi}
-                            </p>
-
                             <section className="mt-9">
                                 <h2 className="text-lg font-bold text-foreground">
                                     Deskripsi
                                 </h2>
 
                                 <div className="mt-4 space-y-5">
-                                    {artikel.isi.map((paragraf, index) => (
-                                        <p
-                                            key={`${artikel.slug}-${index}`}
-                                            className="text-base leading-8 text-foreground/80 md:text-lg"
-                                        >
-                                            {paragraf}
-                                        </p>
-                                    ))}
+                                    {artikel.deskripsi
+                                        .split('\n')
+                                        .filter(Boolean)
+                                        .map((paragraf, index) => (
+                                            <p
+                                                key={`${artikel.slug}-${index}`}
+                                                className="text-base leading-8 text-foreground/80 md:text-lg"
+                                            >
+                                                {paragraf}
+                                            </p>
+                                        ))}
                                 </div>
                             </section>
 
-                            <section className="mt-9 border-t border-border pt-8">
-                                <h2 className="text-lg font-bold text-foreground">
-                                    Kata Kunci
-                                </h2>
+                            {artikel.kataKunci.length > 0 && (
+                                <section className="mt-9 border-t border-border pt-8">
+                                    <h2 className="text-lg font-bold text-foreground">
+                                        Kata Kunci
+                                    </h2>
 
-                                <div className="mt-4 flex flex-wrap gap-2">
-                                    {artikel.kataKunci.map((kata) => (
-                                        <span
-                                            key={kata}
-                                            className="rounded-full bg-primary-soft px-4 py-2 text-sm font-medium text-primary"
-                                        >
-                                            {kata}
-                                        </span>
-                                    ))}
-                                </div>
-                            </section>
-
-                            <section className="mt-9 border-t border-border pt-8">
-                                <h2 className="text-lg font-bold text-foreground">
-                                    Narasumber
-                                </h2>
-
-                                <div className="mt-5 flex items-center gap-4 rounded-2xl bg-muted/50 p-5">
-                                    <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                                        <UserRound className="size-7" />
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        {artikel.kataKunci.map((kata) => (
+                                            <span
+                                                key={kata}
+                                                className="rounded-full bg-primary-soft px-4 py-2 text-sm font-medium text-primary"
+                                            >
+                                                {kata}
+                                            </span>
+                                        ))}
                                     </div>
+                                </section>
+                            )}
 
-                                    <div>
-                                        <h3 className="font-semibold text-foreground">
-                                            {artikel.narasumber.nama}
-                                        </h3>
+                            {artikel.narasumber && (
+                                <section className="mt-9 border-t border-border pt-8">
+                                    <h2 className="text-lg font-bold text-foreground">
+                                        Narasumber
+                                    </h2>
 
-                                        <p className="mt-1 text-sm text-muted-foreground">
-                                            {artikel.narasumber.keterangan}
-                                        </p>
+                                    <div className="mt-5 flex items-center gap-4 rounded-2xl bg-muted/50 p-5">
+                                        <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                            <UserRound className="size-7" />
+                                        </div>
 
-                                        <p className="text-sm text-muted-foreground">
-                                            {artikel.narasumber.asal}
+                                        <p className="font-semibold text-foreground">
+                                            {artikel.narasumber}
                                         </p>
                                     </div>
-                                </div>
-                            </section>
+                                </section>
+                            )}
 
                             <aside className="mt-9 rounded-2xl border border-primary/15 bg-primary-soft/50 p-6">
                                 <h2 className="font-display text-xl text-primary">
@@ -203,78 +214,71 @@ export default function DetailKearifan() {
                     </article>
 
                     <aside className="space-y-4 lg:sticky lg:top-24">
-                        <InformationCard
-                            icon={MapPin}
-                            title="Lokasi"
-                        >
-                            <p>{artikel.lokasi}</p>
-                        </InformationCard>
+                        {artikel.lokasi && (
+                            <InformationCard icon={MapPin} title="Lokasi">
+                                <p>{artikel.lokasi}</p>
+                            </InformationCard>
+                        )}
 
-                        <InformationCard
-                            icon={Languages}
-                            title="Bahasa"
-                        >
-                            <p>{artikel.bahasa}</p>
-                        </InformationCard>
+                        {artikel.bahasa && (
+                            <InformationCard icon={Languages} title="Bahasa">
+                                <p>{artikel.bahasa}</p>
+                            </InformationCard>
+                        )}
 
-                        <InformationCard
-                            icon={Camera}
-                            title="Jenis Media"
-                        >
-                            <p>{artikel.jenisMedia}</p>
-                        </InformationCard>
+                        {artikel.jenisMedia && (
+                            <InformationCard icon={Camera} title="Jenis Media">
+                                <p>{artikel.jenisMedia}</p>
+                            </InformationCard>
+                        )}
 
-                        <InformationCard
-                            icon={CalendarDays}
-                            title="Tanggal Dokumentasi"
-                        >
-                            <p>{artikel.tanggalDokumentasi}</p>
-                        </InformationCard>
+                        {artikel.tanggalDokumentasi && (
+                            <InformationCard
+                                icon={CalendarDays}
+                                title="Tanggal Dokumentasi"
+                            >
+                                <p>{artikel.tanggalDokumentasi}</p>
+                            </InformationCard>
+                        )}
 
-                        <InformationCard
-                            icon={UserRound}
-                            title="Pendokumentasi"
-                        >
-                            <p>{artikel.pendokumentasi}</p>
-                        </InformationCard>
+                        {artikel.pendokumentasi && (
+                            <InformationCard
+                                icon={UserRound}
+                                title="Pendokumentasi"
+                            >
+                                <p>{artikel.pendokumentasi}</p>
+                            </InformationCard>
+                        )}
 
-                        <InformationCard
-                            icon={FileText}
-                            title="Sumber"
-                        >
-                            <p>{artikel.sumber}</p>
-                        </InformationCard>
+                        {artikel.sumber && (
+                            <InformationCard icon={FileText} title="Sumber">
+                                <p>{artikel.sumber}</p>
+                            </InformationCard>
+                        )}
 
-                        <InformationCard
-                            icon={ShieldCheck}
-                            title="Status Etis"
-                        >
-                            <StatusBadge>
-                                {artikel.statusEtis.label}
-                            </StatusBadge>
+                        {artikel.statusEtis && (
+                            <InformationCard
+                                icon={ShieldCheck}
+                                title="Status Etis"
+                            >
+                                <StatusBadge>
+                                    {artikel.statusEtis}
+                                </StatusBadge>
+                            </InformationCard>
+                        )}
 
-                            <p className="mt-3">
-                                {artikel.statusEtis.keterangan}
-                            </p>
-                        </InformationCard>
+                        {artikel.statusKurasi && (
+                            <InformationCard
+                                icon={CheckCircle2}
+                                title="Status Kurasi"
+                            >
+                                <StatusBadge>
+                                    {artikel.statusKurasi}
+                                </StatusBadge>
+                            </InformationCard>
+                        )}
 
-                        <InformationCard
-                            icon={CheckCircle2}
-                            title="Status Kurasi"
-                        >
-                            <StatusBadge>
-                                {artikel.statusKurasi.label}
-                            </StatusBadge>
-
-                            <p className="mt-3">
-                                {artikel.statusKurasi.keterangan}
-                            </p>
-                        </InformationCard>
-
-                        <InformationCard
-                            icon={Tag}
-                            title="Kategori"
-                        >
+                        <InformationCard icon={Tag} title="Kategori">
                             <p>{kategoriLabel}</p>
                         </InformationCard>
                     </aside>
