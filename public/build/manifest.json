@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-D1Sb8GUF.css",
+    "file": "assets/app-D0e4GpPN.css",
     "name": "app",
     "names": [
       "app.css"
@@ -9,19 +9,19 @@
     "isEntry": true
   },
   "resources/js/app.jsx": {
-    "file": "assets/app-BljMR0gL.js",
+    "file": "assets/app-D5mwqzsX.js",
     "name": "app",
     "src": "resources/js/app.jsx",
     "isEntry": true,
     "css": [
-      "assets/app-D1Sb8GUF.css"
+      "assets/app-D0e4GpPN.css"
     ],
     "assets": [
       "assets/kearifan-ekologi-CrQcol46.jpg",
       "assets/kearifan-pertanian-BohEeh3z.jpg",
       "assets/kearifan-tradisi-ClzKBfzD.jpg",
       "assets/wisata-cengklik-DXxKsp_m.jpg",
-      "assets/hero-waduk-CrGSQ3JX.jpg",
+      "assets/waduk-cengklik-hero-BRukpDij.jpg",
       "assets/waduk-cengklik-6Xrud1U7.png",
       "assets/ecoprint-BwJN2HW8.jpg"
     ]
@@ -29,10 +29,6 @@
   "resources/js/assets/ecoprint.jpg": {
     "file": "assets/ecoprint-BwJN2HW8.jpg",
     "src": "resources/js/assets/ecoprint.jpg"
-  },
-  "resources/js/assets/hero-waduk.jpg": {
-    "file": "assets/hero-waduk-CrGSQ3JX.jpg",
-    "src": "resources/js/assets/hero-waduk.jpg"
   },
   "resources/js/assets/kearifan-ekologi.jpg": {
     "file": "assets/kearifan-ekologi-CrQcol46.jpg",
@@ -45,6 +41,10 @@
   "resources/js/assets/kearifan-tradisi.jpg": {
     "file": "assets/kearifan-tradisi-ClzKBfzD.jpg",
     "src": "resources/js/assets/kearifan-tradisi.jpg"
+  },
+  "resources/js/assets/waduk-cengklik-hero.jpg": {
+    "file": "assets/waduk-cengklik-hero-BRukpDij.jpg",
+    "src": "resources/js/assets/waduk-cengklik-hero.jpg"
   },
   "resources/js/assets/waduk-cengklik.png": {
     "file": "assets/waduk-cengklik-6Xrud1U7.png",

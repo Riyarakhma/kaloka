@@ -1,173 +1,71 @@
-import { NavLink, Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
-    ArrowLeft,
+    ArrowUpRight,
     Leaf,
     LogIn,
-    Menu,
-    X,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
-
-const navItems = [
-    { to: '/kearifan-lokal', label: 'Kearifan Lokal' },
-    { to: '/wisata', label: 'Info Wisata' },
-    { to: '/umkm', label: 'Galeri UMKM' },
-];
 
 const SLIMS_URL = 'https://desa.perpus.id';
 
 export default function Navbar() {
-    const [open, setOpen] = useState(false);
-    const location = useLocation();
-
-    const isHome = location.pathname === '/';
-
-    useEffect(() => {
-        setOpen(false);
-    }, [location.pathname]);
-
-    useEffect(() => {
-        const handleEscape = (event) => {
-            if (event.key === 'Escape') {
-                setOpen(false);
-            }
-        };
-
-        document.addEventListener('keydown', handleEscape);
-
-        return () => {
-            document.removeEventListener('keydown', handleEscape);
-        };
-    }, []);
-
-    const menuLinkClass = ({ isActive }) =>
-        `block rounded-2xl px-5 py-4 text-base font-semibold transition ${
-            isActive
-                ? 'bg-primary-soft text-primary'
-                : 'text-foreground hover:bg-primary-soft hover:text-primary'
-        }`;
-
     return (
-        <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
-            <div className="container-page flex min-h-[88px] items-center justify-between gap-6">
-                {/* Bagian kiri: ikon kembali dan logo KALOKA */}
-                <div className="flex min-w-0 items-center gap-3">
-                    {!isHome && (
-                        <Link
-                            to="/"
-                            onClick={() => setOpen(false)}
-                            className="grid size-10 shrink-0 place-items-center text-primary transition hover:opacity-60"
-                            aria-label="Kembali ke Beranda"
-                            title="Kembali ke Beranda"
-                        >
-                            <ArrowLeft
-                                className="size-5"
-                                strokeWidth={2.2}
-                            />
-                        </Link>
-                    )}
+        <header className="relative z-50 border-b border-border/70 bg-background/95 backdrop-blur-md">
+            <div className="container-page flex min-h-[86px] items-center justify-between gap-4 py-3">
+                {/* Logo dan identitas KALOKA */}
+                <Link
+                    to="/"
+                    className="group flex min-w-0 items-center gap-3 sm:gap-4"
+                    aria-label="Kembali ke halaman utama KALOKA"
+                >
+                    <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm transition duration-300 group-hover:-translate-y-0.5 group-hover:shadow-md sm:size-14">
+                        <Leaf
+                            className="size-6 sm:size-7"
+                            strokeWidth={2}
+                        />
+                    </div>
 
-                    <Link
-                        to="/"
-                        className="flex min-w-0 items-center gap-3"
-                        onClick={() => setOpen(false)}
+                    <div className="min-w-0">
+                        <p className="font-display truncate text-xl font-extrabold tracking-[-0.03em] text-primary sm:text-2xl">
+                            KALOKA
+                        </p>
+
+                        <p className="mt-0.5 hidden truncate text-xs font-medium text-muted-foreground sm:block sm:text-sm">
+                            Portal Literasi Desa Sobokerto
+                        </p>
+                    </div>
+                </Link>
+
+                {/* Akses kanan */}
+                <div className="flex shrink-0 items-center gap-4">
+                    {/* Katalog pustaka */}
+                    <a
+                        href={SLIMS_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-2 rounded-full border border-primary/25 bg-background px-4 py-2.5 text-sm font-semibold text-primary transition duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground focus:outline-none focus:ring-4 focus:ring-primary/15 sm:px-5"
                     >
-                        <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-                            <Leaf
-                                className="size-6"
-                                strokeWidth={2.2}
-                            />
-                        </div>
+                        <span className="hidden sm:inline">
+                            Katalog Pustaka
+                        </span>
 
-                        <div className="min-w-0 leading-tight">
-                            <div className="font-display text-xl font-bold text-primary">
-                                KALOKA
-                            </div>
+                        <span className="sm:hidden">
+                            Katalog
+                        </span>
 
-                            <div className="hidden truncate text-xs text-muted-foreground sm:block">
-                                Portal Literasi Desa Sobokerto
-                            </div>
-                        </div>
+                        <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </a>
+
+                    {/* Ikon login polos */}
+                    <Link
+                        to="/login"
+                        aria-label="Masuk"
+                        title="Masuk"
+                        className="text-primary transition duration-300 hover:opacity-60 focus:outline-none"
+                    >
+                        <LogIn className="size-6" />
                     </Link>
                 </div>
-
-                {/* Tombol hamburger */}
-                <button
-                    type="button"
-                    onClick={() => setOpen((value) => !value)}
-                    className={`grid size-11 shrink-0 place-items-center rounded-xl border text-primary transition ${
-                        open
-                            ? 'border-primary bg-primary-soft'
-                            : 'border-border bg-background hover:border-primary hover:bg-primary-soft'
-                    }`}
-                    aria-label={open ? 'Tutup menu' : 'Buka menu'}
-                    aria-expanded={open}
-                    aria-controls="menu-utama"
-                >
-                    {open ? (
-                        <X
-                            className="size-6"
-                            strokeWidth={2}
-                        />
-                    ) : (
-                        <Menu
-                            className="size-6"
-                            strokeWidth={2}
-                        />
-                    )}
-                </button>
             </div>
-
-            {/* Dropdown menu */}
-            {open && (
-                <>
-                    <button
-                        type="button"
-                        className="fixed inset-0 top-[89px] z-40 cursor-default bg-black/10"
-                        onClick={() => setOpen(false)}
-                        aria-label="Tutup menu"
-                    />
-
-                    <div
-                        id="menu-utama"
-                        className="absolute right-6 top-[calc(100%+12px)] z-50 w-[360px] max-w-[calc(100vw-3rem)] overflow-hidden rounded-3xl border border-border bg-background shadow-2xl"
-                    >
-                        <nav className="flex flex-col gap-1 p-5">
-                            <a
-                                href={SLIMS_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() => setOpen(false)}
-                                className="block rounded-2xl px-5 py-4 text-base font-semibold text-foreground transition hover:bg-primary-soft hover:text-primary"
-                            >
-                                Katalog Pustaka
-                            </a>
-
-                            {navItems.map(({ to, label }) => (
-                                <NavLink
-                                    key={to}
-                                    to={to}
-                                    className={menuLinkClass}
-                                    onClick={() => setOpen(false)}
-                                >
-                                    {label}
-                                </NavLink>
-                            ))}
-
-                            <div className="my-3 border-t border-border" />
-
-                            <a
-                                href="/login"
-                                onClick={() => setOpen(false)}
-                                className="flex items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-4 text-base font-semibold text-primary-foreground transition hover:opacity-90"
-                            >
-                                <LogIn className="size-5" />
-                                Masuk sebagai Pengelola
-                            </a>
-                        </nav>
-                    </div>
-                </>
-            )}
         </header>
     );
 }
