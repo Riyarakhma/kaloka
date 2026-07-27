@@ -56,14 +56,14 @@ export default function Navbar() {
                     </a>
 
                     {/* Ikon login polos */}
-                    <Link
-                        to="/login"
+                    <a
+                        href="/login"
                         aria-label="Masuk"
                         title="Masuk"
                         className="text-primary transition duration-300 hover:opacity-60 focus:outline-none"
                     >
                         <LogIn className="size-6" />
-                    </Link>
+                    </a>
                 </div>
             </div>
         </header>

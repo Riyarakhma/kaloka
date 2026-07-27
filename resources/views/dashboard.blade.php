@@ -12,32 +12,46 @@
 
     {{-- Kartu ringkasan --}}
     <div class="row g-3 mb-4">
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-2">
             <div class="card shadow-sm text-center p-3 h-100">
                 <div class="ikon text-success"><i class="bi bi-bank"></i></div>
                 <div class="h2 mb-0">{{ $statistik['kearifan_total'] }}</div>
                 <div class="small text-muted">Total Kearifan Lokal</div>
             </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-2">
             <div class="card shadow-sm text-center p-3 h-100">
                 <div class="ikon text-primary"><i class="bi bi-globe"></i></div>
                 <div class="h2 mb-0">{{ $statistik['kearifan_terbit'] }}</div>
                 <div class="small text-muted">Entri Terbit (publik)</div>
             </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-2">
             <div class="card shadow-sm text-center p-3 h-100">
                 <div class="ikon text-danger"><i class="bi bi-geo-alt"></i></div>
                 <div class="h2 mb-0">{{ $statistik['wisata_total'] }}</div>
                 <div class="small text-muted">Total Spot Wisata</div>
             </div>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-lg-2">
             <div class="card shadow-sm text-center p-3 h-100">
                 <div class="ikon text-info"><i class="bi bi-eye"></i></div>
                 <div class="h2 mb-0">{{ $statistik['wisata_tampil'] }}</div>
                 <div class="small text-muted">Wisata Tampil</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card shadow-sm text-center p-3 h-100">
+                <div class="ikon text-warning"><i class="bi bi-shop"></i></div>
+                <div class="h2 mb-0">{{ $statistik['umkm_total'] }}</div>
+                <div class="small text-muted">Total UMKM</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card shadow-sm text-center p-3 h-100">
+                <div class="ikon text-info"><i class="bi bi-eye"></i></div>
+                <div class="h2 mb-0">{{ $statistik['umkm_tampil'] }}</div>
+                <div class="small text-muted">UMKM Tampil</div>
             </div>
         </div>
     </div>
@@ -134,6 +148,11 @@
         <div class="col-md-6 col-lg-3">
             <a href="{{ route('pengelola.wisata.index') }}" class="btn btn-outline-kaloka w-100">
                 <i class="bi bi-geo-alt me-1"></i>Kelola Wisata
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a href="{{ route('pengelola.umkm.index') }}" class="btn btn-outline-kaloka w-100">
+                <i class="bi bi-shop me-1"></i>Kelola UMKM
             </a>
         </div>
         @if (Auth::user()->isAdmin())
