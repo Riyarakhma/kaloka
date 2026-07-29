@@ -2,7 +2,6 @@ import { Link, useParams } from 'react-router-dom';
 import {
     ArrowLeft,
     CalendarDays,
-    Camera,
     CheckCircle2,
     FileText,
     Languages,
@@ -223,12 +222,6 @@ export default function DetailKearifan() {
                         {artikel.bahasa && (
                             <InformationCard icon={Languages} title="Bahasa">
                                 <p>{artikel.bahasa}</p>
-                            </InformationCard>
-                        )}
-
-                        {artikel.jenisMedia && (
-                            <InformationCard icon={Camera} title="Jenis Media">
-                                <p>{artikel.jenisMedia}</p>
                             </InformationCard>
                         )}
 

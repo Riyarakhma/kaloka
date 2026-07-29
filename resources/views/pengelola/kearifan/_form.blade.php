@@ -64,16 +64,6 @@
         <input type="text" name="bahasa" class="form-control" value="{{ $val('bahasa', 'Indonesia') }}">
     </div>
 
-    {{-- 9. Jenis media --}}
-    <div class="col-md-3">
-        <label class="form-label">Jenis Media <span class="text-danger">*</span></label>
-        <select name="jenis_media" class="form-select" required>
-            @foreach (\App\Models\KearifanLokal::JENIS_MEDIA as $m)
-                <option value="{{ $m }}" @selected($val('jenis_media', 'Teks') === $m)>{{ $m }}</option>
-            @endforeach
-        </select>
-    </div>
-
     {{-- 10. Berkas media --}}
     <div class="col-md-6">
         <label class="form-label">Berkas Media <span class="text-muted small">(opsional, maks 20 MB)</span></label>
@@ -105,26 +95,15 @@
         <input type="text" name="sumber" class="form-control" value="{{ $val('sumber') }}">
     </div>
 
-    {{-- 14. Status etis --}}
-    <div class="col-md-3">
-        <label class="form-label">Status Etis <span class="text-danger">*</span></label>
+    {{-- 14. Status entri --}}
+    <div class="col-md-4">
+        <label class="form-label">Status Entri <span class="text-danger">*</span></label>
         <select name="status_etis" class="form-select" required>
             @foreach (\App\Models\KearifanLokal::STATUS_ETIS as $s)
                 <option value="{{ $s }}" @selected($val('status_etis', 'Umum') === $s)>{{ $s }}</option>
             @endforeach
         </select>
-        <div class="form-text">Terbatas/Sakral tidak ditampilkan ke publik.</div>
-    </div>
-
-    {{-- 15. Status kurasi --}}
-    <div class="col-md-3">
-        <label class="form-label">Status Kurasi <span class="text-danger">*</span></label>
-        <select name="status_kurasi" class="form-select" required>
-            @foreach (\App\Models\KearifanLokal::STATUS_KURASI as $s)
-                <option value="{{ $s }}" @selected($val('status_kurasi', 'Draf') === $s)>{{ $s }}</option>
-            @endforeach
-        </select>
-        <div class="form-text">Hanya "Terbit" yang tampil publik.</div>
+        <div class="form-text">Sakral tidak ditampilkan ke publik.</div>
     </div>
 
     {{-- 16. Catatan --}}

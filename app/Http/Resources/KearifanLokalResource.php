@@ -19,7 +19,6 @@ class KearifanLokalResource extends JsonResource
             'narasumber' => $this->narasumber,
             'lokasi' => $this->lokasi,
             'bahasa' => $this->bahasa,
-            'jenis_media' => $this->jenis_media,
             'url_media' => $this->urlMedia(),
             'tanggal_dokumentasi' => $this->tanggal_dokumentasi?->format('Y-m-d'),
             'pendokumentasi' => $this->pendokumentasi,

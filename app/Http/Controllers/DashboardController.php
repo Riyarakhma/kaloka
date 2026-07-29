@@ -21,9 +21,9 @@ class DashboardController extends Controller
             'kearifan_status'  => $this->hitungPer(KearifanLokal::class, 'status_kurasi', KearifanLokal::STATUS_KURASI),
             'kearifan_dimensi' => $this->hitungPer(KearifanLokal::class, 'dimensi', KearifanLokal::DIMENSI),
             'wisata_total'     => Wisata::count(),
-            'wisata_tampil'    => Wisata::where('status_tampil', true)->count(),
+            'wisata_tampil'    => Wisata::query()->publik()->count(),
             'umkm_total'       => Umkm::count(),
-            'umkm_tampil'      => Umkm::where('status_tampil', true)->count(),
+            'umkm_tampil'      => Umkm::query()->publik()->count(),
         ];
 
         $urlOpac = Pengaturan::ambil('url_opac_slims');

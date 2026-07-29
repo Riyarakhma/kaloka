@@ -16,7 +16,7 @@ class KearifanLokal extends Model
 
     protected $fillable = [
         'kode_entri', 'judul', 'dimensi', 'deskripsi', 'kata_kunci', 'narasumber',
-        'lokasi', 'bahasa', 'jenis_media', 'berkas_media', 'tanggal_dokumentasi',
+        'lokasi', 'bahasa', 'berkas_media', 'tanggal_dokumentasi',
         'pendokumentasi', 'sumber', 'status_etis', 'status_kurasi', 'catatan', 'dibuat_oleh',
     ];
 
@@ -36,11 +36,8 @@ class KearifanLokal extends Model
         'Wisata Komunitas',
     ];
 
-    public const JENIS_MEDIA = ['Teks', 'Foto', 'Audio', 'Video'];
-
-    public const STATUS_ETIS = ['Umum', 'Terbatas', 'Sakral'];
-
-    public const STATUS_KURASI = ['Draf', 'Terverifikasi', 'Terbit'];
+    public const STATUS_ETIS = ['Umum', 'Sakral'];
+    public const STATUS_KURASI = ['Draf', 'Terbit'];
 
     /* ===================== Relasi ===================== */
 
@@ -54,7 +51,7 @@ class KearifanLokal extends Model
     /**
      * Hanya entri yang LAYAK TAMPIL PUBLIK:
      * sudah Terbit DAN berstatus etis Umum.
-     * Entri Draf/Terverifikasi atau berstatus Terbatas/Sakral TIDAK akan bocor ke publik.
+     * Entri Draf atau berstatus Sakral TIDAK akan bocor ke publik.
      */
     public function scopePublik(Builder $query): Builder
     {
@@ -107,19 +104,16 @@ class KearifanLokal extends Model
     {
         return match ($this->status_kurasi) {
             'Terbit' => 'success',
-            'Terverifikasi' => 'info',
             default => 'secondary',
         };
     }
-
     /**
-     * Warna lencana Bootstrap untuk status etis.
+     * Warna lencana Bootstrap untuk status entri.
      */
     public function warnaStatusEtis(): string
     {
         return match ($this->status_etis) {
             'Sakral' => 'danger',
-            'Terbatas' => 'warning',
             default => 'light',
         };
     }

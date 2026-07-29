@@ -21,8 +21,7 @@
                 <div class="card-body">
                     <p class="text-muted small mb-2">
                         <span class="badge badge-dimensi text-white">{{ $entri->dimensi }}</span>
-                        <span class="badge bg-secondary">{{ $entri->jenis_media }}</span>
-                        <span class="badge bg-{{ $entri->warnaStatusEtis() }} text-dark">Etis: {{ $entri->status_etis }}</span>
+                        <span class="badge bg-{{ $entri->warnaStatusEtis() }} text-dark">Entri: {{ $entri->status_etis }}</span>
                         <span class="badge bg-{{ $entri->warnaStatusKurasi() }}">Kurasi: {{ $entri->status_kurasi }}</span>
                     </p>
 
@@ -53,33 +52,35 @@
         </div>
 
         <div class="col-lg-4">
-            {{-- Alur kurasi --}}
-            <div class="card shadow-sm mb-3">
-                <div class="card-header bg-white"><strong>Alur Kurasi</strong></div>
-                <div class="card-body">
-                    <p class="small text-muted">Draf → Terverifikasi → Terbit</p>
-                    <form action="{{ route('pengelola.kearifan.kurasi', $entri) }}" method="POST" class="d-flex gap-2">
-                        @csrf @method('PATCH')
-                        <select name="status_kurasi" class="form-select form-select-sm">
-                            @foreach (\App\Models\KearifanLokal::STATUS_KURASI as $s)
-                                <option value="{{ $s }}" @selected($entri->status_kurasi === $s)>{{ $s }}</option>
-                            @endforeach
-                        </select>
-                        <button class="btn btn-kaloka btn-sm text-nowrap">Ubah</button>
-                    </form>
-                    @if (! $entri->bolehPublik())
-                        <div class="alert alert-warning small mt-3 mb-0">
-                            <i class="bi bi-eye-slash me-1"></i>Entri ini <strong>tidak tampil di publik</strong>
-                            (harus Terbit & status etis Umum).
-                        </div>
-                    @else
-                        <div class="alert alert-success small mt-3 mb-0">
-                            <i class="bi bi-globe me-1"></i>Tampil publik.
-                            <a href="{{ route('kearifan.show', $entri) }}" target="_blank">Lihat halaman publik</a>
-                        </div>
-                    @endif
+            {{-- Alur kurasi (khusus admin) --}}
+            @if (Auth::user()->isAdmin())
+                <div class="card shadow-sm mb-3">
+                    <div class="card-header bg-white"><strong>Alur Kurasi</strong></div>
+                    <div class="card-body">
+                        <p class="small text-muted">Draf → Terbit</p>
+                        <form action="{{ route('pengelola.kearifan.kurasi', $entri) }}" method="POST" class="d-flex gap-2">
+                            @csrf @method('PATCH')
+                            <select name="status_kurasi" class="form-select form-select-sm">
+                                @foreach (\App\Models\KearifanLokal::STATUS_KURASI as $s)
+                                    <option value="{{ $s }}" @selected($entri->status_kurasi === $s)>{{ $s }}</option>
+                                @endforeach
+                            </select>
+                            <button class="btn btn-kaloka btn-sm text-nowrap">Ubah</button>
+                        </form>
+                        @if (! $entri->bolehPublik())
+                            <div class="alert alert-warning small mt-3 mb-0">
+                                <i class="bi bi-eye-slash me-1"></i>Entri ini <strong>tidak tampil di publik</strong>
+                                (harus Terbit & status entri Umum).
+                            </div>
+                        @else
+                            <div class="alert alert-success small mt-3 mb-0">
+                                <i class="bi bi-globe me-1"></i>Tampil publik.
+                                <a href="{{ route('kearifan.show', $entri) }}" target="_blank">Lihat halaman publik</a>
+                            </div>
+                        @endif
+                    </div>
                 </div>
-            </div>
+            @endif
 
             {{-- Metadata --}}
             <div class="card shadow-sm">

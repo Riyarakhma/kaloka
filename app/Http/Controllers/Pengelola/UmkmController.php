@@ -39,16 +39,12 @@ class UmkmController extends Controller
     public function store(UmkmRequest $request)
     {
         $data = $request->validated();
-        unset($data['foto'], $data['hapus_foto']);
-
-        $data['status_tampil'] = $request->boolean('status_tampil');
-
+        unset($data['foto']);
+        $data['kode_entri'] = Umkm::kodeBerikutnya();
+        $data['status_kurasi'] = Umkm::STATUS_KURASI[0]; // selalu mulai dari 'Draf'
         if ($request->hasFile('foto')) {
-            $data['foto'] = collect($request->file('foto'))
-                ->map(fn ($file) => Gambar::simpan($file, 'umkm'))
-                ->all();
+            $data['foto'] = [Gambar::simpan($request->file('foto'), 'umkm')];
         }
-
         $umkm = Umkm::create($data);
 
         return redirect()->route('pengelola.umkm.show', $umkm)
@@ -68,25 +64,13 @@ class UmkmController extends Controller
     public function update(UmkmRequest $request, Umkm $umkm)
     {
         $data = $request->validated();
-        unset($data['foto'], $data['hapus_foto']);
-
-        $data['status_tampil'] = $request->boolean('status_tampil');
-
-        $fotoTersisa = $umkm->foto ?? [];
-        foreach ($request->input('hapus_foto', []) as $index) {
-            if (isset($fotoTersisa[$index])) {
-                Storage::disk('public')->delete($fotoTersisa[$index]);
-                unset($fotoTersisa[$index]);
-            }
-        }
-        $fotoTersisa = array_values($fotoTersisa);
-
+        unset($data['foto']);
         if ($request->hasFile('foto')) {
-            foreach ($request->file('foto') as $file) {
-                $fotoTersisa[] = Gambar::simpan($file, 'umkm');
+            foreach ($umkm->foto ?? [] as $path) {
+                Storage::disk('public')->delete($path);
             }
+            $data['foto'] = [Gambar::simpan($request->file('foto'), 'umkm')];
         }
-        $data['foto'] = $fotoTersisa;
 
         $umkm->update($data);
 
@@ -105,5 +89,17 @@ class UmkmController extends Controller
 
         return redirect()->route('pengelola.umkm.index')
             ->with('sukses', "UMKM \"{$nama}\" berhasil dihapus.");
+    }
+
+    /** Ubah status kurasi. Admin only (dicek lewat middleware/route). */
+    public function ubahKurasi(Request $request, Umkm $umkm)
+    {
+        $request->validate([
+            'status_kurasi' => ['required', \Illuminate\Validation\Rule::in(Umkm::STATUS_KURASI)],
+        ], [], ['status_kurasi' => 'status kurasi']);
+
+        $umkm->update(['status_kurasi' => $request->status_kurasi]);
+
+        return back()->with('sukses', "Status kurasi \"{$umkm->nama_umkm}\" menjadi \"{$request->status_kurasi}\".");
     }
 }
