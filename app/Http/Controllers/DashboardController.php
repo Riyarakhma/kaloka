@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KearifanLokal;
 use App\Models\Pengaturan;
 use App\Models\Wisata;
+use App\Models\Umkm;
 use App\Services\SlimsService;
 
 class DashboardController extends Controller
@@ -20,7 +21,9 @@ class DashboardController extends Controller
             'kearifan_status'  => $this->hitungPer(KearifanLokal::class, 'status_kurasi', KearifanLokal::STATUS_KURASI),
             'kearifan_dimensi' => $this->hitungPer(KearifanLokal::class, 'dimensi', KearifanLokal::DIMENSI),
             'wisata_total'     => Wisata::count(),
-            'wisata_tampil'    => Wisata::where('status_tampil', true)->count(),
+            'wisata_tampil'    => Wisata::query()->publik()->count(),
+            'umkm_total'       => Umkm::count(),
+            'umkm_tampil'      => Umkm::query()->publik()->count(),
         ];
 
         $urlOpac = Pengaturan::ambil('url_opac_slims');

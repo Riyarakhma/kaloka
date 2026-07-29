@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Umkm;
+use Illuminate\Validation\Rule;
 
 class UmkmRequest extends FormRequest
 {
@@ -18,11 +20,8 @@ class UmkmRequest extends FormRequest
             'pemilik'        => ['required', 'string', 'max:255'],
             'alamat'         => ['required', 'string', 'max:255'],
             'kontak'         => ['nullable', 'string', 'max:100'],
-            'foto'           => ['nullable', 'array'],
-            'foto.*'         => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif'],
-            'hapus_foto'     => ['nullable', 'array'],
-            'hapus_foto.*'   => ['integer'],
-            'status_tampil'  => ['nullable', 'boolean'],
+            'foto'           => ['nullable', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif'],
+            'status_etis'    => ['required', Rule::in(Umkm::STATUS_ETIS)],
         ];
     }
 
@@ -36,7 +35,7 @@ class UmkmRequest extends FormRequest
             'alamat' => 'alamat',
             'kontak' => 'kontak',
             'foto' => 'foto',
-            'status_tampil' => 'status tampil',
+            'status_etis' => 'status entri',
         ];
     }
 
@@ -44,8 +43,8 @@ class UmkmRequest extends FormRequest
     {
         return [
             'required' => 'Kolom :attribute wajib diisi.',
-            'foto.*.max' => 'Ukuran tiap foto maksimal 20 MB.',
-            'foto.*.mimes' => 'Format foto harus jpg, jpeg, png, webp, atau gif.',
+            'foto.max' => 'Ukuran foto maksimal 20 MB.',
+            'foto.mimes' => 'Format foto harus jpg, jpeg, png, webp, atau gif.',
         ];
     }
 }

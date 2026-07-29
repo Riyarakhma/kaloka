@@ -20,7 +20,7 @@ class WisataController extends Controller
         $query = Wisata::query();
 
         if (! $user) {
-            $query->tampil();
+            $query->publik();
         }
 
         // Filter opsional lewat query string, mis. ?kategori=Kuliner
@@ -34,6 +34,7 @@ class WisataController extends Controller
         $data->getCollection()->transform(function ($wisata) {
             $wisata->foto_utama = $wisata->fotoUtama();
             $wisata->url_foto = $wisata->urlFoto();
+            $wisata->boleh_publik = $wisata->bolehPublik();
             return $wisata;
         });
 
@@ -47,7 +48,7 @@ class WisataController extends Controller
     {
         $user = $request->user();
 
-        if (! $user && ! $wisatum->status_tampil) {
+        if (! $user && ! $wisatum->bolehPublik()) {
             return response()->json([
                 'message' => 'Spot wisata tidak ditemukan.',
             ], 404);
@@ -55,6 +56,7 @@ class WisataController extends Controller
 
         $wisatum->foto_utama = $wisatum->fotoUtama();
         $wisatum->url_foto = $wisatum->urlFoto();
+        $wisatum->boleh_publik = $wisatum->bolehPublik();
 
         return response()->json(['data' => $wisatum]);
     }
@@ -72,7 +74,7 @@ class WisataController extends Controller
             'koordinat' => 'nullable|string|max:255',
             'jam_operasional' => 'nullable|string|max:255',
             'kontak' => 'nullable|string|max:255',
-            'status_tampil' => 'nullable|boolean',
+            'status_etis' => 'nullable|in:' . implode(',', \App\Models\Wisata::STATUS_ETIS),
             'foto' => 'nullable|array',
             'foto.*' => 'image|max:2048',
         ]);
@@ -114,7 +116,7 @@ class WisataController extends Controller
             'koordinat' => 'nullable|string|max:255',
             'jam_operasional' => 'nullable|string|max:255',
             'kontak' => 'nullable|string|max:255',
-            'status_tampil' => 'nullable|boolean',
+            'status_etis' => 'nullable|in:' . implode(',', Wisata::STATUS_ETIS),
             'foto' => 'nullable|array',
             'foto.*' => 'image|max:2048',
         ]);

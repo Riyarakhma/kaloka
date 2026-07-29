@@ -15,24 +15,7 @@ import {
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { WISATA_ITEMS } from '../data/wisataData';
-
-const WARNA_KATEGORI = {
-    Destinasi: 'bg-primary-soft text-primary',
-    Kuliner:
-        'bg-[oklch(0.94_0.07_30)] text-[oklch(0.4_0.15_25)]',
-    Kerajinan:
-        'bg-[oklch(0.94_0.07_75)] text-[oklch(0.38_0.12_60)]',
-    Event:
-        'bg-[oklch(0.92_0.05_220)] text-[oklch(0.30_0.10_220)]',
-};
-
-function warnaKategori(kategori) {
-    return (
-        WARNA_KATEGORI[kategori] ??
-        WARNA_KATEGORI.Destinasi
-    );
-}
+import { useWisataDetail, warnaKategoriWisata } from '../lib/wisata-api';
 
 function InfoItem({ icon: Icon, label, children }) {
     return (
@@ -58,39 +41,34 @@ export default function DetailWisata() {
     const { slug } = useParams();
     const [bahasa, setBahasa] = useState('id'); // 'id' | 'en'
 
-    const wisata = WISATA_ITEMS.find(
-        (item) => item.slug === slug,
-    );
+    const { data: wisata, isLoading, isError } = useWisataDetail(slug);
 
-    if (!wisata) {
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background">
+                <Navbar />
+                <div className="container-page py-20 text-center text-muted-foreground">
+                    Memuat...
+                </div>
+                <Footer />
+            </div>
+        );
+    }
+
+    if (isError || !wisata) {
         return <Navigate to="/404" replace />;
     }
 
-    const isiArtikel = Array.isArray(wisata.isi)
-        ? wisata.isi
-        : [];
-
-    const isiArtikelEn = Array.isArray(wisata.isi_en)
-        ? wisata.isi_en
-        : [];
-
-    // Terjemahan manual (diisi tim Bahasa Asing Terapan). Kalau belum
-    // tersedia untuk spot ini, otomatis jatuh balik ke versi Indonesia.
-    const terjemahanTersedia = Boolean(
-        wisata.deskripsi_en || isiArtikelEn.length > 0,
-    );
+    // Terjemahan manual (diisi tim Bahasa Asing Terapan lewat dashboard
+    // pengelola). Kalau backend belum menyediakan field deskripsi_en,
+    // tombol EN otomatis nonaktif dan halaman tetap tampil Bahasa Indonesia.
+    const terjemahanTersedia = Boolean(wisata.deskripsi_en);
 
     const tampilkanEn = bahasa === 'en' && terjemahanTersedia;
 
     const teksDeskripsi = tampilkanEn
         ? wisata.deskripsi_en || wisata.deskripsi
         : wisata.deskripsi;
-
-    const teksIsiArtikel = tampilkanEn
-        ? isiArtikelEn.length > 0
-            ? isiArtikelEn
-            : isiArtikel
-        : isiArtikel;
 
     return (
         <div className="min-h-screen bg-background">
@@ -130,7 +108,7 @@ export default function DetailWisata() {
                             <div className="p-6 md:p-10">
                                <div className="flex flex-wrap items-center gap-3">
                                     <span
-                                        className={`inline-flex rounded-full px-4 py-1.5 text-sm font-semibold ${warnaKategori(
+                                        className={`inline-flex rounded-full px-4 py-1.5 text-sm font-semibold ${warnaKategoriWisata(
                                             wisata.kategori,
                                         )}`}
                                     >
@@ -139,18 +117,18 @@ export default function DetailWisata() {
 
                                     <span
                                         className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold ${
-                                            wisata.status_tampil
+                                            wisata.boleh_publik
                                                 ? 'bg-emerald-100 text-emerald-700'
                                                 : 'bg-slate-100 text-slate-600'
                                         }`}
                                     >
-                                        {wisata.status_tampil ? (
+                                        {wisata.boleh_publik ? (
                                             <Eye className="size-4" />
                                         ) : (
                                             <EyeOff className="size-4" />
                                         )}
 
-                                        {wisata.status_tampil
+                                        {wisata.boleh_publik
                                             ? 'Ditampilkan'
                                             : 'Tidak ditampilkan'}
                                     </span>
@@ -207,32 +185,6 @@ export default function DetailWisata() {
                                                 {teksDeskripsi}
                                             </p>
                                         </section>
-
-                                        {teksIsiArtikel.length > 0 && (
-                                            <section className="mt-9 border-t border-border pt-8">
-                                                <h2 className="font-display text-2xl text-foreground">
-                                                    Informasi Selengkapnya
-                                                </h2>
-
-                                                <div className="mt-5 space-y-5">
-                                                    {teksIsiArtikel.map(
-                                                        (
-                                                            paragraf,
-                                                            index,
-                                                        ) => (
-                                                            <p
-                                                                key={index}
-                                                                className="text-base leading-8 text-muted-foreground md:text-lg"
-                                                            >
-                                                                {
-                                                                    paragraf
-                                                                }
-                                                            </p>
-                                                        ),
-                                                    )}
-                                                </div>
-                                            </section>
-                                        )}
                                     </div>
 
                                     <aside className="h-fit rounded-2xl border border-border bg-background px-5 md:px-6 lg:sticky lg:top-24">
@@ -278,7 +230,7 @@ export default function DetailWisata() {
 
                                         <InfoItem
                                             icon={
-                                                wisata.status_tampil
+                                                wisata.boleh_publik
                                                     ? Eye
                                                     : EyeOff
                                             }
@@ -286,12 +238,12 @@ export default function DetailWisata() {
                                         >
                                             <span
                                                 className={
-                                                    wisata.status_tampil
+                                                    wisata.boleh_publik
                                                         ? 'text-emerald-700'
                                                         : 'text-muted-foreground'
                                                 }
                                             >
-                                                {wisata.status_tampil
+                                                {wisata.boleh_publik
                                                     ? 'Ditampilkan'
                                                     : 'Tidak ditampilkan'}
                                             </span>

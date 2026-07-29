@@ -37,7 +37,6 @@ function mapToKearifanItem(item = {}) {
         PLACEHOLDER_BY_KATEGORI[kategori] ?? kearifanTradisi;
 
     const menggunakanFotoApi =
-        item?.jenis_media === 'Foto' &&
         typeof item?.url_media === 'string' &&
         item.url_media.trim() !== '';
 
@@ -76,15 +75,13 @@ function mapToKearifanDetail(item) {
         judul: item.judul,
         kategori,
         deskripsi: item.deskripsi,
-        foto:
-            item.jenis_media === 'Foto' && item.url_media
-                ? item.url_media
-                : PLACEHOLDER_BY_KATEGORI[kategori],
+        foto: item.url_media
+            ? item.url_media
+            : PLACEHOLDER_BY_KATEGORI[kategori],
         kataKunci: item.kata_kunci ?? [],
         narasumber: item.narasumber ?? null,
         lokasi: item.lokasi ?? null,
         bahasa: item.bahasa ?? null,
-        jenisMedia: item.jenis_media ?? null,
         tanggalDokumentasi: item.tanggal_dokumentasi ?? null,
         pendokumentasi: item.pendokumentasi ?? null,
         sumber: item.sumber ?? null,

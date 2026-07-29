@@ -20,9 +20,6 @@ class KearifanLokalController extends Controller
         if ($request->filled('dimensi')) {
             $query->where('dimensi', $request->dimensi);
         }
-        if ($request->filled('jenis_media')) {
-            $query->where('jenis_media', $request->jenis_media);
-        }
         if ($request->filled('cari')) {
             $cari = $request->cari;
             $query->where(function ($q) use ($cari) {

@@ -59,12 +59,13 @@
             <div class="form-text">Foto baru akan ditambahkan ke foto yang sudah ada.</div>
         @endif
     </div>
-    <div class="col-12">
-        <div class="form-check form-switch">
-            <input type="hidden" name="status_tampil" value="0">
-            <input class="form-check-input" type="checkbox" name="status_tampil" value="1" id="tampil"
-                   @checked((bool) $val('status_tampil', true))>
-            <label class="form-check-label" for="tampil">Tampilkan ke publik</label>
-        </div>
+    <div class="col-md-4">
+        <label class="form-label">Status Entri <span class="text-danger">*</span></label>
+        <select name="status_etis" class="form-select" required>
+            @foreach (\App\Models\Wisata::STATUS_ETIS as $s)
+                <option value="{{ $s }}" @selected($val('status_etis', 'Umum') === $s)>{{ $s }}</option>
+            @endforeach
+        </select>
+        <div class="form-text">Sakral tidak ditampilkan ke publik.</div>
     </div>
 </div>

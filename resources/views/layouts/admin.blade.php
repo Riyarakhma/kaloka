@@ -57,6 +57,7 @@
                     <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="bi bi-house-door me-2"></i>Dashboard</a>
                     <a class="nav-link {{ request()->routeIs('pengelola.kearifan.*') ? 'active' : '' }}" href="{{ route('pengelola.kearifan.index') }}"><i class="bi bi-bank me-2"></i>Kearifan Lokal</a>
                     <a class="nav-link {{ request()->routeIs('pengelola.wisata.*') ? 'active' : '' }}" href="{{ route('pengelola.wisata.index') }}"><i class="bi bi-geo-alt me-2"></i>Info Wisata</a>
+                    <a class="nav-link {{ request()->routeIs('pengelola.umkm.*') ? 'active' : '' }}" href="{{ route('pengelola.umkm.index') }}"><i class="bi bi-shop me-2"></i>UMKM</a>
                     @if (auth()->user()?->isAdmin())
                         <a class="nav-link {{ request()->routeIs('pengelola.pengguna.*') ? 'active' : '' }}" href="{{ route('pengelola.pengguna.index') }}"><i class="bi bi-people me-2"></i>Pengguna</a>
                         <a class="nav-link {{ request()->routeIs('pengelola.pengaturan.*') ? 'active' : '' }}" href="{{ route('pengelola.pengaturan.edit') }}"><i class="bi bi-gear me-2"></i>Pengaturan</a>
