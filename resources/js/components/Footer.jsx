@@ -33,10 +33,10 @@ export default function Footer() {
                         </p>
                     </div>
 
-                    {/* Kontak */}
+                    {/* Hubungi Kami */}
                     <div>
                         <h3 className="font-display text-xl font-semibold">
-                            Kontak Perpustakaan
+                            Hubungi Kami
                         </h3>
 
                         <div className="mt-6 space-y-5 rounded-2xl bg-primary-foreground/10 p-6">
@@ -68,6 +68,42 @@ export default function Footer() {
                                     <p className="font-medium">Email</p>
                                     <p className="opacity-90">
                                         perpus.sobokerto@desa.id
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="h-5 w-5 shrink-0"
+                                >
+                                    <rect
+                                        x="2"
+                                        y="2"
+                                        width="20"
+                                        height="20"
+                                        rx="5"
+                                        ry="5"
+                                    />
+                                    <path d="M16 11.37a4 4 0 1 1-1.37-1.37A4 4 0 0 1 16 11.37z" />
+                                    <line
+                                        x1="17.5"
+                                        y1="6.5"
+                                        x2="17.51"
+                                        y2="6.5"
+                                    />
+                                </svg>
+
+                                <div>
+                                    <p className="font-medium">Instagram</p>
+                                    <p className="opacity-90">
+                                        @desa_sobokerto
                                     </p>
                                 </div>
                             </div>
