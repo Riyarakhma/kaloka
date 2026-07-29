@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import {
     ArrowLeft,
@@ -5,6 +6,7 @@ import {
     Eye,
     EyeOff,
     ImageIcon,
+    Languages,
     MapPin,
     Navigation,
     Phone,
@@ -54,6 +56,7 @@ function InfoItem({ icon: Icon, label, children }) {
 
 export default function DetailWisata() {
     const { slug } = useParams();
+    const [bahasa, setBahasa] = useState('id'); // 'id' | 'en'
 
     const wisata = WISATA_ITEMS.find(
         (item) => item.slug === slug,
@@ -66,6 +69,28 @@ export default function DetailWisata() {
     const isiArtikel = Array.isArray(wisata.isi)
         ? wisata.isi
         : [];
+
+    const isiArtikelEn = Array.isArray(wisata.isi_en)
+        ? wisata.isi_en
+        : [];
+
+    // Terjemahan manual (diisi tim Bahasa Asing Terapan). Kalau belum
+    // tersedia untuk spot ini, otomatis jatuh balik ke versi Indonesia.
+    const terjemahanTersedia = Boolean(
+        wisata.deskripsi_en || isiArtikelEn.length > 0,
+    );
+
+    const tampilkanEn = bahasa === 'en' && terjemahanTersedia;
+
+    const teksDeskripsi = tampilkanEn
+        ? wisata.deskripsi_en || wisata.deskripsi
+        : wisata.deskripsi;
+
+    const teksIsiArtikel = tampilkanEn
+        ? isiArtikelEn.length > 0
+            ? isiArtikelEn
+            : isiArtikel
+        : isiArtikel;
 
     return (
         <div className="min-h-screen bg-background">
@@ -103,7 +128,7 @@ export default function DetailWisata() {
                             </div>
 
                             <div className="p-6 md:p-10">
-                                <div className="flex flex-wrap items-center gap-3">
+                               <div className="flex flex-wrap items-center gap-3">
                                     <span
                                         className={`inline-flex rounded-full px-4 py-1.5 text-sm font-semibold ${warnaKategori(
                                             wisata.kategori,
@@ -129,6 +154,27 @@ export default function DetailWisata() {
                                             ? 'Ditampilkan'
                                             : 'Tidak ditampilkan'}
                                     </span>
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setBahasa((prev) =>
+                                                prev === 'en' ? 'id' : 'en',
+                                            )
+                                        }
+                                        disabled={!terjemahanTersedia}
+                                        title={
+                                            terjemahanTersedia
+                                                ? bahasa === 'en'
+                                                    ? 'Tampilkan Bahasa Indonesia'
+                                                    : 'Show in English'
+                                                : 'Terjemahan Bahasa Inggris belum tersedia'
+                                        }
+                                        className="flex items-center gap-1.5 rounded-full border border-primary/25 bg-background px-3.5 py-1.5 text-sm font-semibold text-primary transition duration-300 hover:border-primary hover:bg-primary-soft disabled:cursor-not-allowed disabled:opacity-40"
+                                    >
+                                        <Languages className="size-4" />
+                                        {bahasa === 'en' ? 'ID' : 'EN'}
+                                    </button>
                                 </div>
 
                                 <h1 className="mt-5 font-display text-4xl leading-tight text-foreground md:text-5xl">
@@ -150,19 +196,26 @@ export default function DetailWisata() {
                                                 Deskripsi
                                             </h2>
 
+                                            {bahasa === 'en' && !terjemahanTersedia && (
+                                                <p className="mt-2 text-sm italic text-muted-foreground">
+                                                    Versi Bahasa Inggris belum tersedia untuk
+                                                    spot ini.
+                                                </p>
+                                            )}
+
                                             <p className="mt-4 whitespace-pre-line text-base leading-8 text-muted-foreground md:text-lg">
-                                                {wisata.deskripsi}
+                                                {teksDeskripsi}
                                             </p>
                                         </section>
 
-                                        {isiArtikel.length > 0 && (
+                                        {teksIsiArtikel.length > 0 && (
                                             <section className="mt-9 border-t border-border pt-8">
                                                 <h2 className="font-display text-2xl text-foreground">
                                                     Informasi Selengkapnya
                                                 </h2>
 
                                                 <div className="mt-5 space-y-5">
-                                                    {isiArtikel.map(
+                                                    {teksIsiArtikel.map(
                                                         (
                                                             paragraf,
                                                             index,

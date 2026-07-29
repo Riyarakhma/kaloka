@@ -38,6 +38,13 @@ export const WISATA_ITEMS = [
             'Pengunjung dapat menikmati pemandangan waduk, melihat aktivitas nelayan, bersantai bersama keluarga, dan menikmati suasana matahari terbenam.',
             'Keberadaan Waduk Cengklik juga berperan penting bagi kehidupan masyarakat, terutama dalam mendukung kegiatan perikanan, pertanian, dan usaha wisata lokal.',
         ],
+        deskripsi_en:
+            'Cengklik Reservoir is a waterfront destination offering natural scenery, a calm atmosphere, and community activities around the water.',
+        isi_en: [
+            'Cengklik Reservoir is one of the tourist destinations located in Ngemplak District, Boyolali Regency. The area is known for its calm waters and scenic natural surroundings.',
+            'Visitors can enjoy the reservoir views, watch local fishing activities, relax with family, and take in the sunset.',
+            'Cengklik Reservoir also plays an important role for the local community, particularly in supporting fishery, agriculture, and local tourism activities.',
+        ],
     },
     {
         id: 2,
