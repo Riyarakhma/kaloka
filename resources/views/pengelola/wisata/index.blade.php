@@ -35,11 +35,12 @@
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
-                    <tr><th>Foto</th><th>Nama Spot</th><th>Kategori</th><th>Tampil</th><th class="text-end">Aksi</th></tr>
+                    <tr><th>Kode</th><th>Foto</th><th>Nama Spot</th><th>Kategori</th><th>Entri</th><th>Kurasi</th><th class="text-end">Aksi</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($wisata as $w)
                         <tr>
+                            <td class="small text-muted">{{ $w->kode_entri }}</td>
                             <td>
                                 @if ($w->fotoUtama())
                                     <img src="{{ $w->fotoUtama() }}" style="height:40px;width:55px;object-fit:cover;border-radius:.3rem;">
@@ -49,13 +50,8 @@
                             </td>
                             <td>{{ $w->nama_spot }}</td>
                             <td><span class="badge bg-{{ $w->warnaKategori() }}">{{ $w->kategori }}</span></td>
-                            <td>
-                                @if ($w->status_tampil)
-                                    <span class="badge bg-success">Tampil</span>
-                                @else
-                                    <span class="badge bg-secondary">Sembunyi</span>
-                                @endif
-                            </td>
+                            <td><span class="badge bg-{{ $w->warnaStatusEtis() }} text-dark">{{ $w->status_etis }}</span></td>
+                            <td><span class="badge bg-{{ $w->warnaStatusKurasi() }}">{{ $w->status_kurasi }}</span></td>
                             <td class="text-end text-nowrap">
                                 <a href="{{ route('pengelola.wisata.show', $w) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></a>
                                 <a href="{{ route('pengelola.wisata.edit', $w) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
@@ -67,7 +63,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center text-muted py-4">Belum ada spot wisata.</td></tr>
+                        <tr><td colspan="7" class="text-center text-muted py-4">Belum ada spot wisata.</td></tr>
                     @endforelse
                 </tbody>
             </table>

@@ -18,7 +18,8 @@ class UmkmSeeder extends Seeder
                 'alamat' => 'Desa Sobokerto, Ngemplak, Boyolali',
                 'kontak' => '081234567890',
                 'foto' => ['umkm/ecoprint.jpg'],
-                'status_tampil' => 1,
+                'status_etis' => 'Umum',
+                'status_kurasi' => 'Terbit',
             ],
             [
                 'nama_umkm' => 'Ecoprint Sobokerto',
@@ -28,7 +29,8 @@ class UmkmSeeder extends Seeder
                 'alamat' => 'Dukuh Sobokerto',
                 'kontak' => '082345678901',
                 'foto' => ['umkm/ecoprint.jpg'],
-                'status_tampil' => 1,
+                'status_etis' => 'Umum',
+                'status_kurasi' => 'Terbit',
             ],
             [
                 'nama_umkm' => 'Olahan Lele Sobokerto',
@@ -38,7 +40,8 @@ class UmkmSeeder extends Seeder
                 'alamat' => 'Desa Sobokerto',
                 'kontak' => '083456789012',
                 'foto' => ['umkm/ecoprint.jpg'],
-                'status_tampil' => 1,
+                'status_etis' => 'Umum',
+                'status_kurasi' => 'Terbit',
             ],
             [
                 'nama_umkm' => 'Keripik Belut Sobokerto',
@@ -48,7 +51,8 @@ class UmkmSeeder extends Seeder
                 'alamat' => 'Dukuh Ngandong',
                 'kontak' => '084567890123',
                 'foto' => ['umkm/ecoprint.jpg'],
-                'status_tampil' => 1,
+                'status_etis' => 'Umum',
+                'status_kurasi' => 'Terbit',
             ],
             [
                 'nama_umkm' => 'Budidaya Ikan Nila Cengklik',
@@ -58,7 +62,8 @@ class UmkmSeeder extends Seeder
                 'alamat' => 'Area Waduk Cengklik',
                 'kontak' => '085678901234',
                 'foto' => ['umkm/ecoprint.jpg'],
-                'status_tampil' => 1,
+                'status_etis' => 'Umum',
+                'status_kurasi' => 'Terbit',
             ],
             [
                 'nama_umkm' => 'Pupuk Organik Eceng Gondok',
@@ -68,7 +73,8 @@ class UmkmSeeder extends Seeder
                 'alamat' => 'Desa Sobokerto',
                 'kontak' => '086789012345',
                 'foto' => ['umkm/ecoprint.jpg'],
-                'status_tampil' => 1,
+                'status_etis' => 'Umum',
+                'status_kurasi' => 'Terbit',
             ],
         ];
 

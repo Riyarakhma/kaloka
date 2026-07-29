@@ -71,25 +71,27 @@ Route::middleware('auth')->group(function () {
 
     // Modul Kearifan Lokal (pengelola & admin)
     Route::prefix('dashboard')->name('pengelola.')->group(function () {
-        Route::patch('kearifan/{kearifan}/kurasi', [KelolaKearifan::class, 'ubahKurasi'])
-            ->name('kearifan.kurasi');
         Route::resource('kearifan', KelolaKearifan::class);
 
         // Modul Info Wisata
         Route::delete('wisata/{wisata}/foto', [KelolaWisata::class, 'hapusFoto'])->name('wisata.foto.hapus');
         Route::resource('wisata', KelolaWisata::class)->parameters(['wisata' => 'wisata']);
-        
+
         // Modul UMKM
         Route::resource('umkm', KelolaUmkm::class);
     });
-
     // ===== HANYA ADMIN =====
     Route::middleware('peran:admin')->prefix('dashboard')->name('pengelola.')->group(function () {
+        Route::patch('kearifan/{kearifan}/kurasi', [KelolaKearifan::class, 'ubahKurasi'])
+            ->name('kearifan.kurasi');
+        Route::patch('wisata/{wisata}/kurasi', [KelolaWisata::class, 'ubahKurasi'])
+            ->name('wisata.kurasi');
+        Route::patch('umkm/{umkm}/kurasi', [KelolaUmkm::class, 'ubahKurasi'])
+            ->name('umkm.kurasi');
         // Manajemen pengguna
         Route::resource('pengguna', PenggunaController::class)
             ->parameters(['pengguna' => 'pengguna'])
             ->except('show');
-
         // Pengaturan situs
         Route::get('pengaturan', [PengaturanController::class, 'edit'])->name('pengaturan.edit');
         Route::put('pengaturan', [PengaturanController::class, 'update'])->name('pengaturan.update');

@@ -50,7 +50,6 @@
                         <th>Kode</th>
                         <th>Judul</th>
                         <th>Dimensi</th>
-                        <th>Media</th>
                         <th>Etis</th>
                         <th>Kurasi</th>
                         <th>Dibuat oleh</th>
@@ -63,7 +62,6 @@
                             <td class="small text-muted">{{ $e->kode_entri }}</td>
                             <td>{{ $e->judul }}</td>
                             <td><span class="badge badge-dimensi text-white">{{ $e->dimensi }}</span></td>
-                            <td>{{ $e->jenis_media }}</td>
                             <td><span class="badge bg-{{ $e->warnaStatusEtis() }} text-dark">{{ $e->status_etis }}</span></td>
                             <td><span class="badge bg-{{ $e->warnaStatusKurasi() }}">{{ $e->status_kurasi }}</span></td>
                             <td class="small text-muted">{{ $e->pembuat?->name ?? '—' }}</td>

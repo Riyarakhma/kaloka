@@ -35,9 +35,9 @@ class WisataController extends Controller
     public function store(WisataRequest $request)
     {
         $data = $request->validated();
-        $data['status_tampil'] = $request->boolean('status_tampil');
+        $data['kode_entri'] = Wisata::kodeBerikutnya();
+        $data['status_kurasi'] = Wisata::STATUS_KURASI[0]; // selalu mulai dari 'Draf'
         $data['foto'] = $this->simpanFoto($request);
-
         $wisata = Wisata::create($data);
 
         return redirect()->route('pengelola.wisata.show', $wisata)
@@ -57,7 +57,6 @@ class WisataController extends Controller
     public function update(WisataRequest $request, Wisata $wisata)
     {
         $data = $request->validated();
-        $data['status_tampil'] = $request->boolean('status_tampil');
 
         // Foto baru ditambahkan ke foto lama (tidak menimpa).
         $fotoBaru = $this->simpanFoto($request);
@@ -83,6 +82,18 @@ class WisataController extends Controller
 
         return redirect()->route('pengelola.wisata.index')
             ->with('sukses', "Spot wisata \"{$nama}\" berhasil dihapus.");
+    }
+
+    /** Ubah status kurasi. Admin only (dicek lewat middleware/route). */
+    public function ubahKurasi(Request $request, Wisata $wisata)
+    {
+        $request->validate([
+            'status_kurasi' => ['required', \Illuminate\Validation\Rule::in(Wisata::STATUS_KURASI)],
+        ], [], ['status_kurasi' => 'status kurasi']);
+
+        $wisata->update(['status_kurasi' => $request->status_kurasi]);
+
+        return back()->with('sukses', "Status kurasi \"{$wisata->nama_spot}\" menjadi \"{$request->status_kurasi}\".");
     }
 
     /** Hapus satu foto dari sebuah spot. */

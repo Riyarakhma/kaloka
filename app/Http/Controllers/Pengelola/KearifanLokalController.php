@@ -47,6 +47,7 @@ class KearifanLokalController extends Controller
         $data = $request->validated();
         $data['kode_entri'] = KearifanLokal::kodeBerikutnya();
         $data['dibuat_oleh'] = $request->user()->id;
+        $data['status_kurasi'] = KearifanLokal::STATUS_KURASI[0]; // selalu mulai dari 'Draf'
 
         if ($request->hasFile('berkas_media')) {
             $data['berkas_media'] = Gambar::simpan($request->file('berkas_media'), 'kearifan');

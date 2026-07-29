@@ -10,15 +10,23 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import WisataCard from '../components/WisataCard';
 
-import {
-    WISATA_ITEMS,
-    KATEGORI_WISATA,
-} from '../data/wisataData';
+import { useWisataItems, KATEGORI_WISATA } from '../lib/wisata-api';
 
 export default function Wisata() {
     const [filter, setFilter] = useState('semua');
     const [search, setSearch] = useState('');
     const [categoryOpen, setCategoryOpen] = useState(false);
+
+    const { data: rawItems = [], isLoading, isError } = useWisataItems();
+
+    const WISATA_ITEMS = useMemo(
+        () =>
+            rawItems.map((item) => ({
+                ...item,
+                slug: String(item.id),
+            })),
+        [rawItems],
+    );
 
     const categoryOptions = useMemo(
         () => [
@@ -26,7 +34,7 @@ export default function Wisata() {
                 id: 'semua',
                 label: 'Semua Kategori',
             },
-            ...KATEGORI_WISATA,
+            ...KATEGORI_WISATA.map((k) => ({ id: k, label: k })),
         ],
         [],
     );
@@ -64,7 +72,7 @@ export default function Wisata() {
 
             return teks.includes(kata);
         });
-    }, [filter, search]);
+    }, [WISATA_ITEMS, filter, search]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -204,7 +212,18 @@ export default function Wisata() {
                         </p>
                     </div>
 
-                    {itemsTersaring.length === 0 ? (
+                    {isLoading ? (
+                        <div className="mt-12 text-center text-muted-foreground">
+                            Memuat data...
+                        </div>
+                    ) : isError ? (
+                        <div className="mt-12 rounded-2xl border border-dashed border-destructive bg-card p-10 text-center">
+                            <p className="text-lg text-destructive">
+                                Gagal memuat data. Pastikan server API
+                                sedang berjalan.
+                            </p>
+                        </div>
+                    ) : itemsTersaring.length === 0 ? (
                         <div className="mt-12 rounded-3xl border border-dashed border-border bg-card p-10 text-center">
                             <Mountain className="mx-auto mb-4 size-12 text-primary" />
 

@@ -4,7 +4,7 @@
 
 @section('konten')
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <h1 class="h4 mb-0">{{ $entri->nama_umkm }}</h1>
+        <h1 class="h4 mb-0">{{ $entri->kode_entri }} — {{ $entri->nama_umkm }}</h1>
         <div class="text-nowrap">
             <a href="{{ route('pengelola.umkm.index') }}" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-arrow-left me-1"></i>Daftar
@@ -21,11 +21,8 @@
                 <div class="card-body">
                     <p class="text-muted small mb-2">
                         <span class="badge bg-secondary">{{ $entri->kategori }}</span>
-                        @if ($entri->status_tampil)
-                            <span class="badge bg-success">Tampil publik</span>
-                        @else
-                            <span class="badge bg-secondary">Disembunyikan</span>
-                        @endif
+                        <span class="badge bg-{{ $entri->warnaStatusEtis() }} text-dark">Entri: {{ $entri->status_etis }}</span>
+                        <span class="badge bg-{{ $entri->warnaStatusKurasi() }}">Kurasi: {{ $entri->status_kurasi }}</span>
                     </p>
 
                     <p style="white-space:pre-line">{{ $entri->deskripsi }}</p>
@@ -43,6 +40,33 @@
         </div>
 
         <div class="col-lg-4">
+            @if (Auth::user()->isAdmin())
+                <div class="card shadow-sm mb-3">
+                    <div class="card-header bg-white"><strong>Alur Kurasi</strong></div>
+                    <div class="card-body">
+                        <p class="small text-muted">Draf → Terbit</p>
+                        <form action="{{ route('pengelola.umkm.kurasi', $entri) }}" method="POST" class="d-flex gap-2">
+                            @csrf @method('PATCH')
+                            <select name="status_kurasi" class="form-select form-select-sm">
+                                @foreach (\App\Models\Umkm::STATUS_KURASI as $s)
+                                    <option value="{{ $s }}" @selected($entri->status_kurasi === $s)>{{ $s }}</option>
+                                @endforeach
+                            </select>
+                            <button class="btn btn-kaloka btn-sm text-nowrap">Ubah</button>
+                        </form>
+                        @if (! $entri->bolehPublik())
+                            <div class="alert alert-warning small mt-3 mb-0">
+                                <i class="bi bi-eye-slash me-1"></i>Tidak tampil publik (harus Terbit & entri Umum).
+                            </div>
+                        @else
+                            <div class="alert alert-success small mt-3 mb-0">
+                                <i class="bi bi-globe me-1"></i>Tampil publik.
+                                <a href="{{ route('umkm.show', $entri) }}" target="_blank">Lihat halaman publik</a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
             <div class="card shadow-sm">
                 <div class="card-header bg-white"><strong>Metadata</strong></div>
                 <ul class="list-group list-group-flush small">
@@ -51,12 +75,6 @@
                     <li class="list-group-item"><strong>Kontak:</strong> {{ $entri->kontak ?: '—' }}</li>
                     <li class="list-group-item"><strong>Dibuat:</strong> {{ $entri->created_at?->format('d M Y') ?? '—' }}</li>
                 </ul>
-                @if ($entri->status_tampil)
-                    <div class="alert alert-success small m-3 mb-0">
-                        <i class="bi bi-globe me-1"></i>
-                        <a href="{{ route('umkm.show', $entri) }}" target="_blank">Lihat halaman publik</a>
-                    </div>
-                @endif
             </div>
         </div>
     </div>

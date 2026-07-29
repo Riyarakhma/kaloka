@@ -33,28 +33,26 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
+                        <th>Kode</th>
                         <th>Nama UMKM</th>
                         <th>Kategori</th>
                         <th>Pemilik</th>
                         <th>Kontak</th>
-                        <th>Status</th>
+                        <th>Entri</th>
+                        <th>Kurasi</th>
                         <th class="text-end">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($entri as $e)
                         <tr>
+                            <td class="small text-muted">{{ $e->kode_entri }}</td>
                             <td>{{ $e->nama_umkm }}</td>
                             <td><span class="badge bg-secondary">{{ $e->kategori }}</span></td>
                             <td>{{ $e->pemilik }}</td>
                             <td class="small text-muted">{{ $e->kontak ?: '—' }}</td>
-                            <td>
-                                @if ($e->status_tampil)
-                                    <span class="badge bg-success">Tampil</span>
-                                @else
-                                    <span class="badge bg-secondary">Disembunyikan</span>
-                                @endif
-                            </td>
+                            <td><span class="badge bg-{{ $e->warnaStatusEtis() }} text-dark">{{ $e->status_etis }}</span></td>
+                            <td><span class="badge bg-{{ $e->warnaStatusKurasi() }}">{{ $e->status_kurasi }}</span></td>
                             <td class="text-end text-nowrap">
                                 <a href="{{ route('pengelola.umkm.show', $e) }}" class="btn btn-sm btn-outline-secondary" title="Lihat"><i class="bi bi-eye"></i></a>
                                 <a href="{{ route('pengelola.umkm.edit', $e) }}" class="btn btn-sm btn-outline-primary" title="Ubah"><i class="bi bi-pencil"></i></a>
@@ -66,7 +64,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="text-center text-muted py-4">Belum ada UMKM.</td></tr>
+                        <tr><td colspan="8" class="text-center text-muted py-4">Belum ada UMKM.</td></tr>
                     @endforelse
                 </tbody>
             </table>

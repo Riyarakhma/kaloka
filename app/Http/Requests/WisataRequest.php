@@ -25,7 +25,7 @@ class WisataRequest extends FormRequest
             'kontak'          => ['nullable', 'string', 'max:255'],
             'foto'            => ['nullable', 'array'],
             'foto.*'          => ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'], // maks 5 MB/foto
-            'status_tampil'   => ['nullable', 'boolean'],
+            'status_etis'     => ['required', Rule::in(Wisata::STATUS_ETIS)],
         ];
     }
 

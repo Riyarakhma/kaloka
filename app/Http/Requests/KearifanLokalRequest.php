@@ -24,14 +24,12 @@ class KearifanLokalRequest extends FormRequest
             'narasumber'          => ['nullable', 'string', 'max:255'],
             'lokasi'              => ['nullable', 'string', 'max:255'],
             'bahasa'              => ['nullable', 'string', 'max:100'],
-            'jenis_media'         => ['required', Rule::in(KearifanLokal::JENIS_MEDIA)],
             'berkas_media'        => ['nullable', 'file', 'max:20480', // maks 20 MB
                                       'mimes:jpg,jpeg,png,webp,gif,mp3,wav,ogg,mp4,webm,pdf,doc,docx'],
             'tanggal_dokumentasi' => ['nullable', 'date'],
             'pendokumentasi'      => ['nullable', 'string', 'max:255'],
             'sumber'              => ['nullable', 'string', 'max:255'],
             'status_etis'         => ['required', Rule::in(KearifanLokal::STATUS_ETIS)],
-            'status_kurasi'       => ['required', Rule::in(KearifanLokal::STATUS_KURASI)],
             'catatan'             => ['nullable', 'string'],
         ];
     }
@@ -42,7 +40,6 @@ class KearifanLokalRequest extends FormRequest
             'judul' => 'judul',
             'dimensi' => 'dimensi',
             'deskripsi' => 'deskripsi',
-            'jenis_media' => 'jenis media',
             'berkas_media' => 'berkas media',
             'tanggal_dokumentasi' => 'tanggal dokumentasi',
             'status_etis' => 'status etis',

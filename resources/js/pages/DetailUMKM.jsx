@@ -152,38 +152,6 @@ export default function DetailUMKM() {
                                     {umkm.deskripsi}
                                 </p>
                             </article>
-
-                            <article className="rounded-3xl border border-border bg-card p-6 shadow-sm md:p-8">
-                                <h2 className="font-display text-2xl text-foreground">
-                                    Informasi Selengkapnya
-                                </h2>
-
-                                <div className="mt-5 space-y-5 text-base leading-8 text-muted-foreground">
-                                    {Array.isArray(
-                                        umkm.informasi_selengkapnya,
-                                    ) &&
-                                    umkm.informasi_selengkapnya.length > 0 ? (
-                                        umkm.informasi_selengkapnya.map(
-                                            (paragraf, index) => (
-                                                <p key={index}>
-                                                    {paragraf}
-                                                </p>
-                                            ),
-                                        )
-                                    ) : umkm.informasi_selengkapnya ? (
-                                        <p>
-                                            {
-                                                umkm.informasi_selengkapnya
-                                            }
-                                        </p>
-                                    ) : (
-                                        <p>
-                                            Informasi lebih lanjut mengenai
-                                            usaha ini belum tersedia.
-                                        </p>
-                                    )}
-                                </div>
-                            </article>
                         </div>
 
                         <aside className="h-fit rounded-3xl border border-border bg-card p-6 shadow-sm lg:sticky lg:top-24">
@@ -247,11 +215,7 @@ export default function DetailUMKM() {
                                 <InfoItem
                                     icon={Eye}
                                     label="Status Tampil"
-                                    value={
-                                        umkm.status_tampil
-                                            ? 'Ditampilkan'
-                                            : 'Disembunyikan'
-                                    }
+                                    value="Ditampilkan"
                                 />
                             </div>
                         </aside>

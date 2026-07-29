@@ -47,36 +47,35 @@
         <input type="text" name="kontak" class="form-control" value="{{ $val('kontak') }}">
     </div>
 
-    <div class="col-md-8 d-flex align-items-end">
-        <div class="form-check">
-            <input type="hidden" name="status_tampil" value="0">
-            <input type="checkbox" name="status_tampil" value="1" class="form-check-input" id="statusTampil"
-                   @checked(old('status_tampil', $entri->status_tampil ?? true))>
-            <label class="form-check-label" for="statusTampil">Tampilkan di halaman publik</label>
-        </div>
+    <div class="col-md-8">
+        <label class="form-label">Status Entri <span class="text-danger">*</span></label>
+        <select name="status_etis" class="form-select" required>
+            @foreach (\App\Models\Umkm::STATUS_ETIS as $s)
+                <option value="{{ $s }}" @selected($val('status_etis', 'Umum') === $s)>{{ $s }}</option>
+            @endforeach
+        </select>
+        <div class="form-text">Sakral tidak ditampilkan ke publik.</div>
     </div>
 
     <div class="col-12">
-        <label class="form-label">Foto <span class="text-muted small">(boleh pilih beberapa, maks 20 MB/foto)</span></label>
-        <input type="file" name="foto[]" class="form-control" multiple accept="image/*">
-    </div>
-
-    @if ($entri && $entri->foto)
-        <div class="col-12">
-            <label class="form-label small text-muted">Foto saat ini — centang untuk menghapus</label>
-            <div class="d-flex flex-wrap gap-3">
-                @foreach ($entri->urlFoto() as $index => $url)
-                    <div class="text-center">
-                        <img src="{{ $url }}" alt="Foto {{ $index + 1 }}" class="rounded border mb-1"
-                             style="width:120px;height:90px;object-fit:cover;">
-                        <div class="form-check small">
-                            <input type="checkbox" name="hapus_foto[]" value="{{ $index }}"
-                                   class="form-check-input" id="hapusFoto{{ $index }}">
-                            <label class="form-check-label" for="hapusFoto{{ $index }}">Hapus</label>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+        <label class="form-label">Foto <span class="text-muted small">(maks 20 MB, unggah baru untuk mengganti)</span></label>
+        <input type="file" name="foto" id="inputFoto" class="form-control" accept="image/*"
+               onchange="previewFotoUmkm(event)">
+        <div class="form-text">
+            <img id="previewFotoUmkmImg"
+                 src="{{ $entri && $entri->foto ? ($entri->urlFoto()[0] ?? '') : '' }}"
+                 alt="Pratinjau foto"
+                 class="rounded border mt-2 {{ $entri && $entri->foto ? '' : 'd-none' }}"
+                 style="width:160px;height:120px;object-fit:cover;">
         </div>
-    @endif
+    </div>
+    <script>
+        function previewFotoUmkm(event) {
+            const file = event.target.files[0];
+            const img = document.getElementById('previewFotoUmkmImg');
+            if (!file) return;
+            img.src = URL.createObjectURL(file);
+            img.classList.remove('d-none');
+        }
+    </script>
 </div>
