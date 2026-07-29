@@ -11,6 +11,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import KearifanCard from '../components/KearifanCard';
 import { useKearifanItems } from '../lib/kearifan-api';
+import { usePengaturan, ekstrakYoutubeId } from '../lib/pengaturan-api';
 
 import heroWaduk from '../assets/waduk-cengklik-hero.jpg';
 import wisataCengklik from '../assets/wisata-cengklik.jpg';
@@ -18,6 +19,12 @@ import wisataCengklik from '../assets/wisata-cengklik.jpg';
 export default function Beranda() {
     const { data: kearifanItems, isLoading, isError } =
         useKearifanItems();
+    const { data: pengaturan } = usePengaturan();
+
+    const urlYoutube =
+        pengaturan?.url_youtube || 'https://youtu.be/SAPOqu-06NI';
+    const youtubeId =
+        ekstrakYoutubeId(urlYoutube) || 'SAPOqu-06NI';
 
     const kearifanTerbaru = Array.isArray(kearifanItems)
         ? kearifanItems.slice(0, 3)
@@ -197,7 +204,7 @@ export default function Beranda() {
                         </p>
 
                         <a
-                            href="https://youtu.be/SAPOqu-06NI"
+                          href={urlYoutube}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn-primary mt-8 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold sm:text-base"
@@ -213,7 +220,7 @@ export default function Beranda() {
                             <div className="aspect-video">
                                 <iframe
                                     className="size-full"
-                                    src="https://www.youtube.com/embed/SAPOqu-06NI?rel=0"
+                                    src={`https://www.youtube.com/embed/${youtubeId}?rel=0`}
                                     title="Video Profil Desa Sobokerto"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     allowFullScreen

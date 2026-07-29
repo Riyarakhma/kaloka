@@ -48,6 +48,16 @@
                     </div>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">URL Video YouTube Profil Desa</label>
+                    <input type="url" name="url_youtube" class="form-control"
+                           value="{{ old('url_youtube', $nilai['url_youtube']) }}"
+                           placeholder="https://youtu.be/xxxxxxxxxxx">
+                    <div class="form-text">
+                        Link video YouTube yang ditampilkan di halaman Beranda (bagian "Mengenal Sobokerto Lebih Dekat").
+                    </div>
+                </div>
+
                 <button class="btn btn-kaloka"><i class="bi bi-save me-1"></i>Simpan Pengaturan</button>
             </form>
         </div>

@@ -17,6 +17,7 @@ class Pengaturan extends Model
         'kontak'          => ['label' => 'Kontak Desa', 'nilai' => 'Pemerintah Desa Sobokerto, Ngemplak, Boyolali'],
         'teks_sambutan'   => ['label' => 'Teks Sambutan Beranda', 'nilai' => 'Selamat datang di portal Kearifan dan Literasi Lokal Desa Sobokerto.'],
         'url_opac_slims'  => ['label' => 'URL OPAC SLiMS (katalog)', 'nilai' => 'https://desa.perpus.id'],
+        'url_youtube'     => ['label' => 'URL Video YouTube Profil Desa', 'nilai' => 'https://youtu.be/SAPOqu-06NI'],
         'logo'            => ['label' => 'Logo Situs', 'nilai' => null],
     ];
 
