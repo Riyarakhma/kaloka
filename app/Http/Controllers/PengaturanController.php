@@ -29,15 +29,17 @@ class PengaturanController extends Controller
             'kontak'         => ['nullable', 'string', 'max:500'],
             'teks_sambutan'  => ['nullable', 'string', 'max:1000'],
             'url_opac_slims' => ['nullable', 'url', 'max:255'],
+            'url_youtube'    => ['nullable', 'url', 'max:255'],
             'logo'           => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
         ], [
             'required' => 'Kolom :attribute wajib diisi.',
-            'url' => 'URL OPAC SLiMS harus berupa alamat yang valid (mis. http://...).',
+            'url' => ':attribute harus berupa alamat yang valid (mis. https://...).',
             'logo.image' => 'Logo harus berupa gambar.',
             'logo.max' => 'Ukuran logo maksimal 2 MB.',
         ], [
             'nama_situs' => 'nama situs',
             'url_opac_slims' => 'URL OPAC SLiMS',
+            'url_youtube' => 'URL video YouTube',
         ]);
 
         // Logo ditangani terpisah (berkas).
