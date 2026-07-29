@@ -11,7 +11,8 @@ export default function Navbar() {
     return (
         <header className="relative z-50 border-b border-border/70 bg-background/95 backdrop-blur-md">
             <div className="container-page flex min-h-[86px] items-center justify-between gap-4 py-3">
-                {/* Logo dan identitas KALOKA */}
+
+                {/* Logo */}
                 <Link
                     to="/"
                     className="group flex min-w-0 items-center gap-3 sm:gap-4"
@@ -35,14 +36,15 @@ export default function Navbar() {
                     </div>
                 </Link>
 
-                {/* Akses kanan */}
-                <div className="flex shrink-0 items-center gap-4">
-                    {/* Katalog pustaka */}
+                {/* Tombol kanan */}
+                <div className="flex shrink-0 items-center gap-3">
+
+                    {/* Katalog Pustaka */}
                     <a
                         href={SLIMS_URL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-2 rounded-full border border-primary/25 bg-background px-4 py-2.5 text-sm font-semibold text-primary transition duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground focus:outline-none focus:ring-4 focus:ring-primary/15 sm:px-5"
+                        className="group inline-flex items-center gap-2 rounded-full border border-primary/25 bg-background px-5 py-2.5 text-sm font-semibold text-primary transition duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground focus:outline-none focus:ring-4 focus:ring-primary/15"
                     >
                         <span className="hidden sm:inline">
                             Katalog Pustaka
@@ -55,15 +57,18 @@ export default function Navbar() {
                         <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </a>
 
-                    {/* Ikon login polos */}
+                    {/* Login */}
                     <a
                         href="/login"
-                        aria-label="Masuk"
-                        title="Masuk"
-                        className="text-primary transition duration-300 hover:opacity-60 focus:outline-none"
+                        className="group inline-flex items-center gap-2 rounded-full border border-primary/25 bg-background px-5 py-2.5 text-sm font-semibold text-primary transition duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground focus:outline-none focus:ring-4 focus:ring-primary/15"
                     >
-                        <LogIn className="size-6" />
+                        <span>
+                            Login
+                        </span>
+
+                        <LogIn className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </a>
+
                 </div>
             </div>
         </header>
