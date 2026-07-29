@@ -45,6 +45,29 @@
         <label class="form-label">Kontak</label>
         <input type="text" name="kontak" class="form-control" value="{{ $val('kontak') }}" placeholder="WA / telepon">
     </div>
+
+    <div class="col-12"><hr><h6 class="text-muted">Terjemahan Bahasa Inggris (opsional)</h6></div>
+
+    <div class="col-md-6">
+        <label class="form-label">Nama Spot (EN)</label>
+        <input type="text" name="nama_spot_en" class="form-control" value="{{ $val('nama_spot_en') }}">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Lokasi (EN)</label>
+        <input type="text" name="lokasi_en" class="form-control" value="{{ $val('lokasi_en') }}">
+    </div>
+    <div class="col-12">
+        <label class="form-label">Deskripsi (EN)</label>
+        <textarea name="deskripsi_en" class="form-control" rows="4">{{ $val('deskripsi_en') }}</textarea>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Jam Operasional (EN)</label>
+        <input type="text" name="jam_operasional_en" class="form-control" value="{{ $val('jam_operasional_en') }}">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Kontak (EN)</label>
+        <input type="text" name="kontak_en" class="form-control" value="{{ $val('kontak_en') }}">
+    </div>
     <div class="col-12">
         <label class="form-label">Foto <span class="text-muted small">(bisa beberapa, maks 5 MB/foto)</span></label>
         <input type="file" name="foto[]" class="form-control" accept="image/*" multiple>

@@ -52,7 +52,6 @@
                         <th>Dimensi</th>
                         <th>Etis</th>
                         <th>Kurasi</th>
-                        <th>Dibuat oleh</th>
                         <th class="text-end">Aksi</th>
                     </tr>
                 </thead>
@@ -64,7 +63,6 @@
                             <td><span class="badge badge-dimensi text-white">{{ $e->dimensi }}</span></td>
                             <td><span class="badge bg-{{ $e->warnaStatusEtis() }} text-dark">{{ $e->status_etis }}</span></td>
                             <td><span class="badge bg-{{ $e->warnaStatusKurasi() }}">{{ $e->status_kurasi }}</span></td>
-                            <td class="small text-muted">{{ $e->pembuat?->name ?? '—' }}</td>
                             <td class="text-end text-nowrap">
                                 <a href="{{ route('pengelola.kearifan.show', $e) }}" class="btn btn-sm btn-outline-secondary" title="Lihat"><i class="bi bi-eye"></i></a>
                                 <a href="{{ route('pengelola.kearifan.edit', $e) }}" class="btn btn-sm btn-outline-primary" title="Ubah"><i class="bi bi-pencil"></i></a>
@@ -76,7 +74,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="text-center text-muted py-4">Belum ada entri.</td></tr>
+                        <tr><td colspan="7" class="text-center text-muted py-4">Belum ada entri.</td></tr>
                     @endforelse
                 </tbody>
             </table>

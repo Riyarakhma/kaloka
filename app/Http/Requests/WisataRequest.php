@@ -16,16 +16,18 @@ class WisataRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_spot'       => ['required', 'string', 'max:255'],
-            'kategori'        => ['required', Rule::in(Wisata::KATEGORI)],
-            'deskripsi'       => ['required', 'string'],
-            'lokasi'          => ['nullable', 'string', 'max:255'],
-            'koordinat'       => ['nullable', 'string', 'max:100'],
-            'jam_operasional' => ['nullable', 'string', 'max:255'],
-            'kontak'          => ['nullable', 'string', 'max:255'],
-            'foto'            => ['nullable', 'array'],
-            'foto.*'          => ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'], // maks 5 MB/foto
-            'status_etis'     => ['required', Rule::in(Wisata::STATUS_ETIS)],
+           'nama_spot'          => ['required', 'string', 'max:255'],
+            'nama_spot_en'       => ['nullable', 'string', 'max:255'],
+            'kategori'           => ['required', Rule::in(Wisata::KATEGORI)],
+            'deskripsi'          => ['required', 'string'],
+            'deskripsi_en'       => ['nullable', 'string'],
+            'lokasi'             => ['nullable', 'string', 'max:255'],
+            'lokasi_en'          => ['nullable', 'string', 'max:255'],
+            'koordinat'          => ['nullable', 'string', 'max:100'],
+            'jam_operasional'    => ['nullable', 'string', 'max:255'],
+            'jam_operasional_en' => ['nullable', 'string', 'max:255'],
+            'kontak'             => ['nullable', 'string', 'max:255'],
+            'kontak_en'          => ['nullable', 'string', 'max:255'],
         ];
     }
 

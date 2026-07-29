@@ -7,9 +7,10 @@ class Wisata extends Model
 {
     use HasFactory;
     protected $table = 'wisata';
-    protected $fillable = [
-        'kode_entri', 'nama_spot', 'kategori', 'deskripsi', 'lokasi', 'koordinat',
-        'jam_operasional', 'kontak', 'foto', 'status_etis', 'status_kurasi',
+     protected $fillable = [
+        'kode_entri', 'nama_spot', 'nama_spot_en', 'kategori', 'deskripsi', 'deskripsi_en',
+        'lokasi', 'lokasi_en', 'koordinat', 'jam_operasional', 'jam_operasional_en',
+        'kontak', 'kontak_en', 'foto', 'status_etis', 'status_kurasi',
     ];
     protected function casts(): array
     {
@@ -18,6 +19,12 @@ class Wisata extends Model
         ];
     }
     public const KATEGORI = ['Destinasi', 'Kuliner', 'Kerajinan', 'Event'];
+    public const KATEGORI_EN = [
+        'Destinasi' => 'Destination',
+        'Kuliner' => 'Culinary',
+        'Kerajinan' => 'Craft',
+        'Event' => 'Event',
+    ];
     public const STATUS_ETIS = ['Umum', 'Sakral'];
     public const STATUS_KURASI = ['Draf', 'Terbit'];
 
@@ -28,10 +35,16 @@ class Wisata extends Model
                      ->where('status_etis', 'Umum');
     }
 
-    /** Apakah spot ini boleh tampil di publik? */
+   /** Apakah spot ini boleh tampil di publik? */
     public function bolehPublik(): bool
     {
         return $this->status_kurasi === 'Terbit' && $this->status_etis === 'Umum';
+    }
+
+    /** Terjemahan kategori ke Bahasa Inggris. */
+    public function kategoriEn(): string
+    {
+        return static::KATEGORI_EN[$this->kategori] ?? $this->kategori;
     }
 
     /** Hasilkan kode entri unik berikutnya, mis. WS-0001. */

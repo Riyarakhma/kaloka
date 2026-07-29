@@ -12,7 +12,7 @@ class WisataController extends Controller
 {
     /**
      * Tampilkan daftar Wisata.
-     * Publik hanya lihat yang status_tampil = true. Admin/pengelola lihat semua.
+     * Publik hanya lihat yang boleh publik (status_kurasi Terbit & status_etis Umum). Admin/pengelola lihat semua.
      */
     public function index(Request $request)
     {

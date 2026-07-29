@@ -28,6 +28,17 @@ export function warnaKategoriWisata(kategori) {
     );
 }
 
+const KATEGORI_EN = {
+    Destinasi: 'Destination',
+    Kuliner: 'Culinary',
+    Kerajinan: 'Craft',
+    Event: 'Event',
+};
+
+export function kategoriEn(kategori) {
+    return KATEGORI_EN[kategori] ?? kategori;
+}
+
 export function useWisataItems(kategori = 'semua') {
     return useQuery({
         queryKey: ['wisata', kategori],
