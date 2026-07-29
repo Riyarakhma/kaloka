@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import {
     ArrowLeft,
     Clock3,
     Eye,
     EyeOff,
     ImageIcon,
-    Languages,
     MapPin,
     Navigation,
     Phone,
@@ -15,7 +14,7 @@ import {
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { useWisataDetail, warnaKategoriWisata } from '../lib/wisata-api';
+import { useWisataDetail, warnaKategoriWisata, kategoriEn } from '../lib/wisata-api';
 
 function InfoItem({ icon: Icon, label, children }) {
     return (
@@ -39,16 +38,16 @@ function InfoItem({ icon: Icon, label, children }) {
 
 export default function DetailWisata() {
     const { slug } = useParams();
-    const [bahasa, setBahasa] = useState('id'); // 'id' | 'en'
 
     const { data: wisata, isLoading, isError } = useWisataDetail(slug);
+    const [bahasaInggris, setBahasaInggris] = useState(false);
 
     if (isLoading) {
         return (
             <div className="min-h-screen bg-background">
                 <Navbar />
                 <div className="container-page py-20 text-center text-muted-foreground">
-                    Memuat...
+                    {bahasaInggris ? 'Loading...' : 'Memuat...'}
                 </div>
                 <Footer />
             </div>
@@ -58,17 +57,6 @@ export default function DetailWisata() {
     if (isError || !wisata) {
         return <Navigate to="/404" replace />;
     }
-
-    // Terjemahan manual (diisi tim Bahasa Asing Terapan lewat dashboard
-    // pengelola). Kalau backend belum menyediakan field deskripsi_en,
-    // tombol EN otomatis nonaktif dan halaman tetap tampil Bahasa Indonesia.
-    const terjemahanTersedia = Boolean(wisata.deskripsi_en);
-
-    const tampilkanEn = bahasa === 'en' && terjemahanTersedia;
-
-    const teksDeskripsi = tampilkanEn
-        ? wisata.deskripsi_en || wisata.deskripsi
-        : wisata.deskripsi;
 
     return (
         <div className="min-h-screen bg-background">
@@ -100,19 +88,23 @@ export default function DetailWisata() {
                                 ) : (
                                     <div className="flex size-full flex-col items-center justify-center gap-3 text-muted-foreground">
                                         <ImageIcon className="size-14" />
-                                        <p>Foto belum tersedia</p>
+                                        <p>{bahasaInggris ? 'Photo not available' : 'Foto belum tersedia'}</p>
                                     </div>
                                 )}
                             </div>
 
                             <div className="p-6 md:p-10">
-                               <div className="flex flex-wrap items-center gap-3">
+                                <div className="flex flex-wrap items-center gap-3">
                                     <span
                                         className={`inline-flex rounded-full px-4 py-1.5 text-sm font-semibold ${warnaKategoriWisata(
                                             wisata.kategori,
                                         )}`}
                                     >
-                                        {wisata.kategori}
+                                        {bahasaInggris
+                                            ? (wisata.kategori
+                                                  ? kategoriEn(wisata.kategori)
+                                                  : '')
+                                            : wisata.kategori}
                                     </span>
 
                                     <span
@@ -128,42 +120,37 @@ export default function DetailWisata() {
                                             <EyeOff className="size-4" />
                                         )}
 
-                                        {wisata.boleh_publik
-                                            ? 'Ditampilkan'
-                                            : 'Tidak ditampilkan'}
+                                        {bahasaInggris
+                                            ? (wisata.boleh_publik ? 'Displayed' : 'Not displayed')
+                                            : (wisata.boleh_publik ? 'Ditampilkan' : 'Tidak ditampilkan')}
                                     </span>
 
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            setBahasa((prev) =>
-                                                prev === 'en' ? 'id' : 'en',
-                                            )
+                                            setBahasaInggris((v) => !v)
                                         }
-                                        disabled={!terjemahanTersedia}
-                                        title={
-                                            terjemahanTersedia
-                                                ? bahasa === 'en'
-                                                    ? 'Tampilkan Bahasa Indonesia'
-                                                    : 'Show in English'
-                                                : 'Terjemahan Bahasa Inggris belum tersedia'
-                                        }
-                                        className="flex items-center gap-1.5 rounded-full border border-primary/25 bg-background px-3.5 py-1.5 text-sm font-semibold text-primary transition duration-300 hover:border-primary hover:bg-primary-soft disabled:cursor-not-allowed disabled:opacity-40"
+                                        className="inline-flex items-center gap-2 rounded-full border border-primary px-4 py-1.5 text-sm font-semibold text-primary transition hover:bg-primary hover:text-white"
                                     >
-                                        <Languages className="size-4" />
-                                        {bahasa === 'en' ? 'ID' : 'EN'}
+                                        {bahasaInggris ? 'ID' : 'EN'}
                                     </button>
                                 </div>
 
                                 <h1 className="mt-5 font-display text-4xl leading-tight text-foreground md:text-5xl">
-                                    {wisata.nama_spot}
+                                    {bahasaInggris
+                                        ? (wisata.nama_spot_en ||
+                                              wisata.nama_spot)
+                                        : wisata.nama_spot}
                                 </h1>
 
                                 <div className="mt-5 flex items-start gap-2 text-muted-foreground">
                                     <MapPin className="mt-0.5 size-5 shrink-0 text-primary" />
 
                                     <p className="leading-7">
-                                        {wisata.lokasi}
+                                        {bahasaInggris
+                                            ? (wisata.lokasi_en ||
+                                                  wisata.lokasi)
+                                            : wisata.lokasi}
                                     </p>
                                 </div>
 
@@ -171,18 +158,14 @@ export default function DetailWisata() {
                                     <div>
                                         <section>
                                             <h2 className="font-display text-2xl text-foreground">
-                                                Deskripsi
+                                                {bahasaInggris ? 'Description' : 'Deskripsi'}
                                             </h2>
 
-                                            {bahasa === 'en' && !terjemahanTersedia && (
-                                                <p className="mt-2 text-sm italic text-muted-foreground">
-                                                    Versi Bahasa Inggris belum tersedia untuk
-                                                    spot ini.
-                                                </p>
-                                            )}
-
                                             <p className="mt-4 whitespace-pre-line text-base leading-8 text-muted-foreground md:text-lg">
-                                                {teksDeskripsi}
+                                                {bahasaInggris
+                                                    ? (wisata.deskripsi_en ||
+                                                          wisata.deskripsi)
+                                                    : wisata.deskripsi}
                                             </p>
                                         </section>
                                     </div>
@@ -190,42 +173,60 @@ export default function DetailWisata() {
                                     <aside className="h-fit rounded-2xl border border-border bg-background px-5 md:px-6 lg:sticky lg:top-24">
                                         <InfoItem
                                             icon={Tag}
-                                            label="Kategori"
+                                            label={bahasaInggris ? 'Category' : 'Kategori'}
                                         >
-                                            {wisata.kategori ||
-                                                'Belum tersedia'}
+                                            {bahasaInggris
+                                                ? (wisata.kategori
+                                                      ? kategoriEn(
+                                                            wisata.kategori,
+                                                        )
+                                                      : 'Not available')
+                                                : (wisata.kategori ||
+                                                  'Belum tersedia')}
                                         </InfoItem>
 
                                         <InfoItem
                                             icon={MapPin}
-                                            label="Lokasi"
+                                            label={bahasaInggris ? 'Location' : 'Lokasi'}
                                         >
-                                            {wisata.lokasi ||
-                                                'Belum tersedia'}
+                                            {bahasaInggris
+                                                ? (wisata.lokasi_en ||
+                                                      wisata.lokasi ||
+                                                      'Not available')
+                                                : (wisata.lokasi ||
+                                                  'Belum tersedia')}
                                         </InfoItem>
 
                                         <InfoItem
                                             icon={Navigation}
-                                            label="Koordinat"
+                                            label={bahasaInggris ? 'Coordinates' : 'Koordinat'}
                                         >
                                             {wisata.koordinat ||
-                                                'Belum tersedia'}
+                                                (bahasaInggris ? 'Not available' : 'Belum tersedia')}
                                         </InfoItem>
 
                                         <InfoItem
                                             icon={Clock3}
-                                            label="Jam Operasional"
+                                            label={bahasaInggris ? 'Opening Hours' : 'Jam Operasional'}
                                         >
-                                            {wisata.jam_operasional ||
-                                                'Belum tersedia'}
+                                            {bahasaInggris
+                                                ? (wisata.jam_operasional_en ||
+                                                      wisata.jam_operasional ||
+                                                      'Not available')
+                                                : (wisata.jam_operasional ||
+                                                  'Belum tersedia')}
                                         </InfoItem>
 
                                         <InfoItem
                                             icon={Phone}
-                                            label="Kontak"
+                                            label={bahasaInggris ? 'Contact' : 'Kontak'}
                                         >
-                                            {wisata.kontak ||
-                                                'Belum tersedia'}
+                                            {bahasaInggris
+                                                ? (wisata.kontak_en ||
+                                                      wisata.kontak ||
+                                                      'Not available')
+                                                : (wisata.kontak ||
+                                                  'Belum tersedia')}
                                         </InfoItem>
 
                                         <InfoItem
@@ -234,7 +235,7 @@ export default function DetailWisata() {
                                                     ? Eye
                                                     : EyeOff
                                             }
-                                            label="Status Tampil"
+                                            label={bahasaInggris ? 'Display Status' : 'Status Tampil'}
                                         >
                                             <span
                                                 className={
@@ -243,9 +244,9 @@ export default function DetailWisata() {
                                                         : 'text-muted-foreground'
                                                 }
                                             >
-                                                {wisata.boleh_publik
-                                                    ? 'Ditampilkan'
-                                                    : 'Tidak ditampilkan'}
+                                                {bahasaInggris
+                                                    ? (wisata.boleh_publik ? 'Displayed' : 'Not displayed')
+                                                    : (wisata.boleh_publik ? 'Ditampilkan' : 'Tidak ditampilkan')}
                                             </span>
                                         </InfoItem>
                                     </aside>
