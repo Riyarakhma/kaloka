@@ -53,6 +53,10 @@ class KearifanLokalController extends Controller
             $data['berkas_media'] = Gambar::simpan($request->file('berkas_media'), 'kearifan');
         }
 
+        if ($request->hasFile('dokumen')) {
+            $data['dokumen'] = $request->file('dokumen')->store('kearifan/dokumen', 'public');
+        }
+
         $entri = KearifanLokal::create($data);
 
         return redirect()->route('pengelola.kearifan.show', $entri)
@@ -81,6 +85,13 @@ class KearifanLokalController extends Controller
             $data['berkas_media'] = Gambar::simpan($request->file('berkas_media'), 'kearifan');
         }
 
+        if ($request->hasFile('dokumen')) {
+            if ($kearifan->dokumen) {
+                Storage::disk('public')->delete($kearifan->dokumen);
+            }
+            $data['dokumen'] = $request->file('dokumen')->store('kearifan/dokumen', 'public');
+        }
+
         $kearifan->update($data);
 
         return redirect()->route('pengelola.kearifan.show', $kearifan)
@@ -92,6 +103,9 @@ class KearifanLokalController extends Controller
         if ($kearifan->berkas_media) {
             Storage::disk('public')->delete($kearifan->berkas_media);
         }
+        if ($kearifan->dokumen) {
+            Storage::disk('public')->delete($kearifan->dokumen);
+        }
         $kode = $kearifan->kode_entri;
         $kearifan->delete();
 
@@ -100,7 +114,7 @@ class KearifanLokalController extends Controller
     }
 
     /**
-     * Ubah status kurasi (alur: Draf -> Terverifikasi -> Terbit).
+     * Ubah status kurasi (alur: Draf -> Terbit).
      */
     public function ubahKurasi(Request $request, KearifanLokal $kearifan)
     {

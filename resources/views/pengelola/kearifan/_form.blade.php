@@ -64,14 +64,37 @@
         <input type="text" name="bahasa" class="form-control" value="{{ $val('bahasa', 'Indonesia') }}">
     </div>
 
-    {{-- 10. Berkas media --}}
+    {{-- 10. Foto --}}
     <div class="col-md-6">
-        <label class="form-label">Berkas Media <span class="text-muted small">(opsional, maks 20 MB)</span></label>
-        <input type="file" name="berkas_media" class="form-control">
-        @if ($entri && $entri->berkas_media)
+        <label class="form-label">Foto <span class="text-muted small">(opsional, maks 20 MB, unggah baru untuk mengganti)</span></label>
+        <input type="file" name="berkas_media" id="inputFotoKearifan" class="form-control" accept="image/*"
+               onchange="previewFotoKearifan(event)">
+        <div class="form-text">
+            <img id="previewFotoKearifanImg"
+                 src="{{ $entri && $entri->berkas_media ? $entri->urlMedia() : '' }}"
+                 alt="Pratinjau foto"
+                 class="rounded border mt-2 {{ $entri && $entri->berkas_media ? '' : 'd-none' }}"
+                 style="width:160px;height:120px;object-fit:cover;">
+        </div>
+    </div>
+
+    <script>
+        function previewFotoKearifan(event) {
+            const file = event.target.files[0];
+            const img = document.getElementById('previewFotoKearifanImg');
+            if (!file) return;
+            img.src = URL.createObjectURL(file);
+            img.classList.remove('d-none');
+        }
+    </script>
+
+    {{-- 10b. Dokumen PDF --}}
+    <div class="col-md-6">
+        <label class="form-label">Dokumen PDF <span class="text-muted small">(opsional, maks 20 MB, unggah baru untuk mengganti)</span></label>
+        <input type="file" name="dokumen" class="form-control" accept="application/pdf">
+        @if ($entri && $entri->dokumen)
             <div class="form-text">
-                Berkas saat ini: <a href="{{ $entri->urlMedia() }}" target="_blank">lihat</a>
-                — unggah baru untuk mengganti.
+                Dokumen saat ini: <a href="{{ $entri->urlDokumen() }}" target="_blank">{{ basename($entri->dokumen) }}</a>
             </div>
         @endif
     </div>

@@ -18,24 +18,6 @@
                     <button class="btn btn-kaloka"><i class="bi bi-save me-1"></i>Perbarui</button>
                 </div>
             </form>
-
-            @if ($wisata->foto)
-                <hr>
-                <h2 class="h6">Kelola Foto</h2>
-                <div class="d-flex flex-wrap gap-3">
-                    @foreach ($wisata->urlFoto() as $i => $url)
-                        <div class="text-center">
-                            <img src="{{ $url }}" style="height:90px;width:120px;object-fit:cover;border-radius:.4rem;">
-                            <form action="{{ route('pengelola.wisata.foto.hapus', $wisata) }}" method="POST"
-                                  onsubmit="return confirm('Hapus foto ini?')">
-                                @csrf @method('DELETE')
-                                <input type="hidden" name="index" value="{{ $i }}">
-                                <button class="btn btn-sm btn-outline-danger mt-1"><i class="bi bi-trash"></i></button>
-                            </form>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
         </div>
     </div>
 @endsection

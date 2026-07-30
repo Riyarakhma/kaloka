@@ -24,8 +24,8 @@ class KearifanLokalRequest extends FormRequest
             'narasumber'          => ['nullable', 'string', 'max:255'],
             'lokasi'              => ['nullable', 'string', 'max:255'],
             'bahasa'              => ['nullable', 'string', 'max:100'],
-            'berkas_media'        => ['nullable', 'file', 'max:20480', // maks 20 MB
-                                      'mimes:jpg,jpeg,png,webp,gif,mp3,wav,ogg,mp4,webm,pdf,doc,docx'],
+            'berkas_media'        => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:20480'],
+            'dokumen'             => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
             'tanggal_dokumentasi' => ['nullable', 'date'],
             'pendokumentasi'      => ['nullable', 'string', 'max:255'],
             'sumber'              => ['nullable', 'string', 'max:255'],
@@ -40,10 +40,10 @@ class KearifanLokalRequest extends FormRequest
             'judul' => 'judul',
             'dimensi' => 'dimensi',
             'deskripsi' => 'deskripsi',
-            'berkas_media' => 'berkas media',
+            'berkas_media' => 'foto',
+            'dokumen' => 'dokumen',
             'tanggal_dokumentasi' => 'tanggal dokumentasi',
-            'status_etis' => 'status etis',
-            'status_kurasi' => 'status kurasi',
+            'status_etis' => 'status entri',
         ];
     }
 
@@ -51,8 +51,10 @@ class KearifanLokalRequest extends FormRequest
     {
         return [
             'required' => 'Kolom :attribute wajib diisi.',
-            'berkas_media.max' => 'Ukuran berkas media maksimal 20 MB.',
-            'berkas_media.mimes' => 'Format berkas tidak didukung (gambar/audio/video/dokumen).',
+            'berkas_media.max' => 'Ukuran foto maksimal 20 MB.',
+            'berkas_media.mimes' => 'Format foto harus jpg, jpeg, png, webp, atau gif.',
+            'dokumen.max' => 'Ukuran dokumen maksimal 20 MB.',
+            'dokumen.mimes' => 'Dokumen harus berformat PDF.',
             'in' => 'Pilihan :attribute tidak valid.',
             'date' => 'Format :attribute harus tanggal yang benar.',
         ];

@@ -35,9 +35,14 @@ class WisataController extends Controller
     public function store(WisataRequest $request)
     {
         $data = $request->validated();
+        unset($data['foto']);
         $data['kode_entri'] = Wisata::kodeBerikutnya();
         $data['status_kurasi'] = Wisata::STATUS_KURASI[0]; // selalu mulai dari 'Draf'
-        $data['foto'] = $this->simpanFoto($request);
+
+        if ($request->hasFile('foto')) {
+            $data['foto'] = [Gambar::simpan($request->file('foto'), 'wisata')];
+        }
+
         $wisata = Wisata::create($data);
 
         return redirect()->route('pengelola.wisata.show', $wisata)
@@ -57,13 +62,13 @@ class WisataController extends Controller
     public function update(WisataRequest $request, Wisata $wisata)
     {
         $data = $request->validated();
+        unset($data['foto']);
 
-        // Foto baru ditambahkan ke foto lama (tidak menimpa).
-        $fotoBaru = $this->simpanFoto($request);
-        if (! empty($fotoBaru)) {
-            $data['foto'] = array_merge($wisata->foto ?? [], $fotoBaru);
-        } else {
-            unset($data['foto']); // jangan kosongkan bila tidak unggah foto baru
+        if ($request->hasFile('foto')) {
+            foreach ($wisata->foto ?? [] as $path) {
+                Storage::disk('public')->delete($path);
+            }
+            $data['foto'] = [Gambar::simpan($request->file('foto'), 'wisata')];
         }
 
         $wisata->update($data);
@@ -96,7 +101,7 @@ class WisataController extends Controller
         return back()->with('sukses', "Status kurasi \"{$wisata->nama_spot}\" menjadi \"{$request->status_kurasi}\".");
     }
 
-    /** Hapus satu foto dari sebuah spot. */
+    /** Hapus satu foto dari sebuah spot (dipertahankan untuk kompatibilitas route lama). */
     public function hapusFoto(Request $request, Wisata $wisata)
     {
         $index = (int) $request->input('index');
@@ -107,17 +112,5 @@ class WisataController extends Controller
             $wisata->update(['foto' => array_values($foto)]);
         }
         return back()->with('sukses', 'Foto dihapus.');
-    }
-
-    /** Simpan berkas foto yang diunggah, kembalikan array path. */
-    private function simpanFoto(WisataRequest|Request $request): array
-    {
-        $paths = [];
-        if ($request->hasFile('foto')) {
-            foreach ($request->file('foto') as $file) {
-                $paths[] = Gambar::simpan($file, 'wisata');
-            }
-        }
-        return $paths;
     }
 }

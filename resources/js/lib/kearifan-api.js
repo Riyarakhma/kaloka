@@ -87,6 +87,7 @@ function mapToKearifanDetail(item) {
         sumber: item.sumber ?? null,
         statusEtis: item.status_etis ?? null,
         statusKurasi: item.status_kurasi ?? null,
+        dokumenUrl: item.dokumen_url ?? null,
     };
 }
 

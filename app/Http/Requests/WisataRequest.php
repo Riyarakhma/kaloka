@@ -28,6 +28,8 @@ class WisataRequest extends FormRequest
             'jam_operasional_en' => ['nullable', 'string', 'max:255'],
             'kontak'             => ['nullable', 'string', 'max:255'],
             'kontak_en'          => ['nullable', 'string', 'max:255'],
+            'foto'               => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'status_etis'        => ['required', Rule::in(Wisata::STATUS_ETIS)],
         ];
     }
 
@@ -35,7 +37,8 @@ class WisataRequest extends FormRequest
     {
         return [
             'nama_spot' => 'nama spot',
-            'foto.*' => 'foto',
+            'foto' => 'foto',
+            'status_etis' => 'status entri',
         ];
     }
 
@@ -44,8 +47,8 @@ class WisataRequest extends FormRequest
         return [
             'required' => 'Kolom :attribute wajib diisi.',
             'in' => 'Pilihan :attribute tidak valid.',
-            'foto.*.image' => 'Berkas foto harus berupa gambar.',
-            'foto.*.max' => 'Ukuran tiap foto maksimal 5 MB.',
+            'foto.image' => 'Berkas foto harus berupa gambar.',
+            'foto.max' => 'Ukuran foto maksimal 5 MB.',
         ];
     }
 }

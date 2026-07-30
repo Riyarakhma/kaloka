@@ -16,7 +16,7 @@ class KearifanLokal extends Model
 
     protected $fillable = [
         'kode_entri', 'judul', 'dimensi', 'deskripsi', 'kata_kunci', 'narasumber',
-        'lokasi', 'bahasa', 'berkas_media', 'tanggal_dokumentasi',
+        'lokasi', 'bahasa', 'berkas_media', 'dokumen', 'tanggal_dokumentasi',
         'pendokumentasi', 'sumber', 'status_etis', 'status_kurasi', 'catatan', 'dibuat_oleh',
     ];
 
@@ -84,6 +84,14 @@ class KearifanLokal extends Model
     public function urlMedia(): ?string
     {
         return $this->berkas_media ? asset('storage/' . $this->berkas_media) : null;
+    }
+
+    /**
+     * URL dokumen PDF (jika ada).
+     */
+    public function urlDokumen(): ?string
+    {
+        return $this->dokumen ? asset('storage/' . $this->dokumen) : null;
     }
 
     /**

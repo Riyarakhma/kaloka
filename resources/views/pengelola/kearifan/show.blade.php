@@ -42,6 +42,13 @@
                         </div>
                     @endif
 
+                    @if ($entri->dokumen)
+                        <div class="mb-2">
+                            <strong>Dokumen PDF:</strong>
+                            <a href="{{ $entri->urlDokumen() }}" target="_blank">{{ basename($entri->dokumen) }}</a>
+                        </div>
+                    @endif
+
                     @if ($entri->catatan)
                         <div class="alert alert-light border small mb-0">
                             <strong>Catatan/Relasi:</strong> {{ $entri->catatan }}

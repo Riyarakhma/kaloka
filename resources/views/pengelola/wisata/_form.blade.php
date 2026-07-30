@@ -68,20 +68,30 @@
         <label class="form-label">Kontak (EN)</label>
         <input type="text" name="kontak_en" class="form-control" value="{{ $val('kontak_en') }}">
     </div>
+
     <div class="col-12">
-        <label class="form-label">Foto <span class="text-muted small">(bisa beberapa, maks 5 MB/foto)</span></label>
-        <input type="file" name="foto[]" class="form-control" accept="image/*" multiple>
-        @if ($wisata && $wisata->foto)
-            <div class="d-flex flex-wrap gap-2 mt-2">
-                @foreach ($wisata->urlFoto() as $i => $url)
-                    <div class="position-relative">
-                        <img src="{{ $url }}" style="height:70px;width:90px;object-fit:cover;border-radius:.4rem;">
-                    </div>
-                @endforeach
-            </div>
-            <div class="form-text">Foto baru akan ditambahkan ke foto yang sudah ada.</div>
-        @endif
+        <label class="form-label">Foto <span class="text-muted small">(maks 5 MB, unggah baru untuk mengganti)</span></label>
+        <input type="file" name="foto" id="inputFotoWisata" class="form-control" accept="image/*"
+               onchange="previewFotoWisata(event)">
+        <div class="form-text">
+            <img id="previewFotoWisataImg"
+                 src="{{ $wisata && $wisata->foto ? ($wisata->urlFoto()[0] ?? '') : '' }}"
+                 alt="Pratinjau foto"
+                 class="rounded border mt-2 {{ $wisata && $wisata->foto ? '' : 'd-none' }}"
+                 style="width:160px;height:120px;object-fit:cover;">
+        </div>
     </div>
+
+    <script>
+        function previewFotoWisata(event) {
+            const file = event.target.files[0];
+            const img = document.getElementById('previewFotoWisataImg');
+            if (!file) return;
+            img.src = URL.createObjectURL(file);
+            img.classList.remove('d-none');
+        }
+    </script>
+
     <div class="col-md-4">
         <label class="form-label">Status Entri <span class="text-danger">*</span></label>
         <select name="status_etis" class="form-select" required>

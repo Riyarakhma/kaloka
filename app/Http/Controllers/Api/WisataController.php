@@ -68,15 +68,19 @@ class WisataController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_spot' => 'required|string|max:255',
+            'nama_spot_en' => 'nullable|string|max:255',
             'kategori' => 'required|in:' . implode(',', Wisata::KATEGORI),
             'deskripsi' => 'required|string',
+            'deskripsi_en' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
+            'lokasi_en' => 'nullable|string|max:255',
             'koordinat' => 'nullable|string|max:255',
             'jam_operasional' => 'nullable|string|max:255',
+            'jam_operasional_en' => 'nullable|string|max:255',
             'kontak' => 'nullable|string|max:255',
+            'kontak_en' => 'nullable|string|max:255',
             'status_etis' => 'nullable|in:' . implode(',', \App\Models\Wisata::STATUS_ETIS),
-            'foto' => 'nullable|array',
-            'foto.*' => 'image|max:2048',
+            'foto' => 'nullable|image|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -89,10 +93,7 @@ class WisataController extends Controller
         $data = $validator->validated();
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = array_map(
-                fn ($file) => $file->store('wisata', 'public'),
-                $request->file('foto')
-            );
+            $data['foto'] = [$request->file('foto')->store('wisata', 'public')];
         }
 
         $wisata = Wisata::create($data);
@@ -110,15 +111,19 @@ class WisataController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_spot' => 'sometimes|required|string|max:255',
+            'nama_spot_en' => 'nullable|string|max:255',
             'kategori' => 'sometimes|required|in:' . implode(',', Wisata::KATEGORI),
             'deskripsi' => 'sometimes|required|string',
+            'deskripsi_en' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
+            'lokasi_en' => 'nullable|string|max:255',
             'koordinat' => 'nullable|string|max:255',
             'jam_operasional' => 'nullable|string|max:255',
+            'jam_operasional_en' => 'nullable|string|max:255',
             'kontak' => 'nullable|string|max:255',
+            'kontak_en' => 'nullable|string|max:255',
             'status_etis' => 'nullable|in:' . implode(',', Wisata::STATUS_ETIS),
-            'foto' => 'nullable|array',
-            'foto.*' => 'image|max:2048',
+            'foto' => 'nullable|image|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -136,10 +141,7 @@ class WisataController extends Controller
                 Storage::disk('public')->delete($path);
             }
 
-            $data['foto'] = array_map(
-                fn ($file) => $file->store('wisata', 'public'),
-                $request->file('foto')
-            );
+            $data['foto'] = [$request->file('foto')->store('wisata', 'public')];
         }
 
         $wisatum->update($data);
