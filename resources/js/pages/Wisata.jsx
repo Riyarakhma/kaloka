@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
+    ArrowLeft,
     Check,
     ChevronDown,
     Mountain,
@@ -34,7 +36,10 @@ export default function Wisata() {
                 id: 'semua',
                 label: 'Semua Kategori',
             },
-            ...KATEGORI_WISATA.map((k) => ({ id: k, label: k })),
+            ...KATEGORI_WISATA.map((k) => ({
+                id: k,
+                label: k,
+            })),
         ],
         [],
     );
@@ -79,16 +84,24 @@ export default function Wisata() {
             <Navbar />
 
             <main>
-                <section className="border-b border-border bg-primary-soft/60">
-                    <div className="container-page py-14 md:py-20">
-                        <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
-                            <Mountain className="size-4" />
-                            Pesona Desa
-                        </span>
+                {/* Tombol kembali ke landing page */}
+                <section className="border-b border-border bg-background">
+                    <div className="container-page py-5">
+                        <Link
+                            to="/"
+                            className="inline-flex items-center gap-2 font-semibold text-primary transition-all hover:gap-3"
+                        >
+                            <ArrowLeft className="size-5" />
+                            Kembali ke Beranda
+                        </Link>
+                    </div>
+                </section>
 
-                        <h1 className="mt-4 font-display text-4xl text-foreground md:text-5xl">
-                            Info Wisata Sobokerto
-                        </h1>
+               <section className="border-b border-border bg-primary-soft/60">
+    <div className="container-page py-14 md:py-20">
+        <h1 className="font-display text-4xl text-foreground md:text-5xl">
+            Info Wisata Sobokerto
+        </h1>
 
                         <p className="mt-3 max-w-2xl text-lg leading-8 text-muted-foreground">
                             Jelajahi keindahan Waduk Cengklik, kuliner khas,
@@ -219,8 +232,8 @@ export default function Wisata() {
                     ) : isError ? (
                         <div className="mt-12 rounded-2xl border border-dashed border-destructive bg-card p-10 text-center">
                             <p className="text-lg text-destructive">
-                                Gagal memuat data. Pastikan server API
-                                sedang berjalan.
+                                Gagal memuat data. Pastikan server API sedang
+                                berjalan.
                             </p>
                         </div>
                     ) : itemsTersaring.length === 0 ? (

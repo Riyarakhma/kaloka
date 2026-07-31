@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-DgVVQxXI.css",
+    "file": "assets/app-BOr-aEb4.css",
     "name": "app",
     "names": [
       "app.css"
@@ -9,12 +9,12 @@
     "isEntry": true
   },
   "resources/js/app.jsx": {
-    "file": "assets/app-BaHZv_9g.js",
+    "file": "assets/app-C9TeSyky.js",
     "name": "app",
     "src": "resources/js/app.jsx",
     "isEntry": true,
     "css": [
-      "assets/app-DgVVQxXI.css"
+      "assets/app-BOr-aEb4.css"
     ],
     "assets": [
       "assets/kearifan-ekologi-CrQcol46.jpg",

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
+    ArrowLeft,
     ArrowRight,
     Check,
     ChevronDown,
@@ -133,14 +134,23 @@ export default function KearifanLokal() {
             <Navbar />
 
             <main>
+                {/* Tombol kembali ke halaman beranda */}
+                <section className="border-b border-border bg-background">
+                    <div className="container-page py-5">
+                        <Link
+                            to="/"
+                            className="inline-flex items-center gap-2 font-semibold text-primary transition-all duration-200 hover:gap-3"
+                        >
+                            <ArrowLeft className="size-5" />
+                            Kembali ke Beranda
+                        </Link>
+                    </div>
+                </section>
+
+                {/* Hero */}
                 <section className="border-b border-border bg-primary-soft/60">
                     <div className="container-page py-14 md:py-20">
-                        <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
-                            <Leaf className="size-4" />
-                            Warisan Warga Desa
-                        </span>
-
-                        <h1 className="mt-4 font-display text-4xl text-foreground md:text-5xl">
+                        <h1 className="font-display text-4xl text-foreground md:text-5xl">
                             Kearifan Lokal Sobokerto
                         </h1>
 
@@ -178,6 +188,7 @@ export default function KearifanLokal() {
                     </div>
                 </section>
 
+                {/* Filter dan daftar konten */}
                 <section className="container-page py-10 md:py-14">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                         <div className="relative w-full max-w-md">
@@ -235,9 +246,7 @@ export default function KearifanLokal() {
                                                         setFilter(
                                                             kategori.id,
                                                         );
-                                                        setCategoryOpen(
-                                                            false,
-                                                        );
+                                                        setCategoryOpen(false);
                                                     }}
                                                     className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
                                                         isActive

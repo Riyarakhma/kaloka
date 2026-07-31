@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
+    ArrowLeft,
     Check,
     ChevronDown,
     Search,
@@ -35,7 +37,12 @@ export default function UMKM() {
     const [filter, setFilter] = useState('semua');
     const [query, setQuery] = useState('');
     const [categoryOpen, setCategoryOpen] = useState(false);
-    const { data: UMKM_ITEMS = [], isLoading, isError } = useUmkmItems();
+
+    const {
+        data: UMKM_ITEMS = [],
+        isLoading,
+        isError,
+    } = useUmkmItems();
 
     const categoryOptions = useMemo(
         () => [
@@ -58,8 +65,7 @@ export default function UMKM() {
 
         return UMKM_ITEMS.filter((item) => {
             const sesuaiKategori =
-                filter === 'semua' ||
-                item.kategori === filter;
+                filter === 'semua' || item.kategori === filter;
 
             if (!sesuaiKategori) {
                 return false;
@@ -91,28 +97,35 @@ export default function UMKM() {
             <Navbar />
 
             <main>
+                {/* Tombol kembali ke beranda */}
+                <section className="border-b border-border bg-background">
+                    <div className="container-page py-5">
+                        <Link
+                            to="/"
+                            className="inline-flex items-center gap-2 font-semibold text-primary transition-all hover:gap-3"
+                        >
+                            <ArrowLeft className="size-5" />
+                            Kembali ke Beranda
+                        </Link>
+                    </div>
+                </section>
+
+                {/* Hero Galeri UMKM */}
                 <section className="border-b border-border bg-primary-soft/60">
                     <div className="container-page py-14 md:py-20">
-                        <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
-                            <Store className="size-4" />
-                            Produk Unggulan Desa
-                        </span>
-
-                        <h1 className="mt-4 font-display text-4xl text-foreground md:text-5xl">
+                        <h1 className="font-display text-4xl text-foreground md:text-5xl">
                             Galeri UMKM Sobokerto
                         </h1>
 
                         <p className="mt-3 max-w-2xl text-lg leading-8 text-muted-foreground">
                             Temukan berbagai produk, usaha, dan inovasi
-                            masyarakat Desa Sobokerto yang dikembangkan
-                            dari potensi lokal.
+                            masyarakat Desa Sobokerto yang dikembangkan dari
+                            potensi lokal.
                         </p>
 
                         <form
                             className="mt-8 flex items-center gap-3 rounded-2xl border border-border bg-background p-2 shadow-sm"
-                            onSubmit={(event) =>
-                                event.preventDefault()
-                            }
+                            onSubmit={(event) => event.preventDefault()}
                             role="search"
                         >
                             <Search className="ml-3 size-6 shrink-0 text-primary" />
@@ -138,6 +151,7 @@ export default function UMKM() {
                     </div>
                 </section>
 
+                {/* Filter dan daftar UMKM */}
                 <section className="container-page py-10 md:py-14">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                         <div className="relative w-full max-w-md">
@@ -145,8 +159,7 @@ export default function UMKM() {
                                 type="button"
                                 onClick={() =>
                                     setCategoryOpen(
-                                        (previousValue) =>
-                                            !previousValue,
+                                        (previousValue) => !previousValue,
                                     )
                                 }
                                 className={`flex w-full items-center justify-between gap-4 rounded-xl border bg-background px-4 py-3 text-left transition ${
@@ -163,9 +176,7 @@ export default function UMKM() {
 
                                 <ChevronDown
                                     className={`size-5 shrink-0 text-muted-foreground transition-transform duration-200 ${
-                                        categoryOpen
-                                            ? 'rotate-180'
-                                            : ''
+                                        categoryOpen ? 'rotate-180' : ''
                                     }`}
                                     strokeWidth={2}
                                 />
@@ -187,52 +198,41 @@ export default function UMKM() {
                                         role="listbox"
                                         aria-label="Pilihan kategori UMKM"
                                     >
-                                        {categoryOptions.map(
-                                            (kategori) => {
-                                                const isActive =
-                                                    kategori.id ===
-                                                    filter;
+                                        {categoryOptions.map((kategori) => {
+                                            const isActive =
+                                                kategori.id === filter;
 
-                                                return (
-                                                    <button
-                                                        key={kategori.id}
-                                                        type="button"
-                                                        onClick={() => {
-                                                            setFilter(
-                                                                kategori.id,
-                                                            );
-                                                            setCategoryOpen(
-                                                                false,
-                                                            );
-                                                        }}
-                                                        className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
-                                                            isActive
-                                                                ? 'bg-primary-soft font-medium text-primary'
-                                                                : 'text-foreground hover:bg-primary-soft/60'
-                                                        }`}
-                                                        role="option"
-                                                        aria-selected={
-                                                            isActive
-                                                        }
-                                                    >
-                                                        <span className="truncate">
-                                                            {
-                                                                kategori.label
-                                                            }
-                                                        </span>
+                                            return (
+                                                <button
+                                                    key={kategori.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setFilter(
+                                                            kategori.id,
+                                                        );
+                                                        setCategoryOpen(false);
+                                                    }}
+                                                    className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                                                        isActive
+                                                            ? 'bg-primary-soft font-medium text-primary'
+                                                            : 'text-foreground hover:bg-primary-soft/60'
+                                                    }`}
+                                                    role="option"
+                                                    aria-selected={isActive}
+                                                >
+                                                    <span className="truncate">
+                                                        {kategori.label}
+                                                    </span>
 
-                                                        {isActive && (
-                                                            <Check
-                                                                className="size-4 shrink-0 text-primary"
-                                                                strokeWidth={
-                                                                    2.2
-                                                                }
-                                                            />
-                                                        )}
-                                                    </button>
-                                                );
-                                            },
-                                        )}
+                                                    {isActive && (
+                                                        <Check
+                                                            className="size-4 shrink-0 text-primary"
+                                                            strokeWidth={2.2}
+                                                        />
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
                                 </>
                             )}
@@ -254,8 +254,8 @@ export default function UMKM() {
                     ) : isError ? (
                         <div className="mt-12 rounded-2xl border border-dashed border-destructive bg-card p-10 text-center">
                             <p className="text-lg text-destructive">
-                                Gagal memuat data. Pastikan server API
-                                sedang berjalan.
+                                Gagal memuat data. Pastikan server API sedang
+                                berjalan.
                             </p>
                         </div>
                     ) : items.length === 0 ? (
@@ -267,9 +267,8 @@ export default function UMKM() {
                             </h2>
 
                             <p className="mt-2 text-muted-foreground">
-                                Tidak ada produk UMKM yang sesuai
-                                dengan pencarian atau kategori yang
-                                dipilih.
+                                Tidak ada produk UMKM yang sesuai dengan
+                                pencarian atau kategori yang dipilih.
                             </p>
 
                             <button
