@@ -3,6 +3,7 @@ import {
     ArrowLeft,
     Clock,
     Eye,
+    Share2,
     MapPin,
     Phone,
     Store,
@@ -152,6 +153,29 @@ export default function DetailUMKM() {
                                     {umkm.deskripsi}
                                 </p>
                             </article>
+
+                            {umkm.produk && (
+                                <article className="rounded-3xl border border-border bg-card p-6 shadow-sm md:p-8">
+                                    <h2 className="font-display text-2xl text-foreground">
+                                        Produk
+                                    </h2>
+
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        {umkm.produk
+                                            .split(',')
+                                            .map((p) => p.trim())
+                                            .filter(Boolean)
+                                            .map((produk) => (
+                                                <span
+                                                    key={produk}
+                                                    className="rounded-full bg-primary-soft px-4 py-2 text-sm font-medium text-primary"
+                                                >
+                                                    {produk}
+                                                </span>
+                                            ))}
+                                    </div>
+                                </article>
+                            )}
                         </div>
 
                         <aside className="h-fit rounded-3xl border border-border bg-card p-6 shadow-sm lg:sticky lg:top-24">
@@ -205,6 +229,17 @@ export default function DetailUMKM() {
                                 <Divider />
 
                                 <InfoItem
+                                    icon={Share2}
+                                    label="Sosial Media"
+                                    value={
+                                        umkm.sosial_media ||
+                                        'Belum tersedia'
+                                    }
+                                />
+
+                                <Divider />
+
+                                <InfoItem
                                     icon={Store}
                                     label="Kategori"
                                     value={umkm.kategori}
@@ -217,6 +252,22 @@ export default function DetailUMKM() {
                                     label="Status Tampil"
                                     value="Ditampilkan"
                                 />
+
+                                {umkm.link_maps && (
+                                    <>
+                                        <Divider />
+                                        
+                                        <a
+                                            href={umkm.link_maps}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-white transition hover:opacity-90"
+                                        >
+                                            <MapPin className="size-5" />
+                                            Buka di Google Maps
+                                        </a>
+                                    </>
+                                )}
                             </div>
                         </aside>
                     </div>
