@@ -302,12 +302,6 @@
         @enderror
     </div>
 
-    {{-- Pendokumentasi --}}
-    <div class="col-md-3">
-        <label for="pendokumentasi" class="form-label">
-            Pendokumentasi
-        </label>
-
         <input
             type="text"
             name="pendokumentasi"
@@ -323,29 +317,6 @@
             </div>
         @enderror
     </div>
-
-    {{-- Sumber --}}
-    <div class="col-md-6">
-        <label for="sumber" class="form-label">
-            Sumber
-        </label>
-
-        <input
-            type="text"
-            name="sumber"
-            id="sumber"
-            class="form-control @error('sumber') is-invalid @enderror"
-            value="{{ $val('sumber') }}"
-            placeholder="Asal informasi"
-        >
-
-        @error('sumber')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
-    </div>
-
     {{-- Status Etis --}}
     <div class="col-md-4">
         <label for="status_etis" class="form-label">

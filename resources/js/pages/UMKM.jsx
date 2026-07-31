@@ -118,9 +118,7 @@ export default function UMKM() {
                         </h1>
 
                         <p className="mt-3 max-w-2xl text-lg leading-8 text-muted-foreground">
-                            Temukan berbagai produk, usaha, dan inovasi
-                            masyarakat Desa Sobokerto yang dikembangkan dari
-                            potensi lokal.
+                            Temukan berbagai produk, usaha, dan inovasi masyarakat Desa Sobokerto.
                         </p>
 
                         <form

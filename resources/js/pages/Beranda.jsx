@@ -7,6 +7,8 @@ import {
     PlayCircle,
 } from 'lucide-react';
 
+import UMKMCard from '../components/UMKMCard';
+import { useUmkmItems } from '../lib/umkm-api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import KearifanCard from '../components/KearifanCard';
@@ -20,7 +22,15 @@ export default function Beranda() {
     const { data: kearifanItems, isLoading, isError } =
         useKearifanItems();
     const { data: pengaturan } = usePengaturan();
+    const {
+    data: umkmItems = [],
+    isLoading: umkmLoading,
+    isError: umkmError,
+} = useUmkmItems();
 
+const umkmTerbaru = Array.isArray(umkmItems)
+    ? umkmItems.slice(0, 3)
+    : [];
     const urlYoutube =
         pengaturan?.url_youtube || 'https://youtu.be/SAPOqu-06NI';
     const youtubeId =
@@ -165,8 +175,7 @@ export default function Beranda() {
                             </h3>
 
                             <p className="mt-1 text-base leading-relaxed text-muted-foreground">
-                                Lihat berbagai hasil usaha dan produk buatan
-                                warga Desa Sobokerto.
+                         Temukan berbagai produk, usaha, dan inovasi masyarakat Desa Sobokerto.
                             </p>
                         </div>
                     </Link>
@@ -354,7 +363,86 @@ export default function Beranda() {
                     </div>
                 </div>
             </section>
+            {/* ===== UMKM TERBARU ===== */}
+<section className="container-page mt-24">
+    <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <span className="text-sm font-semibold uppercase tracking-wide text-leaf">
+                Produk Lokal Desa
+            </span>
 
+            <h2 className="mt-2 font-display text-3xl md:text-4xl">
+                Galeri UMKM Desa
+            </h2>
+
+            <p className="mt-2 max-w-2xl text-base text-muted-foreground md:text-lg">
+                Temukan berbagai produk unggulan hasil karya masyarakat
+                Desa Sobokerto.
+            </p>
+        </div>
+
+        <Link
+            to="/umkm"
+            className="btn-outline"
+        >
+            Lihat semua
+            <ArrowRight className="size-5" />
+        </Link>
+    </div>
+
+    <div className="mt-8">
+        {umkmLoading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3].map((item) => (
+                    <div
+                        key={item}
+                        className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+                    >
+                        <div className="h-56 animate-pulse bg-primary-soft" />
+
+                        <div className="space-y-4 p-5">
+                            <div className="h-5 w-40 animate-pulse rounded-full bg-primary-soft" />
+                            <div className="h-6 w-4/5 animate-pulse rounded bg-primary-soft" />
+                            <div className="h-4 w-full animate-pulse rounded bg-primary-soft" />
+                            <div className="h-4 w-3/4 animate-pulse rounded bg-primary-soft" />
+                            <div className="mt-8 h-5 w-36 animate-pulse rounded bg-primary-soft" />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        ) : umkmError ? (
+            <div className="rounded-2xl border border-red-200 bg-red-50 px-6 py-10 text-center">
+                <p className="font-display text-xl font-semibold text-red-700">
+                    Data UMKM belum dapat dimuat
+                </p>
+
+                <p className="mt-2 text-sm leading-6 text-red-600">
+                    Silakan muat ulang halaman atau periksa koneksi
+                    ke layanan data UMKM.
+                </p>
+            </div>
+        ) : umkmTerbaru.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {umkmTerbaru.map((item) => (
+                    <UMKMCard
+                        key={item.slug}
+                        item={item}
+                    />
+                ))}
+            </div>
+        ) : (
+            <div className="rounded-2xl border border-border bg-card px-6 py-12 text-center shadow-sm">
+                <p className="font-display text-xl font-semibold text-foreground">
+                    Belum ada produk UMKM yang ditampilkan
+                </p>
+
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    Produk UMKM akan muncul setelah data tersedia.
+                </p>
+            </div>
+        )}
+    </div>
+</section>
             <Footer />
         </div>
     );

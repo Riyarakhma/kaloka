@@ -82,6 +82,8 @@ export default function DetailUMKM() {
         );
     }
 
+    const dimensi = warnaDimensi(umkm.kategori);
+
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
@@ -141,7 +143,8 @@ export default function DetailUMKM() {
                                     </p>
                                 </div>
                             </section>
-                                                        <section className="mt-9 border-t border-border pt-8">
+
+                            <section className="mt-9 border-t border-border pt-8">
                                 <h2 className="text-lg font-bold text-foreground">
                                     Produk
                                 </h2>
@@ -189,51 +192,41 @@ export default function DetailUMKM() {
 
                                 <div className="mt-6 space-y-6">
 
-                                    <InfoItem
-                                        icon={User}
-                                        title="Pemilik Usaha"
-                                    >
+                                    <InfoItem icon={Tag} title="Dimensi">
+                                        <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${dimensi[0]}`}>
+                                            <span className={`size-2 rounded-full ${dimensi[1]}`} />
+                                            {umkm.kategori ?? '-'}
+                                        </span>
+                                    </InfoItem>
+
+                                    <InfoItem icon={User} title="Pemilik Usaha">
                                         {umkm.pemilik ?? '-'}
                                     </InfoItem>
 
-                                    <InfoItem
-                                        icon={MapPin}
-                                        title="Alamat UMKM"
-                                    >
+                                    <InfoItem icon={MapPin} title="Alamat UMKM">
                                         {umkm.alamat ?? '-'}
                                     </InfoItem>
 
-                                    <InfoItem
-                                        icon={ExternalLink}
-                                        title="Google Maps"
-                                    >
+                                    <InfoItem icon={ExternalLink} title="Google Maps">
                                         {umkm.google_maps ?? '-'}
                                     </InfoItem>
 
-                                    <InfoItem
-                                        icon={Clock}
-                                        title="Jam Operasional"
-                                    >
+                                    <InfoItem icon={Clock} title="Jam Operasional">
                                         {umkm.jam_operasional ?? '-'}
                                     </InfoItem>
 
-                                    <InfoItem
-                                        icon={Phone}
-                                        title="Kontak"
-                                    >
+                                    <InfoItem icon={Phone} title="Kontak">
                                         {umkm.kontak ?? '-'}
                                     </InfoItem>
 
-                                    <InfoItem
-                                        icon={Globe}
-                                        title="Sosial Media"
-                                    >
+                                    <InfoItem icon={Globe} title="Sosial Media">
                                         {umkm.sosial_media ?? '-'}
                                     </InfoItem>
 
                                 </div>
                             </section>
-                                                    </div>
+
+                        </div>
                     </article>
                 </div>
             </main>
@@ -243,22 +236,15 @@ export default function DetailUMKM() {
     );
 }
 
-function InfoItem({
-    icon: Icon,
-    title,
-    children,
-}) {
+function InfoItem({ icon: Icon, title, children }) {
     const value =
-        children === null ||
-        children === undefined ||
-        children === ''
+        children === null || children === undefined || children === ''
             ? '-'
             : children;
 
     const isLink =
         typeof value === 'string' &&
-        (value.startsWith('http://') ||
-            value.startsWith('https://'));
+        (value.startsWith('http://') || value.startsWith('https://'));
 
     return (
         <div className="flex items-start gap-4 rounded-2xl border border-border bg-background p-5">
@@ -272,20 +258,39 @@ function InfoItem({
                 </h3>
 
                 <div className="mt-2 text-sm leading-7 text-muted-foreground break-words">
-                    {isLink ? (
-                        <a
-                            href={value}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-medium text-primary hover:underline"
-                        >
-                            {value}
-                        </a>
-                    ) : (
-                        value
-                    )}
+                    {isLink ? <a href={value} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline">{value}</a> : value}
                 </div>
             </div>
         </div>
     );
+}
+
+const PALET_DIMENSI = [
+    ['bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200', 'bg-emerald-500'],
+    ['bg-amber-50 text-amber-700 ring-1 ring-amber-200', 'bg-amber-500'],
+    ['bg-sky-50 text-sky-700 ring-1 ring-sky-200', 'bg-sky-500'],
+    ['bg-rose-50 text-rose-700 ring-1 ring-rose-200', 'bg-rose-500'],
+    ['bg-violet-50 text-violet-700 ring-1 ring-violet-200', 'bg-violet-500'],
+    ['bg-orange-50 text-orange-700 ring-1 ring-orange-200', 'bg-orange-500'],
+    ['bg-teal-50 text-teal-700 ring-1 ring-teal-200', 'bg-teal-500'],
+    ['bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200', 'bg-indigo-500'],
+];
+
+function warnaDimensi(nama) {
+    const kunci = String(nama ?? '').trim().toLowerCase();
+
+    if (!kunci) {
+        return [
+            'bg-muted text-muted-foreground ring-1 ring-border',
+            'bg-muted-foreground',
+        ];
+    }
+
+    let angka = 0;
+
+    for (let i = 0; i < kunci.length; i += 1) {
+        angka = (angka * 31 + kunci.charCodeAt(i)) % 9973;
+    }
+
+    return PALET_DIMENSI[angka % PALET_DIMENSI.length];
 }
