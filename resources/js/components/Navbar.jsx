@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import {
     ArrowUpRight,
     Leaf,
@@ -12,13 +11,9 @@ export default function Navbar() {
         <header className="relative z-50 border-b border-border/70 bg-background/95 backdrop-blur-md">
             <div className="container-page flex min-h-[86px] items-center justify-between gap-4 py-3">
 
-                {/* Logo */}
-                <Link
-                    to="/"
-                    className="group flex min-w-0 items-center gap-3 sm:gap-4"
-                    aria-label="Kembali ke halaman utama KALOKA"
-                >
-                    <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm transition duration-300 group-hover:-translate-y-0.5 group-hover:shadow-md sm:size-14">
+                {/* Logo (Tidak bisa diklik) */}
+                <div className="flex min-w-0 select-none items-center gap-3 sm:gap-4">
+                    <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm sm:size-14">
                         <Leaf
                             className="size-6 sm:size-7"
                             strokeWidth={2}
@@ -34,7 +29,7 @@ export default function Navbar() {
                             Portal Literasi Desa Sobokerto
                         </p>
                     </div>
-                </Link>
+                </div>
 
                 {/* Tombol kanan */}
                 <div className="flex shrink-0 items-center gap-3">

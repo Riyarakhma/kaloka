@@ -104,7 +104,7 @@ export default function DetailKearifan() {
                     Kembali ke Kearifan Lokal
                 </Link>
 
-                <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+                <div className="mt-8">
                     <article className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
                         <figure className="aspect-video overflow-hidden bg-muted">
                             <img
@@ -122,14 +122,21 @@ export default function DetailKearifan() {
                             <h1 className="mt-5 font-display text-4xl leading-tight text-foreground md:text-5xl">
                                 {artikel.judul}
                             </h1>
-
+{artikel.lokasi && (
+    <div className="mt-5 flex items-center gap-2 text-muted-foreground">
+        <MapPin className="size-5 shrink-0 text-primary" />
+        <p className="text-base leading-7 md:text-lg">
+            {artikel.lokasi}
+        </p>
+    </div>
+)}
                             <section className="mt-9">
                                 <h2 className="text-lg font-bold text-foreground">
                                     Deskripsi
                                 </h2>
                                 <div className="mt-4 space-y-5">
                                     {artikel.deskripsi
-                                        .split('\n')
+                                                                            .split('\n')
                                         .filter(Boolean)
                                         .map((paragraf, index) => (
                                             <p
@@ -175,13 +182,12 @@ export default function DetailKearifan() {
                                     </div>
                                 </section>
                             )}
-
                             {artikel.dokumenUrl && (
                                 <section className="mt-9 border-t border-border pt-8">
                                     <h2 className="text-lg font-bold text-foreground">
                                         Informasi Selengkapnya
                                     </h2>
-                                    
+
                                     <a
                                         href={artikel.dokumenUrl}
                                         target="_blank"
@@ -193,78 +199,11 @@ export default function DetailKearifan() {
                                     </a>
                                 </section>
                             )}
-
-                            <aside className="mt-9 rounded-2xl border border-primary/15 bg-primary-soft/50 p-6">
-                                <h2 className="font-display text-xl text-primary">
-                                    Lestarikan Kearifan, Jaga Warisan
-                                </h2>
-                                <p className="mt-2 leading-7 text-muted-foreground">
-                                    Kearifan lokal merupakan identitas dan
-                                    kekayaan bersama yang perlu dijaga serta
-                                    diwariskan kepada generasi mendatang.
-                                </p>
-                            </aside>
                         </div>
                     </article>
-
-                    <aside className="space-y-4 lg:sticky lg:top-24">
-                        {artikel.lokasi && (
-                            <InformationCard icon={MapPin} title="Lokasi">
-                                <p>{artikel.lokasi}</p>
-                            </InformationCard>
-                        )}
-
-                        {artikel.bahasa && (
-                            <InformationCard icon={Languages} title="Bahasa">
-                                <p>{artikel.bahasa}</p>
-                            </InformationCard>
-                        )}
-
-                        {artikel.tanggalDokumentasi && (
-                            <InformationCard
-                                icon={CalendarDays}
-                                title="Tanggal Dokumentasi"
-                            >
-                                <p>{artikel.tanggalDokumentasi}</p>
-                            </InformationCard>
-                        )}
-
-                        {artikel.pendokumentasi && (
-                            <InformationCard
-                                icon={UserRound}
-                                title="Pendokumentasi"
-                            >
-                                <p>{artikel.pendokumentasi}</p>
-                            </InformationCard>
-                        )}
-
-                        {artikel.sumber && (
-                            <InformationCard icon={FileText} title="Sumber">
-                                <p>{artikel.sumber}</p>
-                            </InformationCard>
-                        )}
-
-                        {artikel.statusEtis && (
-                            <InformationCard icon={ShieldCheck} title="Status Etis">
-                                <StatusBadge>{artikel.statusEtis}</StatusBadge>
-                            </InformationCard>
-                        )}
-
-                        {artikel.statusKurasi && (
-                            <InformationCard
-                                icon={CheckCircle2}
-                                title="Status Kurasi"
-                            >
-                                <StatusBadge>{artikel.statusKurasi}</StatusBadge>
-                            </InformationCard>
-                        )}
-
-                        <InformationCard icon={Tag} title="Kategori">
-                            <p>{kategoriLabel}</p>
-                        </InformationCard>
-                    </aside>
                 </div>
             </main>
+
             <Footer />
         </div>
     );

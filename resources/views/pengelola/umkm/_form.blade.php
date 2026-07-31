@@ -47,6 +47,31 @@
         <input type="text" name="kontak" class="form-control" value="{{ $val('kontak') }}">
     </div>
 
+    <div class="col-md-4">
+        <label class="form-label">Sosial Media <span class="text-muted small">(opsional)</span></label>
+        <input type="text" name="sosial_media" class="form-control" value="{{ $val('sosial_media') }}"
+               placeholder="@NgudiMakmur (Instagram)">
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Jam Operasional <span class="text-muted small">(opsional)</span></label>
+        <input type="text" name="jam_operasional" class="form-control" value="{{ $val('jam_operasional') }}"
+               placeholder="08.00 – 17.00">
+    </div>
+
+    <div class="col-12">
+        <label class="form-label">Produk <span class="text-muted small">(pisah dengan koma)</span></label>
+        <input type="text" name="produk" class="form-control" value="{{ $val('produk') }}"
+               placeholder="mis. tas ecoprint, sarung bantal, taplak meja">
+    </div>
+
+    <div class="col-12">
+        <label class="form-label">Link Google Maps <span class="text-muted small">(opsional)</span></label>
+        <input type="url" name="link_maps" class="form-control" value="{{ $val('link_maps') }}"
+               placeholder="https://maps.app.goo.gl/xxxxxxx">
+        <div class="form-text">Buka Google Maps, cari lokasi, klik "Bagikan" → salin link, lalu tempel di sini.</div>
+    </div>
+
     <div class="col-md-8">
         <label class="form-label">Status Entri <span class="text-danger">*</span></label>
         <select name="status_etis" class="form-select" required>

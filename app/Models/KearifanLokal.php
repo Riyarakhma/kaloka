@@ -11,13 +11,26 @@ class KearifanLokal extends Model
 {
     use HasFactory;
 
-    /** Nama tabel bahasa Indonesia. */
     protected $table = 'kearifan_lokal';
 
     protected $fillable = [
-        'kode_entri', 'judul', 'dimensi', 'deskripsi', 'kata_kunci', 'narasumber',
-        'lokasi', 'bahasa', 'berkas_media', 'dokumen', 'tanggal_dokumentasi',
-        'pendokumentasi', 'sumber', 'status_etis', 'status_kurasi', 'catatan', 'dibuat_oleh',
+        'kode_entri',
+        'judul',
+        'dimensi',
+        'deskripsi',
+        'kata_kunci',
+        'narasumber',
+        'lokasi',
+        'bahasa',
+        'berkas_media',
+        'dokumen',
+        'tanggal_dokumentasi',
+        'pendokumentasi',
+        'sumber',
+        'status_etis',
+        'status_kurasi',
+        'catatan',
+        'dibuat_oleh',
     ];
 
     protected function casts(): array
@@ -27,8 +40,6 @@ class KearifanLokal extends Model
         ];
     }
 
-    /* ===================== Pilihan (enum) ===================== */
-
     public const DIMENSI = [
         'Ekologi Waduk Cengklik',
         'Pertanian & Pangan',
@@ -36,77 +47,110 @@ class KearifanLokal extends Model
         'Wisata Komunitas',
     ];
 
-    public const STATUS_ETIS = ['Umum', 'Sakral'];
-    public const STATUS_KURASI = ['Draf', 'Terbit'];
+    public const STATUS_ETIS = [
+        'Umum',
+        'Sakral',
+    ];
 
-    /* ===================== Relasi ===================== */
-
-    public function pembuat(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'dibuat_oleh');
-    }
-
-    /* ===================== Scope ===================== */
+    public const STATUS_KURASI = [
+        'Draf',
+        'Terbit',
+    ];
 
     /**
-     * Hanya entri yang LAYAK TAMPIL PUBLIK:
-     * sudah Terbit DAN berstatus etis Umum.
-     * Entri Draf atau berstatus Sakral TIDAK akan bocor ke publik.
+     * Relasi ke pengguna pembuat entri.
+     */
+    public function pembuat(): BelongsTo
+    {
+        return $this->belongsTo(
+            User::class,
+            'dibuat_oleh'
+        );
+    }
+
+    /**
+     * Hanya data yang boleh tampil di portal publik.
      */
     public function scopePublik(Builder $query): Builder
     {
-        return $query->where('status_kurasi', 'Terbit')
-                     ->where('status_etis', 'Umum');
+        return $query
+            ->where('status_kurasi', 'Terbit')
+            ->where('status_etis', 'Umum');
     }
 
-    /* ===================== Bantuan ===================== */
-
     /**
-     * Hasilkan kode entri unik berikutnya, mis. KL-0001.
+     * Buat kode entri baru.
      */
     public static function kodeBerikutnya(): string
     {
         $terakhir = static::max('id') ?? 0;
-        return 'KL-' . str_pad((string) ($terakhir + 1), 4, '0', STR_PAD_LEFT);
+
+        return 'KL-' . str_pad(
+            (string) ($terakhir + 1),
+            4,
+            '0',
+            STR_PAD_LEFT
+        );
     }
 
     /**
-     * Apakah entri ini boleh tampil di publik?
+     * Cek apakah entri boleh tampil di publik.
      */
     public function bolehPublik(): bool
     {
-        return $this->status_kurasi === 'Terbit' && $this->status_etis === 'Umum';
+        return $this->status_kurasi === 'Terbit'
+            && $this->status_etis === 'Umum';
     }
 
     /**
-     * URL berkas media (jika ada).
+     * URL foto Kearifan Lokal.
      */
     public function urlMedia(): ?string
     {
-        return $this->berkas_media ? asset('storage/' . $this->berkas_media) : null;
+        if (!$this->berkas_media) {
+            return null;
+        }
+
+        return asset(
+            'storage/' . ltrim($this->berkas_media, '/')
+        );
     }
 
     /**
-     * URL dokumen PDF (jika ada).
+     * URL dokumen PDF.
      */
     public function urlDokumen(): ?string
     {
-        return $this->dokumen ? asset('storage/' . $this->dokumen) : null;
+        if (!$this->dokumen) {
+            return null;
+        }
+
+        return asset(
+            'storage/' . ltrim($this->dokumen, '/')
+        );
     }
 
     /**
-     * Kata kunci sebagai array (untuk tampilan badge).
+     * Kata kunci dalam bentuk array.
      */
     public function daftarKataKunci(): array
     {
-        if (! $this->kata_kunci) {
+        if (!$this->kata_kunci) {
             return [];
         }
-        return array_values(array_filter(array_map('trim', explode(',', $this->kata_kunci))));
+
+        return array_values(
+            array_filter(
+                array_map(
+                    'trim',
+                    explode(',', $this->kata_kunci)
+                )
+            )
+        );
     }
 
     /**
-     * Warna lencana Bootstrap untuk status kurasi.
+     * Warna badge status kurasi.
      */
     public function warnaStatusKurasi(): string
     {
@@ -115,8 +159,9 @@ class KearifanLokal extends Model
             default => 'secondary',
         };
     }
+
     /**
-     * Warna lencana Bootstrap untuk status entri.
+     * Warna badge status etis.
      */
     public function warnaStatusEtis(): string
     {

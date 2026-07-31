@@ -73,6 +73,24 @@
                     <li class="list-group-item"><strong>Pemilik:</strong> {{ $entri->pemilik }}</li>
                     <li class="list-group-item"><strong>Alamat:</strong> {{ $entri->alamat }}</li>
                     <li class="list-group-item"><strong>Kontak:</strong> {{ $entri->kontak ?: '—' }}</li>
+                    <li class="list-group-item"><strong>Sosial Media:</strong> {{ $entri->sosial_media ?: '—' }}</li>
+                    <li class="list-group-item"><strong>Jam Operasional:</strong> {{ $entri->jam_operasional ?: '—' }}</li>
+                    <li class="list-group-item">
+                        <strong>Produk:</strong>
+                        @if ($entri->daftarProduk())
+                            {{ implode(', ', $entri->daftarProduk()) }}
+                        @else
+                            —
+                        @endif
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Google Maps:</strong>
+                        @if ($entri->link_maps)
+                            <a href="{{ $entri->link_maps }}" target="_blank">Buka di Maps</a>
+                        @else
+                            —
+                        @endif
+                    </li>
                     <li class="list-group-item"><strong>Dibuat:</strong> {{ $entri->created_at?->format('d M Y') ?? '—' }}</li>
                 </ul>
             </div>

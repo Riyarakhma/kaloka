@@ -1,137 +1,418 @@
 @php
     /** @var \App\Models\KearifanLokal|null $entri */
+
     $entri = $entri ?? null;
-    $val = fn ($k, $d = '') => old($k, $entri->$k ?? $d);
+
+    $val = function ($key, $default = '') use ($entri) {
+        return old(
+            $key,
+            $entri?->{$key} ?? $default
+        );
+    };
+
+    $fotoSekarang = $entri?->urlMedia();
 @endphp
 
 @if ($errors->any())
     <div class="alert alert-danger">
         <strong>Periksa kembali isian berikut:</strong>
-        <ul class="mb-0">
-            @foreach ($errors->all() as $e)
-                <li>{{ $e }}</li>
+
+        <ul class="mb-0 mt-2">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
 <div class="row g-3">
-    {{-- 2. Judul --}}
+    {{-- Judul --}}
     <div class="col-md-8">
-        <label class="form-label">Judul <span class="text-danger">*</span></label>
-        <input type="text" name="judul" class="form-control" value="{{ $val('judul') }}" required>
+        <label for="judul" class="form-label">
+            Judul
+            <span class="text-danger">*</span>
+        </label>
+
+        <input
+            type="text"
+            name="judul"
+            id="judul"
+            class="form-control @error('judul') is-invalid @enderror"
+            value="{{ $val('judul') }}"
+            required
+        >
+
+        @error('judul')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 3. Dimensi --}}
+    {{-- Dimensi --}}
     <div class="col-md-4">
-        <label class="form-label">Dimensi <span class="text-danger">*</span></label>
-        <select name="dimensi" class="form-select" required>
-            <option value="">— pilih —</option>
-            @foreach (\App\Models\KearifanLokal::DIMENSI as $d)
-                <option value="{{ $d }}" @selected($val('dimensi') === $d)>{{ $d }}</option>
+        <label for="dimensi" class="form-label">
+            Dimensi
+            <span class="text-danger">*</span>
+        </label>
+
+        <select
+            name="dimensi"
+            id="dimensi"
+            class="form-select @error('dimensi') is-invalid @enderror"
+            required
+        >
+            <option value="">
+                — pilih —
+            </option>
+
+            @foreach (\App\Models\KearifanLokal::DIMENSI as $dimensi)
+                <option
+                    value="{{ $dimensi }}"
+                    @selected($val('dimensi') === $dimensi)
+                >
+                    {{ $dimensi }}
+                </option>
             @endforeach
         </select>
+
+        @error('dimensi')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 4. Deskripsi --}}
+    {{-- Deskripsi --}}
     <div class="col-12">
-        <label class="form-label">Deskripsi (narasi) <span class="text-danger">*</span></label>
-        <textarea name="deskripsi" class="form-control" rows="5" required>{{ $val('deskripsi') }}</textarea>
+        <label for="deskripsi" class="form-label">
+            Deskripsi
+            <span class="text-danger">*</span>
+        </label>
+
+        <textarea
+            name="deskripsi"
+            id="deskripsi"
+            class="form-control @error('deskripsi') is-invalid @enderror"
+            rows="5"
+            required
+        >{{ $val('deskripsi') }}</textarea>
+
+        @error('deskripsi')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 5. Kata kunci --}}
+    {{-- Kata Kunci --}}
     <div class="col-md-6">
-        <label class="form-label">Kata Kunci <span class="text-muted small">(pisah dengan koma)</span></label>
-        <input type="text" name="kata_kunci" class="form-control" value="{{ $val('kata_kunci') }}"
-               placeholder="mis. mina padi, tradisi, gotong royong">
+        <label for="kata_kunci" class="form-label">
+            Kata Kunci
+            <span class="text-muted small">
+                (pisahkan dengan koma)
+            </span>
+        </label>
+
+        <input
+            type="text"
+            name="kata_kunci"
+            id="kata_kunci"
+            class="form-control @error('kata_kunci') is-invalid @enderror"
+            value="{{ $val('kata_kunci') }}"
+            placeholder="misalnya: mina padi, tradisi, gotong royong"
+        >
+
+        @error('kata_kunci')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 6. Narasumber --}}
+    {{-- Narasumber --}}
     <div class="col-md-6">
-        <label class="form-label">Narasumber</label>
-        <input type="text" name="narasumber" class="form-control" value="{{ $val('narasumber') }}">
+        <label for="narasumber" class="form-label">
+            Narasumber
+        </label>
+
+        <input
+            type="text"
+            name="narasumber"
+            id="narasumber"
+            class="form-control @error('narasumber') is-invalid @enderror"
+            value="{{ $val('narasumber') }}"
+        >
+
+        @error('narasumber')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 7. Lokasi --}}
+    {{-- Lokasi --}}
     <div class="col-md-6">
-        <label class="form-label">Lokasi <span class="text-muted small">(dukuh/koordinat)</span></label>
-        <input type="text" name="lokasi" class="form-control" value="{{ $val('lokasi') }}">
+        <label for="lokasi" class="form-label">
+            Lokasi
+            <span class="text-muted small">
+                (dukuh atau koordinat)
+            </span>
+        </label>
+
+        <input
+            type="text"
+            name="lokasi"
+            id="lokasi"
+            class="form-control @error('lokasi') is-invalid @enderror"
+            value="{{ $val('lokasi') }}"
+        >
+
+        @error('lokasi')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 8. Bahasa --}}
+    {{-- Bahasa --}}
     <div class="col-md-3">
-        <label class="form-label">Bahasa</label>
-        <input type="text" name="bahasa" class="form-control" value="{{ $val('bahasa', 'Indonesia') }}">
+        <label for="bahasa" class="form-label">
+            Bahasa
+        </label>
+
+        <input
+            type="text"
+            name="bahasa"
+            id="bahasa"
+            class="form-control @error('bahasa') is-invalid @enderror"
+            value="{{ $val('bahasa', 'Indonesia') }}"
+        >
+
+        @error('bahasa')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 10. Foto --}}
+    {{-- Foto --}}
     <div class="col-md-6">
-        <label class="form-label">Foto <span class="text-muted small">(opsional, maks 20 MB, unggah baru untuk mengganti)</span></label>
-        <input type="file" name="berkas_media" id="inputFotoKearifan" class="form-control" accept="image/*"
-               onchange="previewFotoKearifan(event)">
+        <label for="berkas_media" class="form-label">
+            Foto
+            <span class="text-muted small">
+                (opsional, maksimal 20 MB)
+            </span>
+        </label>
+
+        <input
+            type="file"
+            name="berkas_media"
+            id="berkas_media"
+            class="form-control @error('berkas_media') is-invalid @enderror"
+            accept="image/jpeg,image/png,image/webp"
+            onchange="previewFotoKearifan(event)"
+        >
+
+        @error('berkas_media')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+
         <div class="form-text">
-            <img id="previewFotoKearifanImg"
-                 src="{{ $entri && $entri->berkas_media ? $entri->urlMedia() : '' }}"
-                 alt="Pratinjau foto"
-                 class="rounded border mt-2 {{ $entri && $entri->berkas_media ? '' : 'd-none' }}"
-                 style="width:160px;height:120px;object-fit:cover;">
+            Unggah foto baru untuk mengganti foto lama.
         </div>
+
+        <img
+            id="previewFotoKearifanImg"
+            src="{{ $fotoSekarang ?? '' }}"
+            alt="Pratinjau foto"
+            class="rounded border mt-3 {{ $fotoSekarang ? '' : 'd-none' }}"
+            style="
+                width: 180px;
+                height: 130px;
+                object-fit: cover;
+            "
+        >
     </div>
 
-    <script>
-        function previewFotoKearifan(event) {
-            const file = event.target.files[0];
-            const img = document.getElementById('previewFotoKearifanImg');
-            if (!file) return;
-            img.src = URL.createObjectURL(file);
-            img.classList.remove('d-none');
-        }
-    </script>
-
-    {{-- 10b. Dokumen PDF --}}
+    {{-- Dokumen PDF --}}
     <div class="col-md-6">
-        <label class="form-label">Dokumen PDF <span class="text-muted small">(opsional, maks 20 MB, unggah baru untuk mengganti)</span></label>
-        <input type="file" name="dokumen" class="form-control" accept="application/pdf">
+        <label for="dokumen" class="form-label">
+            Dokumen PDF
+            <span class="text-muted small">
+                (opsional, maksimal 20 MB)
+            </span>
+        </label>
+
+        <input
+            type="file"
+            name="dokumen"
+            id="dokumen"
+            class="form-control @error('dokumen') is-invalid @enderror"
+            accept="application/pdf"
+        >
+
+        @error('dokumen')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+
         @if ($entri && $entri->dokumen)
-            <div class="form-text">
-                Dokumen saat ini: <a href="{{ $entri->urlDokumen() }}" target="_blank">{{ basename($entri->dokumen) }}</a>
+            <div class="form-text mt-2">
+                Dokumen saat ini:
+
+                <a
+                    href="{{ $entri->urlDokumen() }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {{ basename($entri->dokumen) }}
+                </a>
             </div>
         @endif
     </div>
 
-    {{-- 11. Tanggal dokumentasi --}}
+    {{-- Tanggal Dokumentasi --}}
     <div class="col-md-3">
-        <label class="form-label">Tanggal Dokumentasi</label>
-        <input type="date" name="tanggal_dokumentasi" class="form-control"
-               value="{{ $val('tanggal_dokumentasi') ? \Illuminate\Support\Carbon::parse($val('tanggal_dokumentasi'))->format('Y-m-d') : '' }}">
+        <label for="tanggal_dokumentasi" class="form-label">
+            Tanggal Dokumentasi
+        </label>
+
+        <input
+            type="date"
+            name="tanggal_dokumentasi"
+            id="tanggal_dokumentasi"
+            class="form-control @error('tanggal_dokumentasi') is-invalid @enderror"
+            value="{{
+                $val('tanggal_dokumentasi')
+                    ? \Illuminate\Support\Carbon::parse(
+                        $val('tanggal_dokumentasi')
+                    )->format('Y-m-d')
+                    : ''
+            }}"
+        >
+
+        @error('tanggal_dokumentasi')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 12. Pendokumentasi --}}
+    {{-- Pendokumentasi --}}
     <div class="col-md-3">
-        <label class="form-label">Pendokumentasi <span class="text-muted small">(nama mahasiswa)</span></label>
-        <input type="text" name="pendokumentasi" class="form-control" value="{{ $val('pendokumentasi') }}">
+        <label for="pendokumentasi" class="form-label">
+            Pendokumentasi
+        </label>
+
+        <input
+            type="text"
+            name="pendokumentasi"
+            id="pendokumentasi"
+            class="form-control @error('pendokumentasi') is-invalid @enderror"
+            value="{{ $val('pendokumentasi') }}"
+            placeholder="Nama mahasiswa"
+        >
+
+        @error('pendokumentasi')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 13. Sumber --}}
+    {{-- Sumber --}}
     <div class="col-md-6">
-        <label class="form-label">Sumber <span class="text-muted small">(asal informasi)</span></label>
-        <input type="text" name="sumber" class="form-control" value="{{ $val('sumber') }}">
+        <label for="sumber" class="form-label">
+            Sumber
+        </label>
+
+        <input
+            type="text"
+            name="sumber"
+            id="sumber"
+            class="form-control @error('sumber') is-invalid @enderror"
+            value="{{ $val('sumber') }}"
+            placeholder="Asal informasi"
+        >
+
+        @error('sumber')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 14. Status entri --}}
+    {{-- Status Etis --}}
     <div class="col-md-4">
-        <label class="form-label">Status Entri <span class="text-danger">*</span></label>
-        <select name="status_etis" class="form-select" required>
-            @foreach (\App\Models\KearifanLokal::STATUS_ETIS as $s)
-                <option value="{{ $s }}" @selected($val('status_etis', 'Umum') === $s)>{{ $s }}</option>
+        <label for="status_etis" class="form-label">
+            Status Entri
+            <span class="text-danger">*</span>
+        </label>
+
+        <select
+            name="status_etis"
+            id="status_etis"
+            class="form-select @error('status_etis') is-invalid @enderror"
+            required
+        >
+            @foreach (\App\Models\KearifanLokal::STATUS_ETIS as $status)
+                <option
+                    value="{{ $status }}"
+                    @selected($val('status_etis', 'Umum') === $status)
+                >
+                    {{ $status }}
+                </option>
             @endforeach
         </select>
-        <div class="form-text">Sakral tidak ditampilkan ke publik.</div>
+
+        <div class="form-text">
+            Entri berstatus Sakral tidak ditampilkan di portal publik.
+        </div>
+
+        @error('status_etis')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-    {{-- 16. Catatan --}}
+    {{-- Catatan --}}
     <div class="col-12">
-        <label class="form-label">Catatan / Relasi</label>
-        <textarea name="catatan" class="form-control" rows="2">{{ $val('catatan') }}</textarea>
+        <label for="catatan" class="form-label">
+            Catatan atau Relasi
+        </label>
+
+        <textarea
+            name="catatan"
+            id="catatan"
+            class="form-control @error('catatan') is-invalid @enderror"
+            rows="2"
+        >{{ $val('catatan') }}</textarea>
+
+        @error('catatan')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 </div>
+
+<script>
+    function previewFotoKearifan(event) {
+        const file = event.target.files?.[0];
+        const preview = document.getElementById(
+            'previewFotoKearifanImg'
+        );
+
+        if (!file || !preview) {
+            return;
+        }
+
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('d-none');
+    }
+</script>

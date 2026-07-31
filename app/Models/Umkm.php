@@ -13,6 +13,10 @@ class Umkm extends Model
         'pemilik',
         'alamat',
         'kontak',
+        'sosial_media',
+        'produk',
+        'link_maps',
+        'jam_operasional',
         'foto',
         'status_etis',
         'status_kurasi',
@@ -29,6 +33,15 @@ class Umkm extends Model
         return collect($this->foto ?? [])
             ->map(fn ($path) => \Illuminate\Support\Facades\Storage::url($path))
             ->all();
+    }
+
+    /** Daftar produk sebagai array (pisah dengan koma). */
+    public function daftarProduk(): array
+    {
+        if (! $this->produk) {
+            return [];
+        }
+        return array_values(array_filter(array_map('trim', explode(',', $this->produk))));
     }
 
     /** Hanya UMKM yang LAYAK TAMPIL PUBLIK: sudah Terbit DAN berstatus entri Umum. */
