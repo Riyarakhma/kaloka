@@ -180,12 +180,6 @@ export default function DetailKearifan() {
                                     >
                                         {valueOrDash(artikel.narasumber)}
                                     </InfoCard>
-                                    <InfoCard
-                                        icon={MapPin}
-                                        title="Lokasi"
-                                    >
-                                        {valueOrDash(artikel.lokasi)}
-                                    </InfoCard>
                                 </div>
                             </section>
                         </div>
