@@ -11,7 +11,7 @@ class UmkmController extends Controller
     public function index()
     {
         $umkm = Umkm::publik()
-                    ->paginate(10);
+                    ->paginate(500);
         return response()->json($umkm);
     }
 

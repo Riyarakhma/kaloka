@@ -4,7 +4,7 @@
 
 @section('konten')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h4 mb-0">Direktori UMKM</h1>
+        <h1 class="h4 mb-0">UMKM</h1>
         <a href="{{ route('pengelola.umkm.create') }}" class="btn btn-kaloka btn-sm">
             <i class="bi bi-plus-lg me-1"></i>Tambah UMKM
         </a>
@@ -18,7 +18,7 @@
                        placeholder="nama UMKM / pemilik / alamat">
             </div>
             <div class="col-md-4">
-                <label class="form-label small mb-1">Kategori</label>
+                <label class="form-label small mb-1">Dimensi</label>
                 <select name="kategori" class="form-select form-select-sm">
                     <option value="">Semua</option>
                     @foreach (\App\Models\Umkm::KATEGORI as $k)
@@ -40,7 +40,7 @@
                         <th>Kode</th>
                         <th>Foto</th>
                         <th>Nama UMKM</th>
-                        <th>Kategori</th>
+                        <th>Dimensi</th>
                         <th>Pemilik</th>
                         <th>Kontak</th>
                         <th>Entri</th>
@@ -58,18 +58,6 @@
                                 $fotoUmkm = $rawFoto ? asset('storage/' . ltrim($rawFoto, '/')) : null;
                             }
 
-                            $petaDimensi = [
-                                'kuliner'     => 'danger',
-                                'kerajinan'   => 'warning',
-                                'budidaya'    => 'info',
-                                'pertanian'   => 'success',
-                                'perikanan'   => 'info',
-                                'perdagangan' => 'primary',
-                                'jasa'        => 'primary',
-                                'fashion'     => 'warning',
-                            ];
-
-                            $warnaDimensi = $petaDimensi[strtolower(trim($e->kategori ?? ''))] ?? 'secondary';
                         @endphp
                         <tr>
                             <td class="small text-muted">{{ $e->kode_entri }}</td>
@@ -81,7 +69,7 @@
                                 @endif
                             </td>
                             <td>{{ $e->nama_umkm }}</td>
-                            <td><span class="badge bg-{{ $warnaDimensi }}">{{ $e->kategori }}</span></td>
+                            <td><span class="badge badge-dimensi text-white">{{ $e->kategori }}</span></td>
                             <td>{{ $e->pemilik }}</td>
                             <td class="small text-muted">{{ $e->kontak ?: '—' }}</td>
                             <td><span class="badge bg-{{ $e->warnaStatusEtis() }} text-dark">{{ $e->status_etis }}</span></td>

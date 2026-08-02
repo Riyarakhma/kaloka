@@ -1,22 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, MapPin } from 'lucide-react';
 
-const WARNA_KATEGORI = {
-    Destinasi: 'bg-primary-soft text-primary',
-    Kuliner:
-        'bg-[oklch(0.94_0.07_30)] text-[oklch(0.4_0.15_25)]',
-    Kerajinan:
-        'bg-[oklch(0.94_0.07_75)] text-[oklch(0.38_0.12_60)]',
-    Event:
-        'bg-[oklch(0.92_0.05_220)] text-[oklch(0.30_0.10_220)]',
-};
-
-function warnaKategori(kategori) {
-    return (
-        WARNA_KATEGORI[kategori] ??
-        WARNA_KATEGORI.Destinasi
-    );
-}
+const DIMENSI_BADGE = 'bg-primary-soft text-primary';
 
 export default function WisataCard({ item }) {
     const detailUrl = `/wisata/${item.slug}`;
@@ -37,9 +22,7 @@ export default function WisataCard({ item }) {
 
             <div className="flex flex-1 flex-col gap-3 p-5">
                 <span
-                    className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${warnaKategori(
-                        item.kategori,
-                    )}`}
+                    className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${DIMENSI_BADGE}`}
                 >
                     {item.kategori}
                 </span>

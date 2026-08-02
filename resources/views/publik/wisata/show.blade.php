@@ -17,7 +17,7 @@
     <div class="row g-4">
         <div class="col-lg-8">
             <h1 class="h3">{{ $wisata->nama_spot }}</h1>
-            <p><span class="badge bg-{{ $wisata->warnaKategori() }}">{{ $wisata->kategori }}</span></p>
+            <p><span class="badge badge-dimensi text-white">{{ $wisata->kategori }}</span></p>
 
             @if ($wisata->foto)
                 <div id="galeriWisata" class="carousel slide mb-4 shadow-sm rounded overflow-hidden" data-bs-ride="carousel">

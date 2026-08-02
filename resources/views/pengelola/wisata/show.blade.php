@@ -16,10 +16,11 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <p>
-                        <span class="badge bg-{{ $wisata->warnaKategori() }}">{{ $wisata->kategori }}</span>
+                        <span class="badge badge-dimensi text-white">{{ $wisata->kategori }}</span>
                         <span class="badge bg-{{ $wisata->warnaStatusEtis() }} text-dark">Entri: {{ $wisata->status_etis }}</span>
                         <span class="badge bg-{{ $wisata->warnaStatusKurasi() }}">Kurasi: {{ $wisata->status_kurasi }}</span>
                     </p>
+                    <p style="white-space:pre-line">{{ $wisata->deskripsi }}</p>
                     @if ($wisata->foto)
                         <div class="row g-2 mb-3">
                             @foreach ($wisata->urlFoto() as $url)
@@ -27,7 +28,18 @@
                             @endforeach
                         </div>
                     @endif
-                    <p style="white-space:pre-line">{{ $wisata->deskripsi }}</p>
+                    @if ($wisata->menu_file)
+                        <div class="mb-3">
+                            <a href="{{ $wisata->urlMenu() }}" target="_blank"
+                               class="d-inline-flex align-items-center gap-2 text-decoration-none border rounded-3 px-3 py-2">
+                                <i class="bi bi-file-earmark-pdf-fill text-danger fs-3"></i>
+                                <span>
+                                    <span class="d-block fw-semibold text-dark">Menu</span>
+                                    <span class="d-block small text-muted">{{ basename($wisata->menu_file) }}</span>
+                                </span>
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -60,12 +72,31 @@
                 </div>
             @endif
             <div class="card shadow-sm">
-                <div class="card-header bg-white"><strong>Informasi</strong></div>
+                <div class="card-header bg-white"><strong>Metadata</strong></div>
                 <ul class="list-group list-group-flush small">
                     <li class="list-group-item"><strong>Lokasi:</strong> {{ $wisata->lokasi ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Koordinat:</strong> {{ $wisata->koordinat ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Jam:</strong> {{ $wisata->jam_operasional ?: '—' }}</li>
+                    <li class="list-group-item">
+                        <strong>Jam Operasional:</strong>
+                        @if ($wisata->daftarOperasional())
+                            <ul class="list-unstyled mb-0 mt-1">
+                                @foreach ($wisata->daftarOperasional() as $baris)
+                                    <li class="d-flex justify-content-between">
+                                        <span>{{ $baris['hari'] }}</span>
+                                        <span class="text-muted">{{ $baris['jam'] }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            —
+                        @endif
+                    </li>
                     <li class="list-group-item"><strong>Kontak:</strong> {{ $wisata->kontak ?: '—' }}</li>
+                    @if ($wisata->google_maps)
+                        <li class="list-group-item">
+                            <strong>Google Maps:</strong>
+                            <a href="{{ $wisata->google_maps }}" target="_blank">Buka link</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>

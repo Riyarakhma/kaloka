@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="h4 mb-0">Info Wisata</h1>
         <a href="{{ route('pengelola.wisata.create') }}" class="btn btn-kaloka btn-sm">
-            <i class="bi bi-plus-lg me-1"></i>Tambah Spot
+            <i class="bi bi-plus-lg me-1"></i>Tambah Wisata
         </a>
     </div>
 
@@ -35,7 +35,7 @@
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
-                    <tr><th>Kode</th><th>Foto</th><th>Nama Spot</th><th>Dimensi</th><th>Entri</th><th>Kurasi</th><th class="text-end">Aksi</th></tr>
+                    <tr><th>Kode</th><th>Foto</th><th>Nama Wisata</th><th>Dimensi</th><th>Entri</th><th>Kurasi</th><th class="text-end">Aksi</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($wisata as $w)
@@ -49,7 +49,7 @@
                                 @endif
                             </td>
                             <td>{{ $w->nama_spot }}</td>
-                            <td><span class="badge bg-{{ $w->warnaKategori() }}">{{ $w->kategori }}</span></td>
+                            <td><span class="badge badge-dimensi text-white">{{ $w->kategori }}</span></td>
                             <td><span class="badge bg-{{ $w->warnaStatusEtis() }} text-dark">{{ $w->status_etis }}</span></td>
                             <td><span class="badge bg-{{ $w->warnaStatusKurasi() }}">{{ $w->status_kurasi }}</span></td>
                             <td class="text-end text-nowrap">

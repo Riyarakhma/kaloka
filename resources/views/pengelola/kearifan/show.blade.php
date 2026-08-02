@@ -36,16 +36,21 @@
                     @endif
 
                     @if ($entri->berkas_media)
-                        <div class="mb-2">
-                            <strong>Berkas Media:</strong>
-                            <a href="{{ $entri->urlMedia() }}" target="_blank">{{ basename($entri->berkas_media) }}</a>
+                        <div class="mb-3">
+                            <img src="{{ $entri->urlMedia() }}" alt="Foto {{ $entri->judul }}"
+                                 class="rounded border" style="max-width:320px;max-height:220px;object-fit:cover;">
                         </div>
                     @endif
-
                     @if ($entri->dokumen)
-                        <div class="mb-2">
-                            <strong>Dokumen PDF:</strong>
-                            <a href="{{ $entri->urlDokumen() }}" target="_blank">{{ basename($entri->dokumen) }}</a>
+                        <div class="mb-3">
+                            <a href="{{ $entri->urlDokumen() }}" target="_blank"
+                               class="d-inline-flex align-items-center gap-2 text-decoration-none border rounded-3 px-3 py-2">
+                                <i class="bi bi-file-earmark-pdf-fill text-danger fs-3"></i>
+                                <span>
+                                    <span class="d-block fw-semibold text-dark">Dokumen PDF</span>
+                                    <span class="d-block small text-muted">{{ basename($entri->dokumen) }}</span>
+                                </span>
+                            </a>
                         </div>
                     @endif
 

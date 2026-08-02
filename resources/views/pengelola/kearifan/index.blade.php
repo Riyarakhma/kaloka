@@ -4,9 +4,7 @@
 
 @section('konten')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h4 mb-0">
-            Repositori Kearifan Lokal
-        </h1>
+        <h1 class="h4 mb-0">Kearifan Lokal</h1>
 
         <a
             href="{{ route('pengelola.kearifan.create') }}"

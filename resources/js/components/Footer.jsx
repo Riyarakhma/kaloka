@@ -1,6 +1,16 @@
 import { Leaf, MapPin, Phone, Mail } from 'lucide-react';
+import { usePengaturan } from '../lib/pengaturan-api';
 
 export default function Footer() {
+    const { data: pengaturan } = usePengaturan();
+
+    const alamat =
+        pengaturan?.footer_alamat ||
+        'Desa Sobokerto, Kecamatan Ngemplak, Kabupaten Boyolali, Jawa Tengah';
+    const telepon = pengaturan?.footer_telepon || '(0276) 000-0000';
+    const email = pengaturan?.footer_email || 'perpus.sobokerto@desa.id';
+    const instagram = pengaturan?.footer_instagram || '@desa_sobokerto';
+
     return (
         <footer className="mt-24 border-t border-border bg-primary text-primary-foreground">
             <div className="container-page py-14">
@@ -46,8 +56,7 @@ export default function Footer() {
                                 <div>
                                     <p className="font-medium">Alamat</p>
                                     <p className="opacity-90">
-                                        Desa Sobokerto, Kecamatan Ngemplak,
-                                        Kabupaten Boyolali, Jawa Tengah
+                                        {alamat}
                                     </p>
                                 </div>
                             </div>
@@ -57,7 +66,7 @@ export default function Footer() {
                                 <div>
                                     <p className="font-medium">Telepon</p>
                                     <p className="opacity-90">
-                                        (0276) 000-0000
+                                        {telepon}
                                     </p>
                                 </div>
                             </div>
@@ -67,7 +76,7 @@ export default function Footer() {
                                 <div>
                                     <p className="font-medium">Email</p>
                                     <p className="opacity-90">
-                                        perpus.sobokerto@desa.id
+                                        {email}
                                     </p>
                                 </div>
                             </div>
@@ -103,7 +112,7 @@ export default function Footer() {
                                 <div>
                                     <p className="font-medium">Instagram</p>
                                     <p className="opacity-90">
-                                        @desa_sobokerto
+                                        {instagram}
                                     </p>
                                 </div>
                             </div>

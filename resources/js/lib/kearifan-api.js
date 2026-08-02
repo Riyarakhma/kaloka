@@ -10,7 +10,10 @@ const DIMENSI_TO_KATEGORI = {
     'Ekologi Waduk Cengklik': 'ekologi',
     'Pertanian & Pangan': 'pertanian',
     'Tradisi Lisan & Sejarah': 'tradisi',
+    Tradisi: 'tradisi',
     'Wisata Komunitas': 'wisata-komunitas',
+    'Wisata Berbasis Komunitas': 'wisata-komunitas',
+    'Wisata-komunitas': 'wisata-komunitas',
 };
 const PLACEHOLDER_BY_KATEGORI = {
     ekologi: kearifanEkologi,
@@ -72,6 +75,7 @@ function mapToKearifanDetail(item) {
 
     return {
         slug: String(item.id),
+        kode_entri: item.kode_entri ?? null,
         judul: item.judul,
         kategori,
         deskripsi: item.deskripsi,
@@ -86,6 +90,7 @@ function mapToKearifanDetail(item) {
         sumber: item.sumber ?? null,
         statusEtis: item.status_etis ?? null,
         statusKurasi: item.status_kurasi ?? null,
+        catatan: item.catatan ?? null,
         dokumenUrl: item.dokumen_url ?? null,
     };
 }

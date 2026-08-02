@@ -14,11 +14,11 @@ export const KATEGORI_KEARIFAN = [
         label: 'Pertanian & Pangan Lokal',
     },
     {
-        id: 'sejarah',
+        id: 'tradisi',
         label: 'Tradisi Lisan & Sejarah',
     },
     {
-        id: 'wisata',
+        id: 'wisata-komunitas',
         label: 'Wisata Berbasis Komunitas',
     },
 ];

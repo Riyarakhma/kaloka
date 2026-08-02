@@ -49,12 +49,6 @@ class KearifanLokalRequest extends FormRequest
                 'max:255',
             ],
 
-            'bahasa' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
-
             'berkas_media' => [
                 'nullable',
                 'image',
@@ -67,17 +61,6 @@ class KearifanLokalRequest extends FormRequest
                 'file',
                 'mimes:pdf',
                 'max:20480',
-            ],
-
-            'tanggal_dokumentasi' => [
-                'nullable',
-                'date',
-            ],
-
-            'sumber' => [
-                'nullable',
-                'string',
-                'max:255',
             ],
 
             'status_etis' => [
@@ -106,14 +89,10 @@ class KearifanLokalRequest extends FormRequest
             'kata_kunci' => 'kata kunci',
             'narasumber' => 'narasumber',
             'lokasi' => 'lokasi',
-            'bahasa' => 'bahasa',
             'berkas_media' => 'foto',
             'dokumen' => 'dokumen PDF',
-            'tanggal_dokumentasi' => 'tanggal dokumentasi',
-            'sumber' => 'sumber',
             'status_etis' => 'status entri',
             'status_kurasi' => 'status kurasi',
-            'catatan' => 'catatan',
         ];
     }
 

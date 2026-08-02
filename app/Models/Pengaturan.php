@@ -18,6 +18,10 @@ class Pengaturan extends Model
         'teks_sambutan'   => ['label' => 'Teks Sambutan Beranda', 'nilai' => 'Selamat datang di portal Kearifan dan Literasi Lokal Desa Sobokerto.'],
         'url_opac_slims'  => ['label' => 'URL OPAC SLiMS (katalog)', 'nilai' => 'https://desa.perpus.id'],
         'url_youtube'     => ['label' => 'URL Video YouTube Profil Desa', 'nilai' => 'https://youtu.be/SAPOqu-06NI'],
+        'footer_alamat'   => ['label' => 'Alamat (Footer)', 'nilai' => 'Desa Sobokerto, Kecamatan Ngemplak, Kabupaten Boyolali, Jawa Tengah'],
+        'footer_telepon'  => ['label' => 'Telepon (Footer)', 'nilai' => '(0276) 000-0000'],
+        'footer_email'    => ['label' => 'Email (Footer)', 'nilai' => 'perpus.sobokerto@desa.id'],
+        'footer_instagram' => ['label' => 'Instagram (Footer)', 'nilai' => '@desa_sobokerto'],
         'logo'            => ['label' => 'Logo Situs', 'nilai' => null],
     ];
 

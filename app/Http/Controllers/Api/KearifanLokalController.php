@@ -28,7 +28,7 @@ class KearifanLokalController extends Controller
             $query->where('dimensi', $request->dimensi);
         }
 
-        $data = $query->latest()->paginate(10);
+        $data = $query->latest()->paginate(500);
 
         return KearifanLokalResource::collection($data);
     }
@@ -61,12 +61,8 @@ class KearifanLokalController extends Controller
             'kata_kunci' => 'nullable|string',
             'narasumber' => 'nullable|string|max:255',
             'lokasi' => 'nullable|string|max:255',
-            'bahasa' => 'nullable|string|max:100',
-            'tanggal_dokumentasi' => 'nullable|date',
-            'sumber' => 'nullable|string|max:255',
             'status_etis' => 'nullable|in:' . implode(',', KearifanLokal::STATUS_ETIS),
             'status_kurasi' => 'nullable|in:' . implode(',', KearifanLokal::STATUS_KURASI),
-            'catatan' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -100,12 +96,8 @@ class KearifanLokalController extends Controller
             'kata_kunci' => 'nullable|string',
             'narasumber' => 'nullable|string|max:255',
             'lokasi' => 'nullable|string|max:255',
-            'bahasa' => 'nullable|string|max:100',
-            'tanggal_dokumentasi' => 'nullable|date',
-            'sumber' => 'nullable|string|max:255',
             'status_etis' => 'nullable|in:' . implode(',', KearifanLokal::STATUS_ETIS),
             'status_kurasi' => 'nullable|in:' . implode(',', KearifanLokal::STATUS_KURASI),
-            'catatan' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
