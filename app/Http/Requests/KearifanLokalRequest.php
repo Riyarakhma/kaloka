@@ -74,12 +74,6 @@ class KearifanLokalRequest extends FormRequest
                 'date',
             ],
 
-            'pendokumentasi' => [
-                'nullable',
-                'string',
-                'max:255',
-            ],
-
             'sumber' => [
                 'nullable',
                 'string',
@@ -116,7 +110,6 @@ class KearifanLokalRequest extends FormRequest
             'berkas_media' => 'foto',
             'dokumen' => 'dokumen PDF',
             'tanggal_dokumentasi' => 'tanggal dokumentasi',
-            'pendokumentasi' => 'pendokumentasi',
             'sumber' => 'sumber',
             'status_etis' => 'status entri',
             'status_kurasi' => 'status kurasi',

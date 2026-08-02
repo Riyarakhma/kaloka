@@ -99,7 +99,6 @@
                     <li class="list-group-item"><strong>Bahasa:</strong> {{ $entri->bahasa ?: '—' }}</li>
                     <li class="list-group-item"><strong>Tanggal Dokumentasi:</strong>
                         {{ $entri->tanggal_dokumentasi?->format('d M Y') ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Pendokumentasi:</strong> {{ $entri->pendokumentasi ?: '—' }}</li>
                     <li class="list-group-item"><strong>Sumber:</strong> {{ $entri->sumber ?: '—' }}</li>
                     <li class="list-group-item"><strong>Ditambahkan oleh:</strong> {{ $entri->pembuat?->name ?? '—' }}</li>
                     <li class="list-group-item"><strong>Dibuat:</strong> {{ $entri->created_at?->format('d M Y') ?? '—' }}</li>

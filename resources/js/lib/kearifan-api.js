@@ -83,7 +83,6 @@ function mapToKearifanDetail(item) {
         lokasi: item.lokasi ?? null,
         bahasa: item.bahasa ?? null,
         tanggalDokumentasi: item.tanggal_dokumentasi ?? null,
-        pendokumentasi: item.pendokumentasi ?? null,
         sumber: item.sumber ?? null,
         statusEtis: item.status_etis ?? null,
         statusKurasi: item.status_kurasi ?? null,

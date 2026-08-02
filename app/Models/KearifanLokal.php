@@ -25,7 +25,6 @@ class KearifanLokal extends Model
         'berkas_media',
         'dokumen',
         'tanggal_dokumentasi',
-        'pendokumentasi',
         'sumber',
         'status_etis',
         'status_kurasi',
