@@ -74,15 +74,55 @@
                     <li class="list-group-item"><strong>Alamat:</strong> {{ $entri->alamat }}</li>
                     <li class="list-group-item"><strong>Kontak:</strong> {{ $entri->kontak ?: '—' }}</li>
                     <li class="list-group-item"><strong>Sosial Media:</strong> {{ $entri->sosial_media ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Jam Operasional:</strong> {{ $entri->jam_operasional ?: '—' }}</li>
                     <li class="list-group-item">
-                        <strong>Produk:</strong>
-                        @if ($entri->daftarProduk())
-                            {{ implode(', ', $entri->daftarProduk()) }}
+                        <strong>Operasional:</strong>
+                        @if ($entri->daftarOperasional())
+                            <ul class="list-unstyled mb-0 mt-1">
+                                @foreach ($entri->daftarOperasional() as $baris)
+                                    <li class="d-flex justify-content-between">
+                                        <span>{{ $baris['hari'] }}</span>
+                                        <span class="text-muted">{{ $baris['jam'] }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
                         @else
                             —
                         @endif
                     </li>
+                   <li class="list-group-item">
+    <strong>Produk:</strong>
+
+    @if (!empty($entri->produk) && is_array($entri->produk))
+
+        <div class="mt-2">
+            @foreach ($entri->produk as $produk)
+
+                <div class="border rounded p-2 mb-2">
+
+                    <strong>{{ $produk['nama'] ?? '-' }}</strong>
+
+                    @if (!empty($produk['deskripsi']))
+                        <div>{{ $produk['deskripsi'] }}</div>
+                    @endif
+
+                    @if (!empty($produk['harga']))
+                        <div>
+                            <strong>Harga:</strong>
+                            {{ $produk['harga'] }}
+                        </div>
+                    @endif
+
+                </div>
+
+            @endforeach
+        </div>
+
+    @else
+
+        —
+
+    @endif
+</li>
                     <li class="list-group-item">
                         <strong>Google Maps:</strong>
                         @if ($entri->link_maps)

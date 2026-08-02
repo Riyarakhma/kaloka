@@ -23,6 +23,7 @@ class Umkm extends Model
     ];
     protected $casts = [
         'foto' => 'array',
+        'jam_operasional' => 'array',
     ];
 
     public const STATUS_ETIS = ['Umum', 'Sakral'];
@@ -35,13 +36,13 @@ class Umkm extends Model
             ->all();
     }
 
-    /** Daftar produk sebagai array (pisah dengan koma). */
-    public function daftarProduk(): array
+    /** Daftar jam operasional yang sudah bersih (buang baris kosong). */
+    public function daftarOperasional(): array
     {
-        if (! $this->produk) {
-            return [];
-        }
-        return array_values(array_filter(array_map('trim', explode(',', $this->produk))));
+        return collect($this->jam_operasional ?? [])
+            ->filter(fn ($baris) => ! empty($baris['hari']) || ! empty($baris['jam']))
+            ->values()
+            ->all();
     }
 
     /** Hanya UMKM yang LAYAK TAMPIL PUBLIK: sudah Terbit DAN berstatus entri Umum. */

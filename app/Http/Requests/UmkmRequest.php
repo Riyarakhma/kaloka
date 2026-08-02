@@ -11,6 +11,20 @@ class UmkmRequest extends FormRequest
         return $this->user() !== null;
     }
 
+    protected function prepareForValidation(): void
+    {
+        if (! $this->has('produk') || ! is_array($this->produk)) {
+            return;
+        }
+
+        $bersih = collect($this->produk)
+            ->filter(fn ($p) => filled($p['nama'] ?? null))
+            ->values()
+            ->all();
+
+        $this->merge(['produk' => $bersih]);
+    }
+
     public function rules(): array
     {
         return [
@@ -21,9 +35,14 @@ class UmkmRequest extends FormRequest
             'alamat'         => ['required', 'string', 'max:255'],
             'kontak'         => ['nullable', 'string', 'max:100'],
             'sosial_media'   => ['nullable', 'string', 'max:255'],
-            'produk'         => ['nullable', 'string'],
+            'produk'              => ['nullable', 'array'],
+            'produk.*.nama'       => ['required_with:produk', 'string', 'max:255'],
+            'produk.*.deskripsi'  => ['nullable', 'string', 'max:1000'],
+            'produk.*.harga'      => ['nullable', 'numeric', 'min:0'],
             'link_maps'      => ['nullable', 'url', 'max:500'],
-            'jam_operasional' => ['nullable', 'string', 'max:255'],
+            'jam_operasional'      => ['nullable', 'array'],
+            'jam_operasional.*.hari' => ['nullable', 'string', 'max:100'],
+            'jam_operasional.*.jam'  => ['nullable', 'string', 'max:100'],
             'foto'           => ['nullable', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif'],
             'status_etis'    => ['required', Rule::in(Umkm::STATUS_ETIS)],
         ];

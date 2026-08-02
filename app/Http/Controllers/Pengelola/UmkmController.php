@@ -40,11 +40,15 @@ class UmkmController extends Controller
     {
         $data = $request->validated();
         unset($data['foto']);
+
         $data['kode_entri'] = Umkm::kodeBerikutnya();
-        $data['status_kurasi'] = Umkm::STATUS_KURASI[0]; // selalu mulai dari 'Draf'
+        $data['status_kurasi'] = Umkm::STATUS_KURASI[0];
+        $data['jam_operasional'] = $this->bersihkanOperasional($request);
+
         if ($request->hasFile('foto')) {
             $data['foto'] = [Gambar::simpan($request->file('foto'), 'umkm')];
         }
+
         $umkm = Umkm::create($data);
 
         return redirect()->route('pengelola.umkm.show', $umkm)
@@ -65,6 +69,8 @@ class UmkmController extends Controller
     {
         $data = $request->validated();
         unset($data['foto']);
+        $data['jam_operasional'] = $this->bersihkanOperasional($request);
+
         if ($request->hasFile('foto')) {
             foreach ($umkm->foto ?? [] as $path) {
                 Storage::disk('public')->delete($path);
@@ -101,5 +107,14 @@ class UmkmController extends Controller
         $umkm->update(['status_kurasi' => $request->status_kurasi]);
 
         return back()->with('sukses', "Status kurasi \"{$umkm->nama_umkm}\" menjadi \"{$request->status_kurasi}\".");
+    }
+
+    /** Buang baris hari/jam yang kosong sebelum disimpan. */
+    private function bersihkanOperasional(Request $request): array
+    {
+        return collect($request->input('jam_operasional', []))
+            ->filter(fn ($baris) => ! empty($baris['hari']) || ! empty($baris['jam']))
+            ->values()
+            ->all();
     }
 }

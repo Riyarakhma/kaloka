@@ -29,8 +29,38 @@ export default function DetailUMKM() {
             const json = await res.json();
             const item = json.data;
 
+            let produk = item.produk;
+            if (typeof produk === 'string') {
+                try {
+                    produk = JSON.parse(produk);
+                } catch {
+                    produk = [];
+                }
+            }
+            if (!Array.isArray(produk)) {
+                produk = [];
+            }
+
+            let jamOperasional = item.jam_operasional;
+            if (Array.isArray(jamOperasional)) {
+                jamOperasional = jamOperasional
+                    .map((j) =>
+                        j && typeof j === 'object'
+                            ? [j.hari, j.jam].filter(Boolean).join(': ')
+                            : String(j ?? ''),
+                    )
+                    .filter(Boolean)
+                    .join('\n') || null;
+            } else if (jamOperasional && typeof jamOperasional === 'object') {
+                jamOperasional = [jamOperasional.hari, jamOperasional.jam]
+                    .filter(Boolean)
+                    .join(': ') || null;
+            }
+
             return {
                 ...item,
+                produk,
+                jam_operasional: jamOperasional,
                 foto: item.foto?.[0]
                     ? `/storage/${item.foto[0]}`
                     : null,
@@ -141,7 +171,8 @@ export default function DetailUMKM() {
                                     </p>
                                 </div>
                             </section>
-                                                        <section className="mt-9 border-t border-border pt-8">
+
+                            <section className="mt-9 border-t border-border pt-8">
                                 <h2 className="text-lg font-bold text-foreground">
                                     Produk
                                 </h2>
@@ -160,16 +191,24 @@ export default function DetailUMKM() {
                                                             {produk.nama}
                                                         </h3>
 
-                                                        <p className="mt-2 text-muted-foreground leading-7">
-                                                            {produk.deskripsi}
-                                                        </p>
+                                                        {produk.deskripsi ? (
+                                                            <p className="mt-2 text-muted-foreground leading-7">
+                                                                {produk.deskripsi}
+                                                            </p>
+                                                        ) : null}
                                                     </div>
 
-                                                    <div className="shrink-0">
-                                                        <span className="inline-flex rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-                                                            {produk.harga}
-                                                        </span>
-                                                    </div>
+                                                    {produk.harga ? (
+                                                        <div className="shrink-0">
+                                                            <span className="inline-flex rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+                                                                {new Intl.NumberFormat('id-ID', {
+                                                                    style: 'currency',
+                                                                    currency: 'IDR',
+                                                                    maximumFractionDigits: 0,
+                                                                }).format(produk.harga)}
+                                                            </span>
+                                                        </div>
+                                                    ) : null}
                                                 </div>
                                             </div>
                                         ))
@@ -203,12 +242,37 @@ export default function DetailUMKM() {
                                         {umkm.alamat ?? '-'}
                                     </InfoItem>
 
-                                    <InfoItem
-                                        icon={ExternalLink}
-                                        title="Google Maps"
-                                    >
-                                        {umkm.google_maps ?? '-'}
-                                    </InfoItem>
+                                    {umkm.link_maps ? (
+                                        <div className="flex items-start gap-4 rounded-2xl border border-border bg-background p-5">
+                                            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                                <ExternalLink className="size-5" />
+                                            </div>
+
+                                            <div className="min-w-0">
+                                                <h3 className="font-semibold text-foreground">
+                                                    Google Maps
+                                                </h3>
+
+                                                
+                                                    <a
+                                                    href={umkm.link_maps}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                                                >
+                                                    Lihat lokasi di Google Maps
+                                                    <ExternalLink className="size-3.5" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <InfoItem
+                                            icon={ExternalLink}
+                                            title="Google Maps"
+                                        >
+                                            -
+                                        </InfoItem>
+                                    )}
 
                                     <InfoItem
                                         icon={Clock}
@@ -233,7 +297,7 @@ export default function DetailUMKM() {
 
                                 </div>
                             </section>
-                                                    </div>
+                        </div>
                     </article>
                 </div>
             </main>
@@ -248,12 +312,17 @@ function InfoItem({
     title,
     children,
 }) {
-    const value =
+    const raw =
         children === null ||
         children === undefined ||
         children === ''
             ? '-'
             : children;
+
+    const value =
+        typeof raw === 'object' && raw !== null
+            ? '-'
+            : raw;
 
     const isLink =
         typeof value === 'string' &&
@@ -271,9 +340,10 @@ function InfoItem({
                     {title}
                 </h3>
 
-                <div className="mt-2 text-sm leading-7 text-muted-foreground break-words">
+                <div className="mt-2 text-sm leading-7 text-muted-foreground break-words whitespace-pre-line">
                     {isLink ? (
-                        <a
+                        
+                            <a
                             href={value}
                             target="_blank"
                             rel="noopener noreferrer"

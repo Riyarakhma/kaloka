@@ -12,7 +12,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form action="{{ route('pengelola.umkm.update', $entri) }}" method="POST" enctype="multipart/form-data">
+            <form id="formUmkm" action="{{ route('pengelola.umkm.update', $entri) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 @include('pengelola.umkm._form')

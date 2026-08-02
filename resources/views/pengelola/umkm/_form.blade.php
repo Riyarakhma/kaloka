@@ -53,17 +53,136 @@
                placeholder="@NgudiMakmur (Instagram)">
     </div>
 
-    <div class="col-md-4">
-        <label class="form-label">Jam Operasional <span class="text-muted small">(opsional)</span></label>
-        <input type="text" name="jam_operasional" class="form-control" value="{{ $val('jam_operasional') }}"
-               placeholder="08.00 – 17.00">
+   <div class="col-12">
+        <label class="form-label">Operasional <span class="text-muted small">(opsional, atur per hari)</span></label>
+
+        <div id="daftarOperasional" class="d-flex flex-column gap-2">
+            @php $baris = old('jam_operasional', $entri->jam_operasional ?? []); @endphp
+            @if (empty($baris))
+                @php $baris = [['hari' => '', 'jam' => '']]; @endphp
+            @endif
+
+            @foreach ($baris as $i => $b)
+                <div class="row g-2 align-items-center baris-operasional">
+                    <div class="col-5">
+                        <input type="text" name="jam_operasional[{{ $i }}][hari]" class="form-control form-control-sm"
+                               value="{{ $b['hari'] ?? '' }}" placeholder="mis. Senin–Kamis">
+                    </div>
+                    <div class="col-5">
+                        <input type="text" name="jam_operasional[{{ $i }}][jam]" class="form-control form-control-sm"
+                               value="{{ $b['jam'] ?? '' }}" placeholder="mis. 06.00–17.00">
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.baris-operasional').remove()">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <button type="button" class="btn btn-sm btn-outline-kaloka mt-2" onclick="tambahBarisOperasional()">
+            <i class="bi bi-plus-lg me-1"></i>Tambah Baris
+        </button>
+
+        <div class="form-text">Contoh: "Senin–Kamis" / "06.00–17.00", baris berikutnya "Jumat" / "17.00–21.00", dst.</div>
     </div>
 
+    <script>
+        let indexOperasional = document.querySelectorAll('#daftarOperasional .baris-operasional').length;
+
+        function tambahBarisOperasional() {
+            const container = document.getElementById('daftarOperasional');
+            const div = document.createElement('div');
+            div.className = 'row g-2 align-items-center baris-operasional';
+            div.innerHTML = `
+                <div class="col-5">
+                    <input type="text" name="jam_operasional[${indexOperasional}][hari]" class="form-control form-control-sm" placeholder="mis. Jumat">
+                </div>
+                <div class="col-5">
+                    <input type="text" name="jam_operasional[${indexOperasional}][jam]" class="form-control form-control-sm" placeholder="mis. 17.00–21.00">
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.baris-operasional').remove()">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(div);
+            indexOperasional++;
+        }
+    </script>
+
     <div class="col-12">
-        <label class="form-label">Produk <span class="text-muted small">(pisah dengan koma)</span></label>
-        <input type="text" name="produk" class="form-control" value="{{ $val('produk') }}"
-               placeholder="mis. tas ecoprint, sarung bantal, taplak meja">
+        <label class="form-label">Produk <span class="text-muted small">(opsional, boleh tambah lebih dari satu)</span></label>
+
+        <div id="daftarProduk"></div>
+
+        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="tambahBarisProduk()">
+            + Tambah Produk
+        </button>
+
+        <template id="templateBarisProduk">
+            <div class="row g-2 align-items-start baris-produk border rounded p-2 mb-2 mx-0">
+                <div class="col-md-4">
+                    <input type="text" class="form-control form-control-sm" data-field="nama"
+                           placeholder="Nama produk">
+                </div>
+                <div class="col-md-5">
+                    <input type="text" class="form-control form-control-sm" data-field="deskripsi"
+                           placeholder="Deskripsi singkat (opsional)">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" min="0" class="form-control form-control-sm" data-field="harga"
+                           placeholder="Harga (Rp, opsional)">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.baris-produk').remove()">
+                        &times;
+                    </button>
+                </div>
+            </div>
+        </template>
     </div>
+
+    <script>
+        function tambahBarisProduk(data = {}) {
+            const tpl = document.getElementById('templateBarisProduk');
+            const node = tpl.content.cloneNode(true);
+            const baris = node.querySelector('.baris-produk');
+
+            baris.querySelector('[data-field="nama"]').value = data.nama ?? '';
+            baris.querySelector('[data-field="deskripsi"]').value = data.deskripsi ?? '';
+            baris.querySelector('[data-field="harga"]').value = data.harga ?? '';
+
+            document.getElementById('daftarProduk').appendChild(node);
+        }
+
+        // Prefill dari data lama (edit) atau input lama (validasi gagal).
+        const produkAwal = @json($val('produk', []) ?: []);
+        if (Array.isArray(produkAwal) && produkAwal.length > 0) {
+            produkAwal.forEach(tambahBarisProduk);
+        }
+
+        // Susun ulang input jadi produk[index][field] sebelum form dikirim.
+        // PENTING: pakai id spesifik #formUmkm, bukan querySelector('form') —
+        // ada form logout tersembunyi di navbar yang render lebih dulu di HTML,
+        // jadi querySelector('form') akan salah ambil form itu.
+        document.getElementById('formUmkm').addEventListener('submit', function () {
+            document.querySelectorAll('#daftarProduk input[name^="produk"]').forEach(el => el.remove());
+
+            document.querySelectorAll('#daftarProduk .baris-produk').forEach((baris, index) => {
+                ['nama', 'deskripsi', 'harga'].forEach(field => {
+                    const sumber = baris.querySelector(`[data-field="${field}"]`);
+                    const hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = `produk[${index}][${field}]`;
+                    hidden.value = sumber.value;
+                    baris.appendChild(hidden);
+                });
+            });
+        });
+    </script>
 
     <div class="col-12">
         <label class="form-label">Link Google Maps <span class="text-muted small">(opsional)</span></label>
