@@ -175,27 +175,6 @@
         @enderror
     </div>
 
-    {{-- Bahasa --}}
-    <div class="col-md-3">
-        <label for="bahasa" class="form-label">
-            Bahasa
-        </label>
-
-        <input
-            type="text"
-            name="bahasa"
-            id="bahasa"
-            class="form-control @error('bahasa') is-invalid @enderror"
-            value="{{ $val('bahasa', 'Indonesia') }}"
-        >
-
-        @error('bahasa')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
-    </div>
-
     {{-- Foto --}}
     <div class="col-md-6">
         <label for="berkas_media" class="form-label">
@@ -302,23 +281,22 @@
         @enderror
     </div>
 
-
-    {{-- Sumber --}}
-    <div class="col-md-6">
-        <label for="sumber" class="form-label">
-            Sumber
+    {{-- Pendokumentasi --}}
+    <div class="col-md-3">
+        <label for="pendokumentasi" class="form-label">
+            Pendokumentasi
         </label>
 
         <input
             type="text"
-            name="sumber"
-            id="sumber"
-            class="form-control @error('sumber') is-invalid @enderror"
-            value="{{ $val('sumber') }}"
-            placeholder="Asal informasi"
+            name="pendokumentasi"
+            id="pendokumentasi"
+            class="form-control @error('pendokumentasi') is-invalid @enderror"
+            value="{{ $val('pendokumentasi') }}"
+            placeholder="Nama mahasiswa"
         >
 
-        @error('sumber')
+        @error('pendokumentasi')
             <div class="invalid-feedback">
                 {{ $message }}
             </div>
@@ -359,25 +337,6 @@
         @enderror
     </div>
 
-    {{-- Catatan --}}
-    <div class="col-12">
-        <label for="catatan" class="form-label">
-            Catatan atau Relasi
-        </label>
-
-        <textarea
-            name="catatan"
-            id="catatan"
-            class="form-control @error('catatan') is-invalid @enderror"
-            rows="2"
-        >{{ $val('catatan') }}</textarea>
-
-        @error('catatan')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
-    </div>
 </div>
 
 <script>

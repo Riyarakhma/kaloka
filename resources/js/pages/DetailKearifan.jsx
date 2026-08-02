@@ -1,8 +1,13 @@
 import { Link, useParams } from 'react-router-dom';
 import {
     ArrowLeft,
+    CalendarDays,
+    CheckCircle2,
     FileText,
+    Languages,
     MapPin,
+    ShieldCheck,
+    Tag,
     UserRound,
 } from 'lucide-react';
 
@@ -12,23 +17,7 @@ import Footer from '../components/Footer';
 import { KATEGORI_KEARIFAN } from '../data/kearifanData';
 import { useKearifanDetail } from '../lib/kearifan-api';
 
-function valueOrDash(value) {
-    if (value === null || value === undefined) {
-        return '-';
-    }
-
-    if (Array.isArray(value)) {
-        return value.length > 0 ? value.join(', ') : '-';
-    }
-
-    if (typeof value === 'string') {
-        return value.trim() !== '' ? value : '-';
-    }
-
-    return String(value);
-}
-
-function InfoCard({ icon: Icon, title, children }) {
+function InformationCard({ icon: Icon, title, children }) {
     return (
         <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
             <div className="flex items-start gap-4">
@@ -43,6 +32,14 @@ function InfoCard({ icon: Icon, title, children }) {
                 </div>
             </div>
         </section>
+    );
+}
+
+function StatusBadge({ children }) {
+    return (
+        <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            {children}
+        </span>
     );
 }
 
@@ -91,7 +88,7 @@ export default function DetailKearifan() {
         return <NotFound />;
     }
 
-    const dimensiLabel =
+    const kategoriLabel =
         KATEGORI_KEARIFAN.find((kategori) => kategori.id === artikel.kategori)
             ?.label ?? artikel.kategori;
 
@@ -118,27 +115,28 @@ export default function DetailKearifan() {
                         </figure>
 
                         <div className="p-6 md:p-9">
-                            <span className="inline-flex rounded-full bg-primary-soft px-3 py-1.5 text-sm font-semibold text-primary">
-                                {dimensiLabel}
+                            <span className="inline-flex rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
+                                {kategoriLabel}
                             </span>
 
                             <h1 className="mt-5 font-display text-4xl leading-tight text-foreground md:text-5xl">
                                 {artikel.judul}
                             </h1>
-
-                            <div className="mt-5 flex items-center gap-2 text-muted-foreground">
-                                <MapPin className="size-5 shrink-0 text-primary" />
-                                <p className="text-base leading-7 md:text-lg">
-                                    {valueOrDash(artikel.lokasi)}
-                                </p>
-                            </div>
+{artikel.lokasi && (
+    <div className="mt-5 flex items-center gap-2 text-muted-foreground">
+        <MapPin className="size-5 shrink-0 text-primary" />
+        <p className="text-base leading-7 md:text-lg">
+            {artikel.lokasi}
+        </p>
+    </div>
+)}
                             <section className="mt-9">
                                 <h2 className="text-lg font-bold text-foreground">
                                     Deskripsi
                                 </h2>
                                 <div className="mt-4 space-y-5">
-                                    {String(artikel.deskripsi ?? '-')
-                                        .split('\n')
+                                    {artikel.deskripsi
+                                                                            .split('\n')
                                         .filter(Boolean)
                                         .map((paragraf, index) => (
                                             <p
@@ -169,29 +167,43 @@ export default function DetailKearifan() {
                                 </section>
                             )}
 
-                            <section className="mt-9 border-t border-border pt-8">
-                                <h2 className="text-lg font-bold text-foreground">
-                                    Informasi Kearifan Lokal
-                                </h2>
-                                <div className="mt-5 space-y-4">
-                                    <InfoCard
-                                        icon={UserRound}
-                                        title="Narasumber"
+                            {artikel.narasumber && (
+                                <section className="mt-9 border-t border-border pt-8">
+                                    <h2 className="text-lg font-bold text-foreground">
+                                        Narasumber
+                                    </h2>
+                                    <div className="mt-5 flex items-center gap-4 rounded-2xl bg-muted/50 p-5">
+                                        <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                            <UserRound className="size-7" />
+                                        </div>
+                                        <p className="font-semibold text-foreground">
+                                            {artikel.narasumber}
+                                        </p>
+                                    </div>
+                                </section>
+                            )}
+                            {artikel.dokumenUrl && (
+                                <section className="mt-9 border-t border-border pt-8">
+                                    <h2 className="text-lg font-bold text-foreground">
+                                        Informasi Selengkapnya
+                                    </h2>
+
+                                    <a
+                                        href={artikel.dokumenUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-white transition hover:opacity-90"
                                     >
-                                        {valueOrDash(artikel.narasumber)}
-                                    </InfoCard>
-                                    <InfoCard
-                                        icon={MapPin}
-                                        title="Lokasi"
-                                    >
-                                        {valueOrDash(artikel.lokasi)}
-                                    </InfoCard>
-                                </div>
-                            </section>
+                                        <FileText className="size-5" />
+                                        Lihat Dokumen PDF
+                                    </a>
+                                </section>
+                            )}
                         </div>
                     </article>
                 </div>
             </main>
+
             <Footer />
         </div>
     );

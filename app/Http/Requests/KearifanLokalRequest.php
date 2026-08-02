@@ -49,6 +49,19 @@ class KearifanLokalRequest extends FormRequest
                 'max:255',
             ],
 
+
+            'tanggal_dokumentasi' => [
+                'nullable',
+                'date',
+            ],
+
+            'pendokumentasi' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+
+
             'berkas_media' => [
                 'nullable',
                 'image',
@@ -73,10 +86,6 @@ class KearifanLokalRequest extends FormRequest
                 Rule::in(KearifanLokal::STATUS_KURASI),
             ],
 
-            'catatan' => [
-                'nullable',
-                'string',
-            ],
         ];
     }
 
@@ -89,6 +98,8 @@ class KearifanLokalRequest extends FormRequest
             'kata_kunci' => 'kata kunci',
             'narasumber' => 'narasumber',
             'lokasi' => 'lokasi',
+            'tanggal_dokumentasi' => 'tanggal dokumentasi',
+            'pendokumentasi' => 'pendokumentasi',
             'berkas_media' => 'foto',
             'dokumen' => 'dokumen PDF',
             'status_etis' => 'status entri',

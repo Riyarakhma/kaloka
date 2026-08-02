@@ -21,14 +21,12 @@ class KearifanLokal extends Model
         'kata_kunci',
         'narasumber',
         'lokasi',
-        'bahasa',
         'berkas_media',
         'dokumen',
         'tanggal_dokumentasi',
-        'sumber',
+        'pendokumentasi',
         'status_etis',
         'status_kurasi',
-        'catatan',
         'dibuat_oleh',
     ];
 
@@ -56,9 +54,6 @@ class KearifanLokal extends Model
         'Terbit',
     ];
 
-    /**
-     * Relasi ke pengguna pembuat entri.
-     */
     public function pembuat(): BelongsTo
     {
         return $this->belongsTo(
@@ -67,9 +62,6 @@ class KearifanLokal extends Model
         );
     }
 
-    /**
-     * Hanya data yang boleh tampil di portal publik.
-     */
     public function scopePublik(Builder $query): Builder
     {
         return $query
@@ -77,9 +69,6 @@ class KearifanLokal extends Model
             ->where('status_etis', 'Umum');
     }
 
-    /**
-     * Buat kode entri baru.
-     */
     public static function kodeBerikutnya(): string
     {
         $terakhir = static::max('id') ?? 0;
@@ -92,18 +81,12 @@ class KearifanLokal extends Model
         );
     }
 
-    /**
-     * Cek apakah entri boleh tampil di publik.
-     */
     public function bolehPublik(): bool
     {
         return $this->status_kurasi === 'Terbit'
             && $this->status_etis === 'Umum';
     }
 
-    /**
-     * URL foto Kearifan Lokal.
-     */
     public function urlMedia(): ?string
     {
         if (!$this->berkas_media) {
@@ -115,9 +98,6 @@ class KearifanLokal extends Model
         );
     }
 
-    /**
-     * URL dokumen PDF.
-     */
     public function urlDokumen(): ?string
     {
         if (!$this->dokumen) {
@@ -129,9 +109,6 @@ class KearifanLokal extends Model
         );
     }
 
-    /**
-     * Kata kunci dalam bentuk array.
-     */
     public function daftarKataKunci(): array
     {
         if (!$this->kata_kunci) {
@@ -148,9 +125,6 @@ class KearifanLokal extends Model
         );
     }
 
-    /**
-     * Warna badge status kurasi.
-     */
     public function warnaStatusKurasi(): string
     {
         return match ($this->status_kurasi) {
@@ -159,9 +133,6 @@ class KearifanLokal extends Model
         };
     }
 
-    /**
-     * Warna badge status etis.
-     */
     public function warnaStatusEtis(): string
     {
         return match ($this->status_etis) {

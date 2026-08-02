@@ -54,11 +54,6 @@
                         </div>
                     @endif
 
-                    @if ($entri->catatan)
-                        <div class="alert alert-light border small mb-0">
-                            <strong>Catatan/Relasi:</strong> {{ $entri->catatan }}
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>
@@ -101,11 +96,9 @@
                     <li class="list-group-item"><strong>Kode:</strong> {{ $entri->kode_entri }}</li>
                     <li class="list-group-item"><strong>Narasumber:</strong> {{ $entri->narasumber ?: '—' }}</li>
                     <li class="list-group-item"><strong>Lokasi:</strong> {{ $entri->lokasi ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Bahasa:</strong> {{ $entri->bahasa ?: '—' }}</li>
                     <li class="list-group-item"><strong>Tanggal Dokumentasi:</strong>
                         {{ $entri->tanggal_dokumentasi?->format('d M Y') ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Sumber:</strong> {{ $entri->sumber ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Ditambahkan oleh:</strong> {{ $entri->pembuat?->name ?? '—' }}</li>
+                    <li class="list-group-item"><strong>Pendokumentasi:</strong> {{ $entri->pendokumentasi ?: '—' }}</li>
                     <li class="list-group-item"><strong>Dibuat:</strong> {{ $entri->created_at?->format('d M Y') ?? '—' }}</li>
                 </ul>
             </div>

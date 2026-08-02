@@ -54,21 +54,30 @@
             @endif
         </div>
 
-        <div class="col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white"><strong>Informasi</strong></div>
-                <ul class="list-group list-group-flush small">
-                    <li class="list-group-item"><strong>Narasumber:</strong> {{ $entri->narasumber ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Lokasi:</strong> {{ $entri->lokasi ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Bahasa:</strong> {{ $entri->bahasa ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Tanggal:</strong>
-                        {{ $entri->tanggal_dokumentasi?->format('d M Y') ?: '—' }}</li>
-                    <li class="list-group-item"><strong>Sumber:</strong> {{ $entri->sumber ?: '—' }}</li>
-                </ul>
-            </div>
-            <a href="{{ route('kearifan.index') }}" class="btn btn-outline-kaloka w-100 mt-3">
-                <i class="bi bi-arrow-left me-1"></i>Kembali ke Daftar
-            </a>
-        </div>
-    </div>
+        <div class="card shadow-sm">
+    <div class="card-header bg-white"><strong>Informasi</strong></div>
+    <ul class="list-group list-group-flush small">
+        <li class="list-group-item">
+            <strong>Narasumber:</strong>
+            {{ $entri->narasumber ?: '—' }}
+        </li>
+
+        <li class="list-group-item">
+            <strong>Pendokumentasi:</strong>
+            {{ $entri->pendokumentasi ?: '—' }}
+        </li>
+
+        <li class="list-group-item">
+            <strong>Lokasi:</strong>
+            {{ $entri->lokasi ?: '—' }}
+        </li>
+
+
+        <li class="list-group-item">
+            <strong>Tanggal Dokumentasi:</strong>
+            {{ $entri->tanggal_dokumentasi?->format('d M Y') ?: '—' }}
+        </li>
+
+    </ul>
+</div>
 @endsection
