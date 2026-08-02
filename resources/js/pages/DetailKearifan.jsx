@@ -3,6 +3,7 @@ import {
     ArrowLeft,
     FileText,
     MapPin,
+    PenLine,
     UserRound,
 } from 'lucide-react';
 
@@ -179,6 +180,12 @@ export default function DetailKearifan() {
                                         title="Narasumber"
                                     >
                                         {valueOrDash(artikel.narasumber)}
+                                    </InfoCard>
+                                    <InfoCard
+                                        icon={PenLine}
+                                        title="Pendokumentasi"
+                                    >
+                                        {valueOrDash(artikel.pendokumentasi)}
                                     </InfoCard>
                                 </div>
                             </section>
