@@ -132,6 +132,9 @@ export function useKearifanDetail(slug) {
         queryKey: ['kearifan-lokal', slug],
         queryFn: async () => {
             const res = await apiFetch(`/kearifan-lokal/${slug}`);
+
+            console.log(res.data);
+
             return mapToKearifanDetail(res.data);
         },
         enabled: Boolean(slug),

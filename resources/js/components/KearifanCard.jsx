@@ -6,10 +6,10 @@ export default function KearifanCard({ item }) {
     return (
         <Link
             to={`/kearifan-lokal/${item.slug}`}
-            className="card-soft group flex h-full flex-col text-left"
+            className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group flex h-full flex-col text-left"
             aria-label={item.judul}
         >
-            <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
+            <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
                 <img
                     src={item.foto}
                     alt={item.judul}
@@ -18,21 +18,21 @@ export default function KearifanCard({ item }) {
                 />
             </div>
 
-            <div className="flex flex-1 flex-col gap-3 p-5">
+            <div className="flex flex-1 flex-col p-6">
                 <KategoriBadge
                     id={item.kategori}
                     size="sm"
                 />
 
-                <h3 className="font-display text-xl leading-tight text-foreground">
+                <h3 className="mt-4 min-h-[64px] font-display text-[22px] leading-tight text-foreground">
                     {item.judul}
                 </h3>
 
-                <p className="text-base leading-relaxed text-muted-foreground">
+                <p className="mt-3 min-h-[110px] line-clamp-4 text-base leading-7 text-muted-foreground">
                     {item.cuplikan}
                 </p>
 
-                <div className="mt-auto flex items-center gap-2 pt-2 text-base font-semibold text-primary">
+                <div className="mt-auto inline-flex items-center gap-2 pt-4 font-semibold text-primary">
                     Baca selengkapnya
                     <ArrowRight className="size-5 transition group-hover:translate-x-1" />
                 </div>

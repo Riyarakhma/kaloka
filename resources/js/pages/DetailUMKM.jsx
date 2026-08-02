@@ -24,6 +24,7 @@ export default function DetailUMKM() {
 
     const { data: umkm, isLoading } = useQuery({
         queryKey: ['umkm', slug],
+
         queryFn: async () => {
             const res = await fetch(`/api/umkm/${slug}`);
 
@@ -32,7 +33,11 @@ export default function DetailUMKM() {
             const json = await res.json();
             const item = json.data;
 
+            // =========================
+            // PRODUK
+            // =========================
             let produk = item.produk;
+
             if (typeof produk === 'string') {
                 try {
                     produk = JSON.parse(produk);
@@ -40,28 +45,44 @@ export default function DetailUMKM() {
                     produk = [];
                 }
             }
+
             if (!Array.isArray(produk)) {
                 produk = [];
             }
 
+            // =========================
+            // JAM OPERASIONAL
+            // =========================
             let jamOperasional = item.jam_operasional;
+
             if (Array.isArray(jamOperasional)) {
                 jamOperasional = jamOperasional
                     .map((j) =>
                         j && typeof j === 'object'
-                            ? [j.hari, j.jam].filter(Boolean).join(': ')
+                            ? [j.hari, j.jam]
+                                  .filter(Boolean)
+                                  .join(': ')
                             : String(j ?? ''),
                     )
                     .filter(Boolean)
                     .join('\n') || null;
-            } else if (jamOperasional && typeof jamOperasional === 'object') {
-                jamOperasional = [jamOperasional.hari, jamOperasional.jam]
-                    .filter(Boolean)
-                    .join(': ') || null;
+            } else if (
+                jamOperasional &&
+                typeof jamOperasional === 'object'
+            ) {
+                jamOperasional =
+                    [jamOperasional.hari, jamOperasional.jam]
+                        .filter(Boolean)
+                        .join(': ') || null;
             }
 
+            // =========================
+            // FOTO
+            // =========================
             const fotoList = Array.isArray(item.foto)
-                ? item.foto.filter(Boolean).map((path) => `/storage/${path}`)
+                ? item.foto
+                      .filter(Boolean)
+                      .map((path) => `/storage/${path}`)
                 : [];
 
             return {
@@ -73,6 +94,9 @@ export default function DetailUMKM() {
         },
     });
 
+    // =========================
+    // LOADING
+    // =========================
     if (isLoading) {
         return (
             <div className="min-h-screen bg-background">
@@ -87,6 +111,9 @@ export default function DetailUMKM() {
         );
     }
 
+    // =========================
+    // NOT FOUND
+    // =========================
     if (!umkm) {
         return (
             <div className="min-h-screen bg-background">
@@ -117,11 +144,16 @@ export default function DetailUMKM() {
         );
     }
 
+    const dimensi = warnaDimensi(umkm.kategori);
+
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
 
             <main className="container-page py-10 md:py-14">
+                {/* =========================
+                    BACK
+                ========================= */}
                 <Link
                     to="/umkm"
                     className="inline-flex items-center gap-2 font-semibold text-primary transition hover:gap-3"
@@ -132,19 +164,26 @@ export default function DetailUMKM() {
 
                 <div className="mt-8">
                     <article className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
-
-                        <FotoCarousel foto={umkm.foto} nama={umkm.nama_umkm} />
+                        {/* =========================
+                            FOTO CAROUSEL
+                        ========================= */}
+                        <FotoCarousel
+                            foto={umkm.foto}
+                            nama={umkm.nama_umkm}
+                        />
 
                         <div className="p-6 md:p-9">
-
+                            {/* KATEGORI */}
                             <span className="inline-flex rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
                                 {umkm.kategori}
                             </span>
 
+                            {/* NAMA UMKM */}
                             <h1 className="mt-5 font-display text-4xl leading-tight text-foreground md:text-5xl">
                                 {umkm.nama_umkm}
                             </h1>
 
+                            {/* ALAMAT */}
                             <div className="mt-5 flex items-start gap-2 text-muted-foreground">
                                 <MapPin className="mt-0.5 size-5 shrink-0 text-primary" />
 
@@ -153,74 +192,109 @@ export default function DetailUMKM() {
                                 </p>
                             </div>
 
+                            {/* =========================
+                                TENTANG USAHA
+                            ========================= */}
                             <section className="mt-9">
                                 <h2 className="text-lg font-bold text-foreground">
                                     Tentang Usaha
                                 </h2>
 
                                 <div className="mt-4 space-y-5">
-                                    <p className="text-base leading-8 text-foreground/80 md:text-lg whitespace-pre-line">
+                                    <p className="whitespace-pre-line text-base leading-8 text-foreground/80 md:text-lg">
                                         {umkm.deskripsi}
                                     </p>
                                 </div>
                             </section>
 
+                            {/* =========================
+                                PRODUK
+                            ========================= */}
                             <section className="mt-9 border-t border-border pt-8">
                                 <h2 className="text-lg font-bold text-foreground">
                                     Produk
                                 </h2>
 
                                 <div className="mt-5 space-y-4">
-
                                     {(umkm.produk ?? []).length > 0 ? (
-                                        umkm.produk.map((produk, index) => (
-                                            <div
-                                                key={index}
-                                                className="rounded-2xl border border-border bg-background p-5"
-                                            >
-                                                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                                                    <div className="min-w-0">
-                                                        <h3 className="font-semibold text-lg text-foreground">
-                                                            {produk.nama}
-                                                        </h3>
+                                        umkm.produk.map(
+                                            (produk, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="rounded-2xl border border-border bg-background p-5"
+                                                >
+                                                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                                        <div className="min-w-0">
+                                                            <h3 className="text-lg font-semibold text-foreground">
+                                                                {
+                                                                    produk.nama
+                                                                }
+                                                            </h3>
 
-                                                        {produk.deskripsi ? (
-                                                            <p className="mt-2 text-muted-foreground leading-7">
-                                                                {produk.deskripsi}
-                                                            </p>
+                                                            {produk.deskripsi ? (
+                                                                <p className="mt-2 leading-7 text-muted-foreground">
+                                                                    {
+                                                                        produk.deskripsi
+                                                                    }
+                                                                </p>
+                                                            ) : null}
+                                                        </div>
+
+                                                        {produk.harga ? (
+                                                            <div className="shrink-0">
+                                                                <span className="inline-flex rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+                                                                    {new Intl.NumberFormat(
+                                                                        'id-ID',
+                                                                        {
+                                                                            style: 'currency',
+                                                                            currency:
+                                                                                'IDR',
+                                                                            maximumFractionDigits: 0,
+                                                                        },
+                                                                    ).format(
+                                                                        produk.harga,
+                                                                    )}
+                                                                </span>
+                                                            </div>
                                                         ) : null}
                                                     </div>
-
-                                                    {produk.harga ? (
-                                                        <div className="shrink-0">
-                                                            <span className="inline-flex rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-                                                                {new Intl.NumberFormat('id-ID', {
-                                                                    style: 'currency',
-                                                                    currency: 'IDR',
-                                                                    maximumFractionDigits: 0,
-                                                                }).format(produk.harga)}
-                                                            </span>
-                                                        </div>
-                                                    ) : null}
                                                 </div>
-                                            </div>
-                                        ))
+                                            ),
+                                        )
                                     ) : (
                                         <div className="rounded-2xl border border-dashed border-border p-5 text-muted-foreground">
                                             Belum ada data produk.
                                         </div>
                                     )}
-
                                 </div>
                             </section>
 
+                            {/* =========================
+                                INFORMASI UMKM
+                            ========================= */}
                             <section className="mt-9 border-t border-border pt-8">
                                 <h2 className="text-lg font-bold text-foreground">
                                     Informasi UMKM
                                 </h2>
 
                                 <div className="mt-6 space-y-6">
+                                    {/* DIMENSI */}
+                                    <InfoItem
+                                        icon={Tag}
+                                        title="Dimensi"
+                                    >
+                                        <span
+                                            className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${dimensi[0]}`}
+                                        >
+                                            <span
+                                                className={`size-2 rounded-full ${dimensi[1]}`}
+                                            />
 
+                                            {umkm.kategori ?? '-'}
+                                        </span>
+                                    </InfoItem>
+
+                                    {/* PEMILIK */}
                                     <InfoItem
                                         icon={User}
                                         title="Pemilik Usaha"
@@ -228,6 +302,7 @@ export default function DetailUMKM() {
                                         {umkm.pemilik ?? '-'}
                                     </InfoItem>
 
+                                    {/* ALAMAT */}
                                     <InfoItem
                                         icon={MapPin}
                                         title="Alamat UMKM"
@@ -235,6 +310,9 @@ export default function DetailUMKM() {
                                         {umkm.alamat ?? '-'}
                                     </InfoItem>
 
+                                    {/* =========================
+                                        GOOGLE MAPS
+                                    ========================= */}
                                     {umkm.link_maps ? (
                                         <div className="flex items-start gap-4 rounded-2xl border border-border bg-background p-5">
                                             <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -253,6 +331,7 @@ export default function DetailUMKM() {
                                                     className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
                                                 >
                                                     Lihat lokasi di Google Maps
+
                                                     <ExternalLink className="size-3.5" />
                                                 </a>
                                             </div>
@@ -266,13 +345,15 @@ export default function DetailUMKM() {
                                         </InfoItem>
                                     )}
 
+                                    {/* JAM OPERASIONAL */}
                                     <InfoItem
                                         icon={Clock}
-                                        title="Operasional"
+                                        title="Jam Operasional"
                                     >
                                         {umkm.jam_operasional ?? '-'}
                                     </InfoItem>
 
+                                    {/* KONTAK */}
                                     <InfoItem
                                         icon={Phone}
                                         title="Kontak"
@@ -280,13 +361,13 @@ export default function DetailUMKM() {
                                         {umkm.kontak ?? '-'}
                                     </InfoItem>
 
+                                    {/* SOSIAL MEDIA */}
                                     <InfoItem
                                         icon={Globe}
                                         title="Sosial Media"
                                     >
                                         {umkm.sosial_media ?? '-'}
                                     </InfoItem>
-
                                 </div>
                             </section>
                         </div>
@@ -298,6 +379,10 @@ export default function DetailUMKM() {
         </div>
     );
 }
+
+/* =========================================================
+   FOTO CAROUSEL
+========================================================= */
 
 function FotoCarousel({ foto, nama }) {
     const scrollerRef = useRef(null);
@@ -315,15 +400,30 @@ function FotoCarousel({ foto, nama }) {
 
     const goTo = (i) => {
         const el = scrollerRef.current;
+
         if (!el) return;
-        const clamped = Math.max(0, Math.min(i, foto.length - 1));
-        el.scrollTo({ left: clamped * el.clientWidth, behavior: 'smooth' });
+
+        const clamped = Math.max(
+            0,
+            Math.min(i, foto.length - 1),
+        );
+
+        el.scrollTo({
+            left: clamped * el.clientWidth,
+            behavior: 'smooth',
+        });
     };
 
     const handleScroll = () => {
         const el = scrollerRef.current;
+
         if (!el || el.clientWidth === 0) return;
-        setIndex(Math.round(el.scrollLeft / el.clientWidth));
+
+        setIndex(
+            Math.round(
+                el.scrollLeft / el.clientWidth,
+            ),
+        );
     };
 
     return (
@@ -345,9 +445,12 @@ function FotoCarousel({ foto, nama }) {
 
             {foto.length > 1 && (
                 <>
+                    {/* PREVIOUS */}
                     <button
                         type="button"
-                        onClick={() => goTo(index - 1)}
+                        onClick={() =>
+                            goTo(index - 1)
+                        }
                         disabled={index === 0}
                         className="absolute left-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 disabled:opacity-0"
                         aria-label="Foto sebelumnya"
@@ -355,22 +458,30 @@ function FotoCarousel({ foto, nama }) {
                         <ChevronLeft className="size-5" />
                     </button>
 
+                    {/* NEXT */}
                     <button
                         type="button"
-                        onClick={() => goTo(index + 1)}
-                        disabled={index === foto.length - 1}
+                        onClick={() =>
+                            goTo(index + 1)
+                        }
+                        disabled={
+                            index === foto.length - 1
+                        }
                         className="absolute right-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 disabled:opacity-0"
                         aria-label="Foto berikutnya"
                     >
                         <ChevronRight className="size-5" />
                     </button>
 
+                    {/* DOTS */}
                     <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
                         {foto.map((_, i) => (
                             <button
                                 key={i}
                                 type="button"
-                                onClick={() => goTo(i)}
+                                onClick={() =>
+                                    goTo(i)
+                                }
                                 aria-label={`Ke foto ${i + 1}`}
                                 className={
                                     i === index
@@ -381,6 +492,7 @@ function FotoCarousel({ foto, nama }) {
                         ))}
                     </div>
 
+                    {/* COUNTER */}
                     <div className="absolute right-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
                         {index + 1}/{foto.length}
                     </div>
@@ -390,27 +502,32 @@ function FotoCarousel({ foto, nama }) {
     );
 }
 
+/* =========================================================
+   INFORMATION ITEM
+========================================================= */
+
 function InfoItem({
     icon: Icon,
     title,
     children,
 }) {
-    const raw =
+    const value =
         children === null ||
         children === undefined ||
         children === ''
             ? '-'
             : children;
 
-    const value =
-        typeof raw === 'object' && raw !== null
+    const safeValue =
+        typeof value === 'object' &&
+        value !== null
             ? '-'
-            : raw;
+            : value;
 
     const isLink =
-        typeof value === 'string' &&
-        (value.startsWith('http://') ||
-            value.startsWith('https://'));
+        typeof safeValue === 'string' &&
+        (safeValue.startsWith('http://') ||
+            safeValue.startsWith('https://'));
 
     return (
         <div className="flex items-start gap-4 rounded-2xl border border-border bg-background p-5">
@@ -423,21 +540,86 @@ function InfoItem({
                     {title}
                 </h3>
 
-                <div className="mt-2 text-sm leading-7 text-muted-foreground break-words whitespace-pre-line">
+                <div className="mt-2 break-words whitespace-pre-line text-sm leading-7 text-muted-foreground">
                     {isLink ? (
                         <a
-                            href={value}
+                            href={safeValue}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="font-medium text-primary hover:underline"
                         >
-                            {value}
+                            {safeValue}
                         </a>
                     ) : (
-                        value
+                        safeValue
                     )}
                 </div>
             </div>
         </div>
     );
+}
+
+/* =========================================================
+   WARNA DIMENSI
+========================================================= */
+
+const PALET_DIMENSI = [
+    [
+        'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+        'bg-emerald-500',
+    ],
+    [
+        'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+        'bg-amber-500',
+    ],
+    [
+        'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
+        'bg-sky-500',
+    ],
+    [
+        'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+        'bg-rose-500',
+    ],
+    [
+        'bg-violet-50 text-violet-700 ring-1 ring-violet-200',
+        'bg-violet-500',
+    ],
+    [
+        'bg-orange-50 text-orange-700 ring-1 ring-orange-200',
+        'bg-orange-500',
+    ],
+    [
+        'bg-teal-50 text-teal-700 ring-1 ring-teal-200',
+        'bg-teal-500',
+    ],
+    [
+        'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200',
+        'bg-indigo-500',
+    ],
+];
+
+function warnaDimensi(nama) {
+    const kunci = String(nama ?? '')
+        .trim()
+        .toLowerCase();
+
+    if (!kunci) {
+        return [
+            'bg-muted text-muted-foreground ring-1 ring-border',
+            'bg-muted-foreground',
+        ];
+    }
+
+    let angka = 0;
+
+    for (let i = 0; i < kunci.length; i += 1) {
+        angka =
+            (angka * 31 +
+                kunci.charCodeAt(i)) %
+            9973;
+    }
+
+    return PALET_DIMENSI[
+        angka % PALET_DIMENSI.length
+    ];
 }

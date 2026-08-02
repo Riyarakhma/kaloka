@@ -17,7 +17,7 @@
                 <input type="text" name="cari" value="{{ request('cari') }}" class="form-control form-control-sm" placeholder="nama spot">
             </div>
             <div class="col-md-4">
-                <label class="form-label small mb-1">Kategori</label>
+                <label class="form-label small mb-1">Dimensi</label>
                 <select name="kategori" class="form-select form-select-sm">
                     <option value="">Semua</option>
                     @foreach (\App\Models\Wisata::KATEGORI as $k)
@@ -35,7 +35,7 @@
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
-                    <tr><th>Kode</th><th>Foto</th><th>Nama Spot</th><th>Kategori</th><th>Entri</th><th>Kurasi</th><th class="text-end">Aksi</th></tr>
+                    <tr><th>Kode</th><th>Foto</th><th>Nama Spot</th><th>Dimensi</th><th>Entri</th><th>Kurasi</th><th class="text-end">Aksi</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($wisata as $w)
@@ -45,7 +45,7 @@
                                 @if ($w->fotoUtama())
                                     <img src="{{ $w->fotoUtama() }}" style="height:40px;width:55px;object-fit:cover;border-radius:.3rem;">
                                 @else
-                                    <span class="text-muted small">—</span>
+                                    <span class="text-muted small">&mdash;</span>
                                 @endif
                             </td>
                             <td>{{ $w->nama_spot }}</td>
