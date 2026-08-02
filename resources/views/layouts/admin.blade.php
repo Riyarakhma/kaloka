@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>
-        @yield('judul', 'Dashboard') — Admin KALOKA
+        @yield('judul', 'Dashboard') — Admin {{ $situs['nama'] ?? 'KALOKA' }}
     </title>
 
     <link
         rel="icon"
-        href="{{ asset('favicon.svg') }}"
+        href="{{ $situs['logo'] ?? asset('favicon.svg') }}"
         type="image/svg+xml"
     >
 
@@ -29,6 +29,59 @@
         rel="stylesheet"
     >
 
+    <style>
+        .logo-admin {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            display: block;
+            flex-shrink: 0;
+        }
+
+        .logo-admin-fallback {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand-logo {
+            min-width: 0;
+            white-space: normal;
+        }
+
+        .navbar-brand-text {
+            line-height: 1.15;
+        }
+
+        .navbar-brand-title {
+            display: block;
+            font-weight: 700;
+        }
+
+        .navbar-brand-subtitle {
+            display: block;
+            margin-top: 2px;
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+
+        @media (max-width: 575.98px) {
+            .logo-admin,
+            .logo-admin-fallback {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+            }
+
+            .navbar-brand-subtitle {
+                display: none;
+            }
+        }
+    </style>
+
     @stack('gaya')
 </head>
 
@@ -44,26 +97,17 @@
                     <img
                         src="{{ $situs['logo'] }}"
                         alt="{{ $situs['nama'] ?? 'KALOKA' }}"
-                        class="me-2"
-                        style="
-                            width: 34px;
-                            height: 34px;
-                            object-fit: contain;
-                        "
+                        class="logo-admin me-2"
                     >
                 @else
                     <span
-                        class="d-inline-flex align-items-center justify-content-center me-2"
-                        style="
-                            width: 34px;
-                            height: 34px;
-                        "
+                        class="logo-admin-fallback d-inline-flex align-items-center justify-content-center me-2"
                         aria-hidden="true"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="30"
-                            height="30"
+                            width="34"
+                            height="34"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
@@ -78,12 +122,14 @@
                     </span>
                 @endif
 
-                <span class="fw-bold">
-                    KALOKA
-                </span>
+                <span class="navbar-brand-text">
+                    <span class="navbar-brand-title">
+                        {{ $situs['nama'] ?? 'KALOKA' }}
+                    </span>
 
-                <span class="d-none d-sm-inline fw-normal fs-6 ms-1">
-                    — Perpustakaan Desa Sobokerto
+                    <span class="navbar-brand-subtitle d-none d-sm-block">
+                        Perpustakaan Desa Sobokerto
+                    </span>
                 </span>
             </a>
 
@@ -251,7 +297,9 @@
 
     <footer class="footer-kaloka py-3 mt-4">
         <div class="container-fluid text-center small">
-            KALOKA — Perpustakaan Desa Sobokerto &copy; {{ date('Y') }}
+            {{ $situs['nama'] ?? 'KALOKA' }}
+            — Perpustakaan Desa Sobokerto
+            &copy; {{ date('Y') }}
         </div>
     </footer>
 
