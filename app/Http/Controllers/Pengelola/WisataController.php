@@ -40,7 +40,18 @@ class WisataController extends Controller
         $data['status_kurasi'] = Wisata::STATUS_KURASI[0]; // selalu mulai dari 'Draf'
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = [Gambar::simpan($request->file('foto'), 'wisata')];
+            $data['foto'] = collect($request->file('foto'))
+                ->map(fn ($file) => Gambar::simpan($file, 'wisata'))
+                ->all();
+        }
+
+        $data['jam_operasional'] = collect($request->input('jam_operasional', []))
+            ->filter(fn ($baris) => ! empty($baris['hari']) || ! empty($baris['jam']))
+            ->values()
+            ->all();
+
+        if ($request->hasFile('menu_file')) {
+            $data['menu_file'] = $request->file('menu_file')->store('wisata/menu', 'public');
         }
 
         $wisata = Wisata::create($data);
@@ -64,11 +75,33 @@ class WisataController extends Controller
         $data = $request->validated();
         unset($data['foto']);
 
-        if ($request->hasFile('foto')) {
-            foreach ($wisata->foto ?? [] as $path) {
+        $fotoTersisa = $wisata->foto ?? [];
+        foreach ($request->input('hapus_foto', []) as $path) {
+            $idx = array_search($path, $fotoTersisa, true);
+            if ($idx !== false) {
                 Storage::disk('public')->delete($path);
+                unset($fotoTersisa[$idx]);
             }
-            $data['foto'] = [Gambar::simpan($request->file('foto'), 'wisata')];
+        }
+        $fotoTersisa = array_values($fotoTersisa);
+
+        if ($request->hasFile('foto')) {
+            foreach ($request->file('foto') as $file) {
+                $fotoTersisa[] = Gambar::simpan($file, 'wisata');
+            }
+        }
+        $data['foto'] = $fotoTersisa;
+
+        $data['jam_operasional'] = collect($request->input('jam_operasional', []))
+            ->filter(fn ($baris) => ! empty($baris['hari']) || ! empty($baris['jam']))
+            ->values()
+            ->all();
+
+        if ($request->hasFile('menu_file')) {
+            if ($wisata->menu_file) {
+                Storage::disk('public')->delete($wisata->menu_file);
+            }
+            $data['menu_file'] = $request->file('menu_file')->store('wisata/menu', 'public');
         }
 
         $wisata->update($data);

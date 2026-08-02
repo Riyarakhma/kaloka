@@ -21,14 +21,13 @@ class Wisata extends Model
         'deskripsi_en',
         'lokasi',
         'lokasi_en',
-        'koordinat',
         'google_maps',
         'jam_operasional',
         'jam_operasional_en',
         'kontak',
         'kontak_en',
         'sosial_media',
-        'menu',
+        'menu_file',
         'fasilitas',
         'narasumber',
         'foto',
@@ -40,6 +39,7 @@ class Wisata extends Model
     {
         return [
             'foto' => 'array',
+            'jam_operasional' => 'array',
         ];
     }
 
@@ -113,6 +113,21 @@ class Wisata extends Model
             fn ($path) => asset('storage/' . $path),
             $this->foto ?? []
         );
+    }
+
+    /** Daftar jam operasional yang sudah bersih (buang baris kosong). */
+    public function daftarOperasional(): array
+    {
+        return collect($this->jam_operasional ?? [])
+            ->filter(fn ($baris) => ! empty($baris['hari']) || ! empty($baris['jam']))
+            ->values()
+            ->all();
+    }
+
+    /** URL file menu (jika ada). */
+    public function urlMenu(): ?string
+    {
+        return $this->menu_file ? asset('storage/' . $this->menu_file) : null;
     }
 
     public function warnaKategori(): string

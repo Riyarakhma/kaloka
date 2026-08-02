@@ -114,29 +114,6 @@
         @enderror
     </div>
 
-    {{-- Koordinat --}}
-    <div class="col-md-6">
-        <label for="koordinat" class="form-label">
-            Koordinat
-            <span class="text-muted small">
-                (lat,long — opsional)
-            </span>
-        </label>
-
-        <input
-            type="text"
-            name="koordinat"
-            id="koordinat"
-            class="form-control @error('koordinat') is-invalid @enderror"
-            value="{{ $val('koordinat') }}"
-            placeholder="-7.5306,110.7460"
-        >
-
-        @error('koordinat')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
-
     {{-- Google Maps --}}
     <div class="col-12">
         <label for="google_maps" class="form-label">
@@ -162,24 +139,65 @@
     </div>
 
     {{-- Jam Operasional --}}
-    <div class="col-md-6">
-        <label for="jam_operasional" class="form-label">
-            Jam Operasional
-        </label>
+    <div class="col-12">
+        <label class="form-label">Jam Operasional <span class="text-muted small">(opsional, atur per hari)</span></label>
 
-        <input
-            type="text"
-            name="jam_operasional"
-            id="jam_operasional"
-            class="form-control @error('jam_operasional') is-invalid @enderror"
-            value="{{ $val('jam_operasional') }}"
-            placeholder="Contoh: 06.00–18.00"
-        >
+        <div id="daftarOperasionalWisata" class="d-flex flex-column gap-2">
+            @php $barisJam = old('jam_operasional', $wisata->jam_operasional ?? []); @endphp
+            @if (empty($barisJam))
+                @php $barisJam = [['hari' => '', 'jam' => '']]; @endphp
+            @endif
 
-        @error('jam_operasional')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+            @foreach ($barisJam as $i => $b)
+                <div class="row g-2 align-items-center baris-operasional-wisata">
+                    <div class="col-5">
+                        <input type="text" name="jam_operasional[{{ $i }}][hari]" class="form-control form-control-sm"
+                               value="{{ $b['hari'] ?? '' }}" placeholder="mis. Senin–Jumat">
+                    </div>
+                    <div class="col-5">
+                        <input type="text" name="jam_operasional[{{ $i }}][jam]" class="form-control form-control-sm"
+                               value="{{ $b['jam'] ?? '' }}" placeholder="mis. 06.00–18.00">
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.baris-operasional-wisata').remove()">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <button type="button" class="btn btn-sm btn-outline-kaloka mt-2" onclick="tambahBarisOperasionalWisata()">
+            <i class="bi bi-plus-lg me-1"></i>Tambah Baris
+        </button>
+
+        <div class="form-text">Contoh: "Senin–Jumat" / "06.00–18.00", baris berikutnya "Sabtu–Minggu" / "08.00–20.00".</div>
     </div>
+
+    <script>
+        let indexOperasionalWisata = document.querySelectorAll('#daftarOperasionalWisata .baris-operasional-wisata').length;
+
+        function tambahBarisOperasionalWisata() {
+            const container = document.getElementById('daftarOperasionalWisata');
+            const div = document.createElement('div');
+            div.className = 'row g-2 align-items-center baris-operasional-wisata';
+            div.innerHTML = `
+                <div class="col-5">
+                    <input type="text" name="jam_operasional[${indexOperasionalWisata}][hari]" class="form-control form-control-sm" placeholder="mis. Sabtu–Minggu">
+                </div>
+                <div class="col-5">
+                    <input type="text" name="jam_operasional[${indexOperasionalWisata}][jam]" class="form-control form-control-sm" placeholder="mis. 08.00–20.00">
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.baris-operasional-wisata').remove()">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(div);
+            indexOperasionalWisata++;
+        }
+    </script>
 
     {{-- Kontak --}}
     <div class="col-md-6">
@@ -223,19 +241,26 @@
 
     {{-- Menu --}}
     <div class="col-md-6">
-        <label for="menu" class="form-label">
-            Menu
+        <label for="menu_file" class="form-label">
+            Menu <span class="text-muted small">(unggah PDF atau foto, opsional)</span>
         </label>
 
-        <textarea
-            name="menu"
-            id="menu"
-            class="form-control @error('menu') is-invalid @enderror"
-            rows="4"
-            placeholder="Contoh: ikan bakar, nasi goreng, es teh"
-        >{{ $val('menu') }}</textarea>
+        <input
+            type="file"
+            name="menu_file"
+            id="menu_file"
+            class="form-control @error('menu_file') is-invalid @enderror"
+            accept=".pdf,image/jpeg,image/png,image/webp"
+        >
 
-        @error('menu')
+        @if ($wisata && $wisata->menu_file)
+            <div class="form-text">
+                Menu saat ini: <a href="{{ $wisata->urlMenu() }}" target="_blank">lihat</a>
+                — unggah baru untuk mengganti.
+            </div>
+        @endif
+
+        @error('menu_file')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
@@ -391,47 +416,42 @@
         <hr class="my-3">
     </div>
 
-    <div class="col-md-6">
-        <label for="foto" class="form-label">
-            Foto
-            <span class="text-muted small">
-                (opsional, maksimal 20 MB)
-            </span>
-        </label>
-
-        <input
-            type="file"
-            name="foto"
-            id="foto"
-            class="form-control @error('foto') is-invalid @enderror"
-            accept="image/jpeg,image/png,image/webp"
-            onchange="previewFotoWisata(event)"
-        >
-
+    <div class="col-12">
+        <label class="form-label">Foto <span class="text-muted small">(boleh pilih beberapa sekaligus, maks 10 foto, maks 20 MB per foto)</span></label>
+        @if ($wisata && $wisata->foto)
+            <div class="form-text mb-2">Foto yang sudah ada — centang untuk menghapus:</div>
+            <div class="d-flex flex-wrap gap-3 mb-3">
+                @foreach ($wisata->urlFoto() as $i => $url)
+                    <label class="text-center" style="cursor:pointer;">
+                        <img src="{{ $url }}" alt="Foto {{ $i + 1 }}" class="rounded border d-block mb-1"
+                             style="width:120px;height:90px;object-fit:cover;">
+                        <span class="d-inline-flex align-items-center gap-1 small text-danger">
+                            <input type="checkbox" name="hapus_foto[]" value="{{ $wisata->foto[$i] }}">
+                            Hapus
+                        </span>
+                    </label>
+                @endforeach
+            </div>
+        @endif
+        <input type="file" name="foto[]" id="inputFotoWisata" class="form-control @error('foto') is-invalid @enderror"
+               accept="image/*" multiple onchange="previewFotoWisata(event)">
         @error('foto')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
-
-        <img
-            id="previewFotoWisata"
-            src="{{ $fotoSekarang ?? '' }}"
-            alt="Pratinjau foto wisata"
-            class="rounded border mt-3 {{ $fotoSekarang ? '' : 'd-none' }}"
-            style="width:220px;height:150px;object-fit:cover;"
-        >
+        <div class="form-text">Foto baru yang diunggah akan ditambahkan (bukan mengganti semua foto lama).</div>
+        <div id="previewFotoBaruWisata" class="d-flex flex-wrap gap-3 mt-2"></div>
     </div>
 </div>
-
 <script>
     function previewFotoWisata(event) {
-        const file = event.target.files?.[0];
-        const preview = document.getElementById('previewFotoWisata');
-
-        if (!file || !preview) {
-            return;
-        }
-
-        preview.src = URL.createObjectURL(file);
-        preview.classList.remove('d-none');
+        const wadah = document.getElementById('previewFotoBaruWisata');
+        wadah.innerHTML = '';
+        Array.from(event.target.files).forEach((file) => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.className = 'rounded border';
+            img.style.cssText = 'width:120px;height:90px;object-fit:cover;';
+            wadah.appendChild(img);
+        });
     }
 </script>

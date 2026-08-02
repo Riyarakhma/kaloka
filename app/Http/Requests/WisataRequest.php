@@ -55,12 +55,6 @@ class WisataRequest extends FormRequest
                 'max:255',
             ],
 
-            'koordinat' => [
-                'nullable',
-                'string',
-                'max:255',
-            ],
-
             'google_maps' => [
                 'nullable',
                 'string',
@@ -73,10 +67,19 @@ class WisataRequest extends FormRequest
                 'max:255',
             ],
 
-            'jam_operasional_en' => [
+            'jam_operasional' => [
+                'nullable',
+                'array',
+            ],
+            'jam_operasional.*.hari' => [
                 'nullable',
                 'string',
-                'max:255',
+                'max:100',
+            ],
+            'jam_operasional.*.jam' => [
+                'nullable',
+                'string',
+                'max:100',
             ],
 
             'kontak' => [
@@ -97,9 +100,11 @@ class WisataRequest extends FormRequest
                 'max:2000',
             ],
 
-            'menu' => [
+            'menu_file' => [
                 'nullable',
-                'string',
+                'file',
+                'mimes:pdf,jpg,jpeg,png,webp',
+                'max:20480',
             ],
 
             'fasilitas' => [
@@ -125,9 +130,20 @@ class WisataRequest extends FormRequest
 
             'foto' => [
                 'nullable',
-                'image',
+                'array',
+                'max:10',
+            ],
+            'foto.*' => [
+                'file',
                 'mimes:jpg,jpeg,png,webp',
                 'max:20480',
+            ],
+            'hapus_foto' => [
+                'nullable',
+                'array',
+            ],
+            'hapus_foto.*' => [
+                'string',
             ],
         ];
     }
@@ -142,14 +158,13 @@ class WisataRequest extends FormRequest
             'deskripsi_en' => 'deskripsi bahasa Inggris',
             'lokasi' => 'lokasi',
             'lokasi_en' => 'lokasi bahasa Inggris',
-            'koordinat' => 'koordinat',
             'google_maps' => 'Google Maps',
             'jam_operasional' => 'jam operasional',
             'jam_operasional_en' => 'jam operasional bahasa Inggris',
             'kontak' => 'kontak',
             'kontak_en' => 'kontak bahasa Inggris',
             'sosial_media' => 'sosial media',
-            'menu' => 'menu',
+            'menu_file' => 'menu',
             'fasilitas' => 'fasilitas',
             'narasumber' => 'narasumber',
             'status_etis' => 'status entri',
@@ -167,9 +182,11 @@ class WisataRequest extends FormRequest
             'deskripsi.required' => 'Deskripsi wajib diisi.',
             'status_etis.required' => 'Status entri wajib dipilih.',
             'status_etis.in' => 'Status entri tidak valid.',
-            'foto.image' => 'File foto harus berupa gambar.',
-            'foto.mimes' => 'Foto harus berformat JPG, JPEG, PNG, atau WEBP.',
-            'foto.max' => 'Ukuran foto maksimal 20 MB.',
+            'foto.max' => 'Maksimal 10 foto per spot wisata.',
+            'foto.*.mimes' => 'Foto harus berformat JPG, JPEG, PNG, atau WEBP.',
+            'foto.*.max' => 'Ukuran tiap foto maksimal 20 MB.',
+            'menu_file.mimes' => 'Menu harus berformat PDF, JPG, JPEG, PNG, atau WEBP.',
+            'menu_file.max' => 'Ukuran file menu maksimal 20 MB.',
         ];
     }
 }
