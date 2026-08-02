@@ -58,7 +58,7 @@ export default function DetailWisata() {
     if (isLoading) {
         return (
             <div className="min-h-screen bg-background">
-            <Navbar />
+                <Navbar />
 
                 <div className="container-page py-20 text-center text-muted-foreground">
                     {bahasaInggris ? 'Loading...' : 'Memuat...'}
@@ -107,16 +107,16 @@ export default function DetailWisata() {
 
             <main>
                 <section className="border-b border-border bg-primary-soft/50">
-    <div className="container-page py-8 md:py-10">
-        <Link
-            to="/wisata"
-            className="inline-flex items-center gap-2 font-semibold text-primary transition hover:gap-3"
-        >
-            <ArrowLeft className="size-5" />
-            Kembali ke Info Wisata
-        </Link>
-    </div>
-</section>
+                    <div className="container-page py-8 md:py-10">
+                        <Link
+                            to="/wisata"
+                            className="inline-flex items-center gap-2 font-semibold text-primary transition hover:gap-3"
+                        >
+                            <ArrowLeft className="size-5" />
+                            Kembali ke Info Wisata
+                        </Link>
+                    </div>
+                </section>
 
                 <section className="container-page py-10 md:py-14">
                     <article className="mx-auto max-w-6xl">
@@ -136,8 +136,8 @@ export default function DetailWisata() {
                                                     type="button"
                                                     onClick={() =>
                                                         setFotoAktif(
-                                                            (i) =>
-                                                                (i -
+                                                            (index) =>
+                                                                (index -
                                                                     1 +
                                                                     wisata
                                                                         .url_foto
@@ -148,6 +148,7 @@ export default function DetailWisata() {
                                                         )
                                                     }
                                                     className="absolute left-4 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white transition hover:bg-black/70"
+                                                    aria-label="Foto sebelumnya"
                                                 >
                                                     <ChevronLeft className="size-6" />
                                                 </button>
@@ -156,34 +157,38 @@ export default function DetailWisata() {
                                                     type="button"
                                                     onClick={() =>
                                                         setFotoAktif(
-                                                            (i) =>
-                                                                (i + 1) %
+                                                            (index) =>
+                                                                (index + 1) %
                                                                 wisata
                                                                     .url_foto
                                                                     .length,
                                                         )
                                                     }
                                                     className="absolute right-4 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white transition hover:bg-black/70"
+                                                    aria-label="Foto berikutnya"
                                                 >
                                                     <ChevronRight className="size-6" />
                                                 </button>
 
                                                 <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2">
                                                     {wisata.url_foto.map(
-                                                        (_, i) => (
+                                                        (_, index) => (
                                                             <button
-                                                                key={i}
+                                                                key={index}
                                                                 type="button"
                                                                 onClick={() =>
                                                                     setFotoAktif(
-                                                                        i,
+                                                                        index,
                                                                     )
                                                                 }
                                                                 className={`size-2.5 rounded-full transition ${
-                                                                    i ===
+                                                                    index ===
                                                                     fotoAktif
                                                                         ? 'bg-white'
                                                                         : 'bg-white/50'
+                                                                }`}
+                                                                aria-label={`Tampilkan foto ${
+                                                                    index + 1
                                                                 }`}
                                                             />
                                                         ),
@@ -207,20 +212,24 @@ export default function DetailWisata() {
 
                             {(wisata.url_foto ?? []).length > 1 && (
                                 <div className="flex gap-2 overflow-x-auto border-b border-border bg-background px-6 py-4 md:px-10">
-                                    {wisata.url_foto.map((url, i) => (
+                                    {wisata.url_foto.map((url, index) => (
                                         <button
-                                            key={i}
+                                            key={index}
                                             type="button"
-                                            onClick={() => setFotoAktif(i)}
+                                            onClick={() =>
+                                                setFotoAktif(index)
+                                            }
                                             className={`size-16 shrink-0 overflow-hidden rounded-lg border-2 transition ${
-                                                i === fotoAktif
+                                                index === fotoAktif
                                                     ? 'border-primary'
                                                     : 'border-transparent opacity-70 hover:opacity-100'
                                             }`}
                                         >
                                             <img
                                                 src={url}
-                                                alt={`${namaSpot} thumbnail ${i + 1}`}
+                                                alt={`${namaSpot} thumbnail ${
+                                                    index + 1
+                                                }`}
                                                 className="size-full object-cover"
                                             />
                                         </button>
@@ -230,9 +239,7 @@ export default function DetailWisata() {
 
                             <div className="p-6 md:p-10">
                                 <div className="flex flex-wrap items-center gap-3">
-                                    <span
-                                        className="inline-flex rounded-full bg-primary-soft px-4 py-1.5 text-sm font-semibold text-primary"
-                                    >
+                                    <span className="inline-flex rounded-full bg-primary-soft px-4 py-1.5 text-sm font-semibold text-primary">
                                         {bahasaInggris
                                             ? kategoriEn(wisata.kategori)
                                             : wisata.kategori}
@@ -256,6 +263,7 @@ export default function DetailWisata() {
                                     {namaSpot}
                                 </h1>
 
+                                {/* Lokasi hanya ditampilkan di bawah judul */}
                                 <div className="mt-5 flex items-start gap-2 text-muted-foreground">
                                     <MapPin className="mt-0.5 size-5 shrink-0 text-primary" />
 
@@ -291,20 +299,6 @@ export default function DetailWisata() {
 
                                     <div className="mt-7 grid gap-5">
                                         <InfoCard
-                                            icon={MapPin}
-                                            label={
-                                                bahasaInggris
-                                                    ? 'Location'
-                                                    : 'Lokasi'
-                                            }
-                                        >
-                                            {lokasi ||
-                                                (bahasaInggris
-                                                    ? 'Not available'
-                                                    : 'Belum tersedia')}
-                                        </InfoCard>
-
-                                        <InfoCard
                                             icon={ExternalLink}
                                             label="Google Maps"
                                         >
@@ -321,10 +315,10 @@ export default function DetailWisata() {
 
                                                     <ExternalLink className="size-4" />
                                                 </a>
+                                            ) : bahasaInggris ? (
+                                                'Not available'
                                             ) : (
-                                                bahasaInggris
-                                                    ? 'Not available'
-                                                    : 'Belum tersedia'
+                                                'Belum tersedia'
                                             )}
                                         </InfoCard>
 
@@ -340,16 +334,21 @@ export default function DetailWisata() {
                                             jamOperasional.length > 0 ? (
                                                 <div className="space-y-1">
                                                     {jamOperasional.map(
-                                                        (baris, i) => (
+                                                        (baris, index) => (
                                                             <div
-                                                                key={i}
+                                                                key={index}
                                                                 className="flex items-center justify-between gap-3"
                                                             >
                                                                 <span className="font-medium text-foreground">
-                                                                    {baris.hari}
+                                                                    {
+                                                                        baris.hari
+                                                                    }
                                                                 </span>
+
                                                                 <span>
-                                                                    {baris.jam}
+                                                                    {
+                                                                        baris.jam
+                                                                    }
                                                                 </span>
                                                             </div>
                                                         ),

@@ -21,20 +21,25 @@ import { useQuery } from '@tanstack/react-query';
 export default function DetailUMKM() {
     const { slug } = useParams();
 
-    const { data: umkm, isLoading, isError } = useQuery({
+    const {
+        data: umkm,
+        isLoading,
+        isError,
+    } = useQuery({
         queryKey: ['umkm-detail', slug],
 
         queryFn: async () => {
             const res = await fetch(`/api/umkm/${slug}`);
 
-            if (!res.ok) return null;
+            if (!res.ok) {
+                return null;
+            }
 
             const json = await res.json();
             const item = json.data;
 
             // =========================
             // PRODUK
-            // JAM OPERASIONAL
             // =========================
             let produk = item.produk;
 
@@ -50,25 +55,32 @@ export default function DetailUMKM() {
                 produk = [];
             }
 
+            // =========================
+            // JAM OPERASIONAL
+            // =========================
             let jamOperasional = item.jam_operasional;
 
             if (Array.isArray(jamOperasional)) {
-                jamOperasional = jamOperasional
-                    .map((j) =>
-                        j && typeof j === 'object'
-                            ? [j.hari, j.jam]
-                                  .filter(Boolean)
-                                  .join(': ')
-                            : String(j ?? ''),
-                    )
-                    .filter(Boolean)
-                    .join('\n') || null;
+                jamOperasional =
+                    jamOperasional
+                        .map((jam) =>
+                            jam && typeof jam === 'object'
+                                ? [jam.hari, jam.jam]
+                                      .filter(Boolean)
+                                      .join(': ')
+                                : String(jam ?? ''),
+                        )
+                        .filter(Boolean)
+                        .join('\n') || null;
             } else if (
                 jamOperasional &&
                 typeof jamOperasional === 'object'
             ) {
                 jamOperasional =
-                    [jamOperasional.hari, jamOperasional.jam]
+                    [
+                        jamOperasional.hari,
+                        jamOperasional.jam,
+                    ]
                         .filter(Boolean)
                         .join(': ') || null;
             }
@@ -108,6 +120,9 @@ export default function DetailUMKM() {
         );
     }
 
+    // =========================
+    // ERROR
+    // =========================
     if (isError) {
         return (
             <div className="min-h-screen bg-background">
@@ -179,7 +194,7 @@ export default function DetailUMKM() {
 
             <main className="container-page py-10 md:py-14">
                 {/* =========================
-                    BACK
+                    KEMBALI
                 ========================= */}
                 <Link
                     to="/umkm"
@@ -200,7 +215,7 @@ export default function DetailUMKM() {
                         />
 
                         <div className="p-6 md:p-9">
-                            {/* DIMENSI */}
+                            {/* KATEGORI */}
                             <span className="inline-flex rounded-full bg-primary-soft px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
                                 {dimensi}
                             </span>
@@ -210,12 +225,12 @@ export default function DetailUMKM() {
                                 {umkm.nama_umkm}
                             </h1>
 
-                            {/* ALAMAT */}
+                            {/* ALAMAT HANYA DITAMPILKAN DI BAGIAN ATAS */}
                             <div className="mt-5 flex items-start gap-2 text-muted-foreground">
                                 <MapPin className="mt-0.5 size-5 shrink-0 text-primary" />
 
                                 <p className="leading-7">
-                                    {umkm.alamat}
+                                    {umkm.alamat || 'Alamat belum tersedia'}
                                 </p>
                             </div>
 
@@ -229,7 +244,8 @@ export default function DetailUMKM() {
 
                                 <div className="mt-4 space-y-5">
                                     <p className="whitespace-pre-line text-base leading-8 text-foreground/80 md:text-lg">
-                                        {umkm.deskripsi}
+                                        {umkm.deskripsi ||
+                                            'Deskripsi belum tersedia.'}
                                     </p>
                                 </div>
                             </section>
@@ -253,9 +269,7 @@ export default function DetailUMKM() {
                                                     <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                                                         <div className="min-w-0">
                                                             <h3 className="text-lg font-semibold text-foreground">
-                                                                {
-                                                                    produk.nama
-                                                                }
+                                                                {produk.nama}
                                                             </h3>
 
                                                             {produk.deskripsi ? (
@@ -313,17 +327,9 @@ export default function DetailUMKM() {
                                         {umkm.pemilik ?? '-'}
                                     </InfoItem>
 
-                                    {/* ALAMAT */}
-                                    <InfoItem
-                                        icon={MapPin}
-                                        title="Alamat UMKM"
-                                    >
-                                        {umkm.alamat ?? '-'}
-                                    </InfoItem>
+                                    {/* ALAMAT UMKM DI BAGIAN INI DIHAPUS */}
 
-                                    {/* =========================
-                                        GOOGLE MAPS
-                                    ========================= */}
+                                    {/* GOOGLE MAPS */}
                                     {umkm.link_maps ? (
                                         <div className="flex items-start gap-4 rounded-2xl border border-border bg-background p-5">
                                             <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -409,30 +415,34 @@ function FotoCarousel({ foto, nama }) {
         );
     }
 
-    const goTo = (i) => {
-        const el = scrollerRef.current;
+    const goTo = (newIndex) => {
+        const element = scrollerRef.current;
 
-        if (!el) return;
+        if (!element) {
+            return;
+        }
 
-        const clamped = Math.max(
+        const clampedIndex = Math.max(
             0,
-            Math.min(i, foto.length - 1),
+            Math.min(newIndex, foto.length - 1),
         );
 
-        el.scrollTo({
-            left: clamped * el.clientWidth,
+        element.scrollTo({
+            left: clampedIndex * element.clientWidth,
             behavior: 'smooth',
         });
     };
 
     const handleScroll = () => {
-        const el = scrollerRef.current;
+        const element = scrollerRef.current;
 
-        if (!el || el.clientWidth === 0) return;
+        if (!element || element.clientWidth === 0) {
+            return;
+        }
 
         setIndex(
             Math.round(
-                el.scrollLeft / el.clientWidth,
+                element.scrollLeft / element.clientWidth,
             ),
         );
     };
@@ -444,11 +454,11 @@ function FotoCarousel({ foto, nama }) {
                 onScroll={handleScroll}
                 className="flex h-full w-full snap-x snap-mandatory overflow-x-auto scroll-smooth"
             >
-                {foto.map((src, i) => (
+                {foto.map((src, fotoIndex) => (
                     <img
-                        key={i}
+                        key={fotoIndex}
                         src={src}
-                        alt={`${nama} - foto ${i + 1}`}
+                        alt={`${nama} - foto ${fotoIndex + 1}`}
                         className="h-full w-full shrink-0 snap-center object-cover"
                     />
                 ))}
@@ -456,12 +466,10 @@ function FotoCarousel({ foto, nama }) {
 
             {foto.length > 1 && (
                 <>
-                    {/* PREVIOUS */}
+                    {/* FOTO SEBELUMNYA */}
                     <button
                         type="button"
-                        onClick={() =>
-                            goTo(index - 1)
-                        }
+                        onClick={() => goTo(index - 1)}
                         disabled={index === 0}
                         className="absolute left-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 disabled:opacity-0"
                         aria-label="Foto sebelumnya"
@@ -469,33 +477,27 @@ function FotoCarousel({ foto, nama }) {
                         <ChevronLeft className="size-5" />
                     </button>
 
-                    {/* NEXT */}
+                    {/* FOTO BERIKUTNYA */}
                     <button
                         type="button"
-                        onClick={() =>
-                            goTo(index + 1)
-                        }
-                        disabled={
-                            index === foto.length - 1
-                        }
+                        onClick={() => goTo(index + 1)}
+                        disabled={index === foto.length - 1}
                         className="absolute right-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 disabled:opacity-0"
                         aria-label="Foto berikutnya"
                     >
                         <ChevronRight className="size-5" />
                     </button>
 
-                    {/* DOTS */}
+                    {/* DOT */}
                     <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-                        {foto.map((_, i) => (
+                        {foto.map((_, fotoIndex) => (
                             <button
-                                key={i}
+                                key={fotoIndex}
                                 type="button"
-                                onClick={() =>
-                                    goTo(i)
-                                }
-                                aria-label={`Ke foto ${i + 1}`}
+                                onClick={() => goTo(fotoIndex)}
+                                aria-label={`Ke foto ${fotoIndex + 1}`}
                                 className={
-                                    i === index
+                                    fotoIndex === index
                                         ? 'h-1.5 w-4 rounded-full bg-white transition-all'
                                         : 'h-1.5 w-1.5 rounded-full bg-white/60 transition-all'
                                 }
@@ -503,7 +505,7 @@ function FotoCarousel({ foto, nama }) {
                         ))}
                     </div>
 
-                    {/* COUNTER */}
+                    {/* PENGHITUNG FOTO */}
                     <div className="absolute right-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
                         {index + 1}/{foto.length}
                     </div>
@@ -537,8 +539,10 @@ function InfoItem({
 
     const isLink =
         typeof safeValue === 'string' &&
-        (safeValue.startsWith('http://') ||
-            safeValue.startsWith('https://'));
+        (
+            safeValue.startsWith('http://') ||
+            safeValue.startsWith('https://')
+        );
 
     return (
         <div className="flex items-start gap-4 rounded-2xl border border-border bg-background p-5">

@@ -302,7 +302,6 @@
             </div>
         @enderror
     </div>
-
     {{-- Status Etis --}}
     <div class="col-md-4">
         <label for="status_etis" class="form-label">
@@ -338,7 +337,6 @@
     </div>
 
 </div>
-
 <script>
     function previewFotoKearifan(event) {
         const file = event.target.files?.[0];

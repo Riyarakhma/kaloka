@@ -128,7 +128,7 @@
                     </span>
 
                     <span class="navbar-brand-subtitle d-none d-sm-block">
-                        Perpustakaan Desa Sobokerto
+                        Portal Literasi Desa Sobokerto
                     </span>
                 </span>
             </a>
