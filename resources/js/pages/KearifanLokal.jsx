@@ -155,9 +155,7 @@ export default function KearifanLokal() {
                         </h1>
 
                         <p className="mt-3 max-w-2xl text-lg leading-8 text-muted-foreground">
-                            Jelajahi pengetahuan lokal, kehidupan masyarakat,
-                            pertanian, sejarah, serta potensi lingkungan Desa
-                            Sobokerto.
+                        Cerita, tradisi, dan pengetahuan warga desa.
                         </p>
 
                         <form
