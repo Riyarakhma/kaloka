@@ -27,6 +27,7 @@ class Umkm extends Model
         'produk' => 'array',
     ];
 
+    public const KATEGORI = ['Kuliner', 'Kerajinan', 'Budidaya', 'Pertanian', 'Jasa', 'Lainnya'];
     public const STATUS_ETIS = ['Umum', 'Sakral'];
     public const STATUS_KURASI = ['Draf', 'Terbit'];
 

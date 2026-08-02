@@ -29,7 +29,7 @@ class UmkmRequest extends FormRequest
     {
         return [
             'nama_umkm'      => ['required', 'string', 'max:255'],
-            'kategori'       => ['required', 'string', 'max:100'],
+            'kategori'       => ['required', Rule::in(Umkm::KATEGORI)],
             'deskripsi'      => ['required', 'string'],
             'pemilik'        => ['required', 'string', 'max:255'],
             'alamat'         => ['required', 'string', 'max:255'],

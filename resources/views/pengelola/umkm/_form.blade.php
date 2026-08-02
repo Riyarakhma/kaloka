@@ -23,8 +23,12 @@
 
     <div class="col-md-4">
         <label class="form-label">Kategori <span class="text-danger">*</span></label>
-        <input type="text" name="kategori" class="form-control" value="{{ $val('kategori') }}"
-               placeholder="mis. Kuliner, Kerajinan" required>
+        <select name="kategori" class="form-select" required>
+            <option value="">— Pilih kategori —</option>
+            @foreach (\App\Models\Umkm::KATEGORI as $k)
+                <option value="{{ $k }}" @selected($val('kategori') === $k)>{{ $k }}</option>
+            @endforeach
+        </select>
     </div>
 
     <div class="col-12">

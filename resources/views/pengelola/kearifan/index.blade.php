@@ -119,7 +119,7 @@
                         </th>
 
                         <th>
-                            Etis
+                            Entri
                         </th>
 
                         <th>

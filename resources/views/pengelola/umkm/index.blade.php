@@ -18,9 +18,13 @@
                        placeholder="nama UMKM / pemilik / alamat">
             </div>
             <div class="col-md-4">
-                <label class="form-label small mb-1">Dimensi</label>
-                <input type="text" name="kategori" value="{{ request('kategori') }}" class="form-control form-control-sm"
-                       placeholder="mis. Kuliner">
+                <label class="form-label small mb-1">Kategori</label>
+                <select name="kategori" class="form-select form-select-sm">
+                    <option value="">Semua</option>
+                    @foreach (\App\Models\Umkm::KATEGORI as $k)
+                        <option value="{{ $k }}" @selected(request('kategori') === $k)>{{ $k }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-md-3 d-grid">
                 <button class="btn btn-outline-kaloka btn-sm"><i class="bi bi-funnel me-1"></i>Filter</button>
@@ -36,7 +40,7 @@
                         <th>Kode</th>
                         <th>Foto</th>
                         <th>Nama UMKM</th>
-                        <th>Dimensi</th>
+                        <th>Kategori</th>
                         <th>Pemilik</th>
                         <th>Kontak</th>
                         <th>Entri</th>
