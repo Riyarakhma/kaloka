@@ -302,7 +302,7 @@
         @enderror
     </div>
 
-<<<<<<< HEAD
+
     {{-- Sumber --}}
     <div class="col-md-6">
         <label for="sumber" class="form-label">
@@ -319,27 +319,12 @@
         >
 
         @error('sumber')
-=======
-        <input
-            type="text"
-            name="pendokumentasi"
-            id="pendokumentasi"
-            class="form-control @error('pendokumentasi') is-invalid @enderror"
-            value="{{ $val('pendokumentasi') }}"
-            placeholder="Nama mahasiswa"
-        >
-
-        @error('pendokumentasi')
->>>>>>> gabung-perbaikan
             <div class="invalid-feedback">
                 {{ $message }}
             </div>
         @enderror
     </div>
-<<<<<<< HEAD
 
-=======
->>>>>>> gabung-perbaikan
     {{-- Status Etis --}}
     <div class="col-md-4">
         <label for="status_etis" class="form-label">
