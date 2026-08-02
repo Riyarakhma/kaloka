@@ -26,6 +26,7 @@
 @endif
 
 <div class="row g-3">
+
     {{-- Judul --}}
     <div class="col-md-8">
         <label for="judul" class="form-label">
@@ -377,11 +378,13 @@
             </div>
         @enderror
     </div>
+
 </div>
 
 <script>
     function previewFotoKearifan(event) {
         const file = event.target.files?.[0];
+
         const preview = document.getElementById(
             'previewFotoKearifanImg'
         );

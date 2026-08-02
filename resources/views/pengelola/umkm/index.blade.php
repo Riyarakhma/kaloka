@@ -18,7 +18,7 @@
                        placeholder="nama UMKM / pemilik / alamat">
             </div>
             <div class="col-md-4">
-                <label class="form-label small mb-1">Kategori</label>
+                <label class="form-label small mb-1">Dimensi</label>
                 <input type="text" name="kategori" value="{{ request('kategori') }}" class="form-control form-control-sm"
                        placeholder="mis. Kuliner">
             </div>
@@ -34,8 +34,9 @@
                 <thead class="table-light">
                     <tr>
                         <th>Kode</th>
+                        <th>Foto</th>
                         <th>Nama UMKM</th>
-                        <th>Kategori</th>
+                        <th>Dimensi</th>
                         <th>Pemilik</th>
                         <th>Kontak</th>
                         <th>Entri</th>
@@ -45,10 +46,38 @@
                 </thead>
                 <tbody>
                     @forelse ($entri as $e)
+                        @php
+                            $fotoUmkm = method_exists($e, 'fotoUtama') ? $e->fotoUtama() : null;
+
+                            if (! $fotoUmkm) {
+                                $rawFoto = is_array($e->foto) ? ($e->foto[0] ?? null) : $e->foto;
+                                $fotoUmkm = $rawFoto ? asset('storage/' . ltrim($rawFoto, '/')) : null;
+                            }
+
+                            $petaDimensi = [
+                                'kuliner'     => 'danger',
+                                'kerajinan'   => 'warning',
+                                'budidaya'    => 'info',
+                                'pertanian'   => 'success',
+                                'perikanan'   => 'info',
+                                'perdagangan' => 'primary',
+                                'jasa'        => 'primary',
+                                'fashion'     => 'warning',
+                            ];
+
+                            $warnaDimensi = $petaDimensi[strtolower(trim($e->kategori ?? ''))] ?? 'secondary';
+                        @endphp
                         <tr>
                             <td class="small text-muted">{{ $e->kode_entri }}</td>
+                            <td>
+                                @if ($fotoUmkm)
+                                    <img src="{{ $fotoUmkm }}" style="height:40px;width:55px;object-fit:cover;border-radius:.3rem;">
+                                @else
+                                    <span class="text-muted small">&mdash;</span>
+                                @endif
+                            </td>
                             <td>{{ $e->nama_umkm }}</td>
-                            <td><span class="badge bg-secondary">{{ $e->kategori }}</span></td>
+                            <td><span class="badge bg-{{ $warnaDimensi }}">{{ $e->kategori }}</span></td>
                             <td>{{ $e->pemilik }}</td>
                             <td class="small text-muted">{{ $e->kontak ?: '—' }}</td>
                             <td><span class="badge bg-{{ $e->warnaStatusEtis() }} text-dark">{{ $e->status_etis }}</span></td>
@@ -64,7 +93,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="text-center text-muted py-4">Belum ada UMKM.</td></tr>
+                        <tr><td colspan="9" class="text-center text-muted py-4">Belum ada UMKM.</td></tr>
                     @endforelse
                 </tbody>
             </table>
