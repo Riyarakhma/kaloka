@@ -85,12 +85,10 @@ function mapToKearifanDetail(item) {
         kataKunci: item.kata_kunci ?? [],
         narasumber: item.narasumber ?? null,
         lokasi: item.lokasi ?? null,
-        bahasa: item.bahasa ?? null,
         tanggalDokumentasi: item.tanggal_dokumentasi ?? null,
-        sumber: item.sumber ?? null,
+        pendokumentasi: item.pendokumentasi ?? null,
         statusEtis: item.status_etis ?? null,
         statusKurasi: item.status_kurasi ?? null,
-        catatan: item.catatan ?? null,
         dokumenUrl: item.dokumen_url ?? null,
     };
 }

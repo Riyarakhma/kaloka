@@ -22,6 +22,7 @@ class KearifanLokalResource extends JsonResource
             'url_media' => $this->urlMedia(),
             'dokumen_url' => $this->urlDokumen(),
             'tanggal_dokumentasi' => $this->tanggal_dokumentasi?->format('Y-m-d'),
+            'pendokumentasi' => $this->pendokumentasi,
             'sumber' => $this->sumber,
             'status_etis' => $this->status_etis,
             'status_kurasi' => $this->status_kurasi,
