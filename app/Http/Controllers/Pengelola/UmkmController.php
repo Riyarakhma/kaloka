@@ -46,7 +46,9 @@ class UmkmController extends Controller
         $data['jam_operasional'] = $this->bersihkanOperasional($request);
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = [Gambar::simpan($request->file('foto'), 'umkm')];
+            $data['foto'] = collect($request->file('foto'))
+                ->map(fn ($f) => Gambar::simpan($f, 'umkm'))
+                ->all();
         }
 
         $umkm = Umkm::create($data);
@@ -71,12 +73,24 @@ class UmkmController extends Controller
         unset($data['foto']);
         $data['jam_operasional'] = $this->bersihkanOperasional($request);
 
-        if ($request->hasFile('foto')) {
-            foreach ($umkm->foto ?? [] as $path) {
-                Storage::disk('public')->delete($path);
-            }
-            $data['foto'] = [Gambar::simpan($request->file('foto'), 'umkm')];
+        // Foto lama yang dicentang untuk dihapus.
+        $fotoDihapus = $request->input('hapus_foto', []);
+        $fotoTersisa = collect($umkm->foto ?? [])
+            ->reject(fn ($path) => in_array($path, $fotoDihapus, true))
+            ->values();
+
+        foreach ($fotoDihapus as $path) {
+            Storage::disk('public')->delete($path);
         }
+
+        // Foto baru diunggah -> ditambahkan ke sisa foto lama (bukan mengganti semua).
+        $fotoBaru = collect();
+        if ($request->hasFile('foto')) {
+            $fotoBaru = collect($request->file('foto'))
+                ->map(fn ($f) => Gambar::simpan($f, 'umkm'));
+        }
+
+        $data['foto'] = $fotoTersisa->merge($fotoBaru)->values()->all();
 
         $umkm->update($data);
 

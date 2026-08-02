@@ -202,24 +202,40 @@
     </div>
 
     <div class="col-12">
-        <label class="form-label">Foto <span class="text-muted small">(maks 20 MB, unggah baru untuk mengganti)</span></label>
-        <input type="file" name="foto" id="inputFoto" class="form-control" accept="image/*"
+        <label class="form-label">Foto <span class="text-muted small">(boleh pilih beberapa sekaligus, maks 10 foto, maks 20 MB per foto)</span></label>
+
+        @if ($entri && $entri->foto)
+            <div class="form-text mb-2">Foto yang sudah ada — centang untuk menghapus:</div>
+            <div class="d-flex flex-wrap gap-3 mb-3">
+                @foreach ($entri->urlFoto() as $i => $url)
+                    <label class="text-center" style="cursor:pointer;">
+                        <img src="{{ $url }}" alt="Foto {{ $i + 1 }}" class="rounded border d-block mb-1"
+                             style="width:120px;height:90px;object-fit:cover;">
+                        <span class="d-inline-flex align-items-center gap-1 small text-danger">
+                            <input type="checkbox" name="hapus_foto[]" value="{{ $entri->foto[$i] }}">
+                            Hapus
+                        </span>
+                    </label>
+                @endforeach
+            </div>
+        @endif
+
+        <input type="file" name="foto[]" id="inputFoto" class="form-control" accept="image/*" multiple
                onchange="previewFotoUmkm(event)">
-        <div class="form-text">
-            <img id="previewFotoUmkmImg"
-                 src="{{ $entri && $entri->foto ? ($entri->urlFoto()[0] ?? '') : '' }}"
-                 alt="Pratinjau foto"
-                 class="rounded border mt-2 {{ $entri && $entri->foto ? '' : 'd-none' }}"
-                 style="width:160px;height:120px;object-fit:cover;">
-        </div>
+        <div class="form-text">Foto baru yang diunggah akan ditambahkan ke sampul (bukan mengganti semua foto lama).</div>
+        <div id="previewFotoBaru" class="d-flex flex-wrap gap-3 mt-2"></div>
     </div>
     <script>
         function previewFotoUmkm(event) {
-            const file = event.target.files[0];
-            const img = document.getElementById('previewFotoUmkmImg');
-            if (!file) return;
-            img.src = URL.createObjectURL(file);
-            img.classList.remove('d-none');
+            const wadah = document.getElementById('previewFotoBaru');
+            wadah.innerHTML = '';
+            Array.from(event.target.files).forEach((file) => {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.className = 'rounded border';
+                img.style.cssText = 'width:120px;height:90px;object-fit:cover;';
+                wadah.appendChild(img);
+            });
         }
     </script>
 </div>

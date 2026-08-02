@@ -24,6 +24,7 @@ class Umkm extends Model
     protected $casts = [
         'foto' => 'array',
         'jam_operasional' => 'array',
+        'produk' => 'array',
     ];
 
     public const STATUS_ETIS = ['Umum', 'Sakral'];

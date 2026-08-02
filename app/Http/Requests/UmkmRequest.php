@@ -43,7 +43,10 @@ class UmkmRequest extends FormRequest
             'jam_operasional'      => ['nullable', 'array'],
             'jam_operasional.*.hari' => ['nullable', 'string', 'max:100'],
             'jam_operasional.*.jam'  => ['nullable', 'string', 'max:100'],
-            'foto'           => ['nullable', 'file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif'],
+            'foto'           => ['nullable', 'array', 'max:10'],
+            'foto.*'         => ['file', 'max:20480', 'mimes:jpg,jpeg,png,webp,gif'],
+            'hapus_foto'     => ['nullable', 'array'],
+            'hapus_foto.*'   => ['string'],
             'status_etis'    => ['required', Rule::in(Umkm::STATUS_ETIS)],
         ];
     }
@@ -70,8 +73,9 @@ class UmkmRequest extends FormRequest
     {
         return [
             'required' => 'Kolom :attribute wajib diisi.',
-            'foto.max' => 'Ukuran foto maksimal 20 MB.',
-            'foto.mimes' => 'Format foto harus jpg, jpeg, png, webp, atau gif.',
+            'foto.max' => 'Maksimal 10 foto per UMKM.',
+            'foto.*.max' => 'Ukuran tiap foto maksimal 20 MB.',
+            'foto.*.mimes' => 'Format foto harus jpg, jpeg, png, webp, atau gif.',
             'link_maps.url' => 'Link Google Maps harus berupa URL yang valid.',
         ];
     }

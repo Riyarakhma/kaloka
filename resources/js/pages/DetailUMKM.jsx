@@ -1,6 +1,9 @@
+import { useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
     ArrowLeft,
+    ChevronLeft,
+    ChevronRight,
     Clock,
     ExternalLink,
     Globe,
@@ -57,13 +60,15 @@ export default function DetailUMKM() {
                     .join(': ') || null;
             }
 
+            const fotoList = Array.isArray(item.foto)
+                ? item.foto.filter(Boolean).map((path) => `/storage/${path}`)
+                : [];
+
             return {
                 ...item,
                 produk,
                 jam_operasional: jamOperasional,
-                foto: item.foto?.[0]
-                    ? `/storage/${item.foto[0]}`
-                    : null,
+                foto: fotoList,
             };
         },
     });
@@ -128,19 +133,7 @@ export default function DetailUMKM() {
                 <div className="mt-8">
                     <article className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
 
-                        <figure className="aspect-[16/9] overflow-hidden bg-muted">
-                            {umkm.foto ? (
-                                <img
-                                    src={umkm.foto}
-                                    alt={umkm.nama_umkm}
-                                    className="h-full w-full object-cover"
-                                />
-                            ) : (
-                                <div className="flex h-full items-center justify-center">
-                                    <Store className="size-16 text-primary/40" />
-                                </div>
-                            )}
-                        </figure>
+                        <FotoCarousel foto={umkm.foto} nama={umkm.nama_umkm} />
 
                         <div className="p-6 md:p-9">
 
@@ -253,8 +246,7 @@ export default function DetailUMKM() {
                                                     Google Maps
                                                 </h3>
 
-                                                
-                                                    <a
+                                                <a
                                                     href={umkm.link_maps}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -276,7 +268,7 @@ export default function DetailUMKM() {
 
                                     <InfoItem
                                         icon={Clock}
-                                        title="Jam Operasional"
+                                        title="Operasional"
                                     >
                                         {umkm.jam_operasional ?? '-'}
                                     </InfoItem>
@@ -304,6 +296,97 @@ export default function DetailUMKM() {
 
             <Footer />
         </div>
+    );
+}
+
+function FotoCarousel({ foto, nama }) {
+    const scrollerRef = useRef(null);
+    const [index, setIndex] = useState(0);
+
+    if (!foto || foto.length === 0) {
+        return (
+            <figure className="aspect-[16/9] overflow-hidden bg-muted">
+                <div className="flex h-full items-center justify-center">
+                    <Store className="size-16 text-primary/40" />
+                </div>
+            </figure>
+        );
+    }
+
+    const goTo = (i) => {
+        const el = scrollerRef.current;
+        if (!el) return;
+        const clamped = Math.max(0, Math.min(i, foto.length - 1));
+        el.scrollTo({ left: clamped * el.clientWidth, behavior: 'smooth' });
+    };
+
+    const handleScroll = () => {
+        const el = scrollerRef.current;
+        if (!el || el.clientWidth === 0) return;
+        setIndex(Math.round(el.scrollLeft / el.clientWidth));
+    };
+
+    return (
+        <figure className="relative aspect-[16/9] overflow-hidden bg-muted">
+            <div
+                ref={scrollerRef}
+                onScroll={handleScroll}
+                className="flex h-full w-full snap-x snap-mandatory overflow-x-auto scroll-smooth"
+            >
+                {foto.map((src, i) => (
+                    <img
+                        key={i}
+                        src={src}
+                        alt={`${nama} - foto ${i + 1}`}
+                        className="h-full w-full shrink-0 snap-center object-cover"
+                    />
+                ))}
+            </div>
+
+            {foto.length > 1 && (
+                <>
+                    <button
+                        type="button"
+                        onClick={() => goTo(index - 1)}
+                        disabled={index === 0}
+                        className="absolute left-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 disabled:opacity-0"
+                        aria-label="Foto sebelumnya"
+                    >
+                        <ChevronLeft className="size-5" />
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => goTo(index + 1)}
+                        disabled={index === foto.length - 1}
+                        className="absolute right-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 disabled:opacity-0"
+                        aria-label="Foto berikutnya"
+                    >
+                        <ChevronRight className="size-5" />
+                    </button>
+
+                    <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+                        {foto.map((_, i) => (
+                            <button
+                                key={i}
+                                type="button"
+                                onClick={() => goTo(i)}
+                                aria-label={`Ke foto ${i + 1}`}
+                                className={
+                                    i === index
+                                        ? 'h-1.5 w-4 rounded-full bg-white transition-all'
+                                        : 'h-1.5 w-1.5 rounded-full bg-white/60 transition-all'
+                                }
+                            />
+                        ))}
+                    </div>
+
+                    <div className="absolute right-3 top-3 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
+                        {index + 1}/{foto.length}
+                    </div>
+                </>
+            )}
+        </figure>
     );
 }
 
@@ -342,8 +425,7 @@ function InfoItem({
 
                 <div className="mt-2 text-sm leading-7 text-muted-foreground break-words whitespace-pre-line">
                     {isLink ? (
-                        
-                            <a
+                        <a
                             href={value}
                             target="_blank"
                             rel="noopener noreferrer"
