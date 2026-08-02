@@ -329,6 +329,40 @@ export default function DetailWisata() {
                                         </InfoCard>
 
                                         <InfoCard
+                                            icon={Clock3}
+                                            label={
+                                                bahasaInggris
+                                                    ? 'Operating Hours'
+                                                    : 'Operasional'
+                                            }
+                                        >
+                                            {Array.isArray(jamOperasional) &&
+                                            jamOperasional.length > 0 ? (
+                                                <div className="space-y-1">
+                                                    {jamOperasional.map(
+                                                        (baris, i) => (
+                                                            <div
+                                                                key={i}
+                                                                className="flex items-center justify-between gap-3"
+                                                            >
+                                                                <span className="font-medium text-foreground">
+                                                                    {baris.hari}
+                                                                </span>
+                                                                <span>
+                                                                    {baris.jam}
+                                                                </span>
+                                                            </div>
+                                                        ),
+                                                    )}
+                                                </div>
+                                            ) : bahasaInggris ? (
+                                                'Not available'
+                                            ) : (
+                                                'Belum tersedia'
+                                            )}
+                                        </InfoCard>
+
+                                        <InfoCard
                                             icon={Phone}
                                             label={
                                                 bahasaInggris

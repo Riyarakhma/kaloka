@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class WisataController extends Controller
 {
-    /**
-     * Tampilkan daftar Wisata.
-     * Publik hanya lihat yang boleh publik (status_kurasi Terbit & status_etis Umum). Admin/pengelola lihat semua.
-     */
     public function index(Request $request)
     {
         $user = $request->user();
@@ -23,17 +19,16 @@ class WisataController extends Controller
             $query->publik();
         }
 
-        // Filter opsional lewat query string, mis. ?kategori=Kuliner
         if ($request->filled('kategori')) {
             $query->where('kategori', $request->kategori);
         }
 
         $data = $query->latest()->paginate(500);
 
-        // Tambahkan url foto biar frontend gampang makainya
         $data->getCollection()->transform(function ($wisata) {
             $wisata->foto_utama = $wisata->fotoUtama();
             $wisata->url_foto = $wisata->urlFoto();
+            $wisata->menu_url = $wisata->urlMenu();
             $wisata->boleh_publik = $wisata->bolehPublik();
             return $wisata;
         });
@@ -41,9 +36,6 @@ class WisataController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * Tampilkan satu spot Wisata.
-     */
     public function show(Request $request, Wisata $wisatum)
     {
         $user = $request->user();
@@ -56,27 +48,36 @@ class WisataController extends Controller
 
         $wisatum->foto_utama = $wisatum->fotoUtama();
         $wisatum->url_foto = $wisatum->urlFoto();
+        $wisatum->menu_url = $wisatum->urlMenu();
         $wisatum->boleh_publik = $wisatum->bolehPublik();
 
         return response()->json(['data' => $wisatum]);
     }
 
-    /**
-     * Tambah spot Wisata baru. Login wajib (admin/pengelola).
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nama_spot' => 'required|string|max:255',
+            'nama_spot_en' => 'nullable|string|max:255',
             'kategori' => 'required|in:' . implode(',', Wisata::KATEGORI),
             'deskripsi' => 'required|string',
+            'deskripsi_en' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
-            'koordinat' => 'nullable|string|max:255',
-            'jam_operasional' => 'nullable|string|max:255',
+            'lokasi_en' => 'nullable|string|max:255',
+            'google_maps' => 'nullable|string|max:2000',
+            'jam_operasional' => 'nullable|array',
+            'jam_operasional.*.hari' => 'nullable|string|max:100',
+            'jam_operasional.*.jam' => 'nullable|string|max:100',
+            'jam_operasional_en' => 'nullable|string|max:255',
             'kontak' => 'nullable|string|max:255',
-            'status_etis' => 'nullable|in:' . implode(',', \App\Models\Wisata::STATUS_ETIS),
-            'foto' => 'nullable|array',
-            'foto.*' => 'image|max:2048',
+            'kontak_en' => 'nullable|string|max:255',
+            'sosial_media' => 'nullable|string|max:2000',
+            'fasilitas' => 'nullable|string',
+            'narasumber' => 'nullable|string|max:255',
+            'status_etis' => 'nullable|in:' . implode(',', Wisata::STATUS_ETIS),
+            'foto' => 'nullable|array|max:10',
+            'foto.*' => 'file|mimes:jpg,jpeg,png,webp|max:20480',
+            'menu_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:20480',
         ]);
 
         if ($validator->fails()) {
@@ -87,12 +88,16 @@ class WisataController extends Controller
         }
 
         $data = $validator->validated();
+        unset($data['foto'], $data['menu_file']);
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = array_map(
-                fn ($file) => $file->store('wisata', 'public'),
-                $request->file('foto')
-            );
+            $data['foto'] = collect($request->file('foto'))
+                ->map(fn ($file) => $file->store('wisata', 'public'))
+                ->all();
+        }
+
+        if ($request->hasFile('menu_file')) {
+            $data['menu_file'] = $request->file('menu_file')->store('wisata/menu', 'public');
         }
 
         $wisata = Wisata::create($data);
@@ -103,22 +108,32 @@ class WisataController extends Controller
         ], 201);
     }
 
-    /**
-     * Perbarui spot Wisata. Login wajib (admin/pengelola).
-     */
     public function update(Request $request, Wisata $wisatum)
     {
         $validator = Validator::make($request->all(), [
             'nama_spot' => 'sometimes|required|string|max:255',
+            'nama_spot_en' => 'nullable|string|max:255',
             'kategori' => 'sometimes|required|in:' . implode(',', Wisata::KATEGORI),
             'deskripsi' => 'sometimes|required|string',
+            'deskripsi_en' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
-            'koordinat' => 'nullable|string|max:255',
-            'jam_operasional' => 'nullable|string|max:255',
+            'lokasi_en' => 'nullable|string|max:255',
+            'google_maps' => 'nullable|string|max:2000',
+            'jam_operasional' => 'nullable|array',
+            'jam_operasional.*.hari' => 'nullable|string|max:100',
+            'jam_operasional.*.jam' => 'nullable|string|max:100',
+            'jam_operasional_en' => 'nullable|string|max:255',
             'kontak' => 'nullable|string|max:255',
+            'kontak_en' => 'nullable|string|max:255',
+            'sosial_media' => 'nullable|string|max:2000',
+            'fasilitas' => 'nullable|string',
+            'narasumber' => 'nullable|string|max:255',
             'status_etis' => 'nullable|in:' . implode(',', Wisata::STATUS_ETIS),
-            'foto' => 'nullable|array',
-            'foto.*' => 'image|max:2048',
+            'foto' => 'nullable|array|max:10',
+            'foto.*' => 'file|mimes:jpg,jpeg,png,webp|max:20480',
+            'hapus_foto' => 'nullable|array',
+            'hapus_foto.*' => 'string',
+            'menu_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:20480',
         ]);
 
         if ($validator->fails()) {
@@ -129,17 +144,30 @@ class WisataController extends Controller
         }
 
         $data = $validator->validated();
+        unset($data['foto'], $data['hapus_foto'], $data['menu_file']);
+
+        $fotoTersisa = $wisatum->foto ?? [];
+        foreach ($request->input('hapus_foto', []) as $path) {
+            $idx = array_search($path, $fotoTersisa, true);
+            if ($idx !== false) {
+                Storage::disk('public')->delete($path);
+                unset($fotoTersisa[$idx]);
+            }
+        }
+        $fotoTersisa = array_values($fotoTersisa);
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama sebelum ganti yang baru
-            foreach ($wisatum->foto ?? [] as $path) {
-                Storage::disk('public')->delete($path);
+            foreach ($request->file('foto') as $file) {
+                $fotoTersisa[] = $file->store('wisata', 'public');
             }
+        }
+        $data['foto'] = $fotoTersisa;
 
-            $data['foto'] = array_map(
-                fn ($file) => $file->store('wisata', 'public'),
-                $request->file('foto')
-            );
+        if ($request->hasFile('menu_file')) {
+            if ($wisatum->menu_file) {
+                Storage::disk('public')->delete($wisatum->menu_file);
+            }
+            $data['menu_file'] = $request->file('menu_file')->store('wisata/menu', 'public');
         }
 
         $wisatum->update($data);
@@ -150,13 +178,14 @@ class WisataController extends Controller
         ]);
     }
 
-    /**
-     * Hapus spot Wisata. Admin only (dicek lewat middleware/route).
-     */
     public function destroy(Wisata $wisatum)
     {
         foreach ($wisatum->foto ?? [] as $path) {
             Storage::disk('public')->delete($path);
+        }
+
+        if ($wisatum->menu_file) {
+            Storage::disk('public')->delete($wisatum->menu_file);
         }
 
         $wisatum->delete();
