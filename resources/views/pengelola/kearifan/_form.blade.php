@@ -26,7 +26,6 @@
 @endif
 
 <div class="row g-3">
-
     {{-- Judul --}}
     <div class="col-md-8">
         <label for="judul" class="form-label">
@@ -176,6 +175,27 @@
         @enderror
     </div>
 
+    {{-- Bahasa --}}
+    <div class="col-md-3">
+        <label for="bahasa" class="form-label">
+            Bahasa
+        </label>
+
+        <input
+            type="text"
+            name="bahasa"
+            id="bahasa"
+            class="form-control @error('bahasa') is-invalid @enderror"
+            value="{{ $val('bahasa', 'Indonesia') }}"
+        >
+
+        @error('bahasa')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
+
     {{-- Foto --}}
     <div class="col-md-6">
         <label for="berkas_media" class="form-label">
@@ -255,6 +275,56 @@
         @endif
     </div>
 
+    {{-- Tanggal Dokumentasi --}}
+    <div class="col-md-3">
+        <label for="tanggal_dokumentasi" class="form-label">
+            Tanggal Dokumentasi
+        </label>
+
+        <input
+            type="date"
+            name="tanggal_dokumentasi"
+            id="tanggal_dokumentasi"
+            class="form-control @error('tanggal_dokumentasi') is-invalid @enderror"
+            value="{{
+                $val('tanggal_dokumentasi')
+                    ? \Illuminate\Support\Carbon::parse(
+                        $val('tanggal_dokumentasi')
+                    )->format('Y-m-d')
+                    : ''
+            }}"
+        >
+
+        @error('tanggal_dokumentasi')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
+
+
+    {{-- Sumber --}}
+    <div class="col-md-6">
+        <label for="sumber" class="form-label">
+            Sumber
+        </label>
+
+        <input
+            type="text"
+            name="sumber"
+            id="sumber"
+            class="form-control @error('sumber') is-invalid @enderror"
+            value="{{ $val('sumber') }}"
+            placeholder="Asal informasi"
+        >
+
+        @error('sumber')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
+
     {{-- Status Etis --}}
     <div class="col-md-4">
         <label for="status_etis" class="form-label">
@@ -289,12 +359,30 @@
         @enderror
     </div>
 
+    {{-- Catatan --}}
+    <div class="col-12">
+        <label for="catatan" class="form-label">
+            Catatan atau Relasi
+        </label>
+
+        <textarea
+            name="catatan"
+            id="catatan"
+            class="form-control @error('catatan') is-invalid @enderror"
+            rows="2"
+        >{{ $val('catatan') }}</textarea>
+
+        @error('catatan')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
 </div>
 
 <script>
     function previewFotoKearifan(event) {
         const file = event.target.files?.[0];
-
         const preview = document.getElementById(
             'previewFotoKearifanImg'
         );
