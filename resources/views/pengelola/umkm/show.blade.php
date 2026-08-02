@@ -20,7 +20,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <p class="text-muted small mb-2">
-                        <span class="badge bg-secondary">{{ $entri->kategori }}</span>
+                        <span class="badge badge-dimensi text-white">{{ $entri->kategori }}</span>
                         <span class="badge bg-{{ $entri->warnaStatusEtis() }} text-dark">Entri: {{ $entri->status_etis }}</span>
                         <span class="badge bg-{{ $entri->warnaStatusKurasi() }}">Kurasi: {{ $entri->status_kurasi }}</span>
                     </p>

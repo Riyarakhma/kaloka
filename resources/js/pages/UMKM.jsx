@@ -14,7 +14,7 @@ import UMKMCard from '../components/UMKMCard';
 
 import { useUmkmItems } from '../lib/umkm-api';
 
-const KATEGORI = [
+const DIMENSI = [
     {
         id: 'Kerajinan',
         label: 'Kerajinan',
@@ -48,9 +48,9 @@ export default function UMKM() {
         () => [
             {
                 id: 'semua',
-                label: 'Semua Kategori',
+                                label: 'Semua Dimensi',
             },
-            ...KATEGORI,
+            ...DIMENSI,
         ],
         [],
     );
@@ -194,7 +194,7 @@ export default function UMKM() {
                                     <div
                                         className="absolute left-0 top-full z-40 mt-2 w-full overflow-hidden rounded-xl border border-border bg-background p-1 shadow-lg"
                                         role="listbox"
-                                        aria-label="Pilihan kategori UMKM"
+                                        aria-label="Pilihan dimensi UMKM"
                                     >
                                         {categoryOptions.map((kategori) => {
                                             const isActive =
@@ -266,7 +266,7 @@ export default function UMKM() {
 
                             <p className="mt-2 text-muted-foreground">
                                 Tidak ada produk UMKM yang sesuai dengan
-                                pencarian atau kategori yang dipilih.
+                                pencarian atau dimensi yang dipilih.
                             </p>
 
                             <button

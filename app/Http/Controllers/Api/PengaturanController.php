@@ -20,6 +20,11 @@ class PengaturanController extends Controller
             $data[$kunci] = Pengaturan::ambil($kunci);
         }
 
+        // Ubah path logo jadi URL lengkap biar langsung bisa dipakai <img src="...">.
+        if (! empty($data['logo'])) {
+            $data['logo'] = asset('storage/' . $data['logo']);
+        }
+
         return response()->json([
             'data' => $data,
         ]);

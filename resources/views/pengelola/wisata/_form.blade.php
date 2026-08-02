@@ -416,7 +416,7 @@
         <hr class="my-3">
     </div>
 
-    <div class="col-12">
+   <div class="col-12">
         <label class="form-label">Foto <span class="text-muted small">(boleh pilih beberapa sekaligus, maks 10 foto, maks 20 MB per foto)</span></label>
         @if ($wisata && $wisata->foto)
             <div class="form-text mb-2">Foto yang sudah ada — centang untuk menghapus:</div>

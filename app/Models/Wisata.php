@@ -132,12 +132,7 @@ class Wisata extends Model
 
     public function warnaKategori(): string
     {
-        return match ($this->kategori) {
-            'Kuliner' => 'danger',
-            'Kerajinan' => 'warning',
-            'Event' => 'info',
-            default => 'success',
-        };
+        return 'success';
     }
 
     public function warnaStatusKurasi(): string

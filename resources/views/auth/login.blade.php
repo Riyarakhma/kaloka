@@ -9,7 +9,11 @@
             <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <i class="bi bi-book-half" style="font-size:2.5rem;color:var(--kaloka-primary);"></i>
+                        @if (!empty($situs['logo']))
+                            <img src="{{ $situs['logo'] }}" alt="Logo" style="height:56px;">
+                        @else
+                            <i class="bi bi-book-half" style="font-size:2.5rem;color:var(--kaloka-primary);"></i>
+                        @endif
                         <h1 class="h4 mt-2 mb-0">Masuk Area Pengelola</h1>
                         <p class="text-muted small">KALOKA — Perpustakaan Desa Sobokerto</p>
                     </div>

@@ -39,7 +39,7 @@ function KearifanCard({ item }) {
             </Link>
 
             <div className="flex flex-1 flex-col p-6">
-                <span className="w-fit rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+                <span className="w-fit rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">
                     {kategoriLabel}
                 </span>
 

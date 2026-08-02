@@ -10,7 +10,6 @@ import {
     MapPin,
     Phone,
     Store,
-    Tag,
     User,
 } from 'lucide-react';
 
@@ -22,8 +21,8 @@ import { useQuery } from '@tanstack/react-query';
 export default function DetailUMKM() {
     const { slug } = useParams();
 
-    const { data: umkm, isLoading } = useQuery({
-        queryKey: ['umkm', slug],
+    const { data: umkm, isLoading, isError } = useQuery({
+        queryKey: ['umkm-detail', slug],
 
         queryFn: async () => {
             const res = await fetch(`/api/umkm/${slug}`);
@@ -35,6 +34,7 @@ export default function DetailUMKM() {
 
             // =========================
             // PRODUK
+            // JAM OPERASIONAL
             // =========================
             let produk = item.produk;
 
@@ -50,9 +50,6 @@ export default function DetailUMKM() {
                 produk = [];
             }
 
-            // =========================
-            // JAM OPERASIONAL
-            // =========================
             let jamOperasional = item.jam_operasional;
 
             if (Array.isArray(jamOperasional)) {
@@ -111,6 +108,36 @@ export default function DetailUMKM() {
         );
     }
 
+    if (isError) {
+        return (
+            <div className="min-h-screen bg-background">
+                <Navbar />
+
+                <main className="container-page py-24 text-center">
+                    <Store className="mx-auto size-14 text-primary" />
+
+                    <h1 className="mt-5 font-display text-4xl text-foreground">
+                        Detail UMKM gagal dimuat
+                    </h1>
+
+                    <p className="mt-3 text-muted-foreground">
+                        Coba muat ulang halaman atau kembali ke daftar UMKM.
+                    </p>
+
+                    <Link
+                        to="/umkm"
+                        className="mt-8 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-white"
+                    >
+                        <ArrowLeft className="size-5" />
+                        Kembali
+                    </Link>
+                </main>
+
+                <Footer />
+            </div>
+        );
+    }
+
     // =========================
     // NOT FOUND
     // =========================
@@ -144,7 +171,7 @@ export default function DetailUMKM() {
         );
     }
 
-    const dimensi = warnaDimensi(umkm.kategori);
+    const dimensi = umkm.kategori;
 
     return (
         <div className="min-h-screen bg-background">
@@ -173,9 +200,9 @@ export default function DetailUMKM() {
                         />
 
                         <div className="p-6 md:p-9">
-                            {/* KATEGORI */}
-                            <span className="inline-flex rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
-                                {umkm.kategori}
+                            {/* DIMENSI */}
+                            <span className="inline-flex rounded-full bg-primary-soft px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
+                                {dimensi}
                             </span>
 
                             {/* NAMA UMKM */}
@@ -278,22 +305,6 @@ export default function DetailUMKM() {
                                 </h2>
 
                                 <div className="mt-6 space-y-6">
-                                    {/* DIMENSI */}
-                                    <InfoItem
-                                        icon={Tag}
-                                        title="Dimensi"
-                                    >
-                                        <span
-                                            className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${dimensi[0]}`}
-                                        >
-                                            <span
-                                                className={`size-2 rounded-full ${dimensi[1]}`}
-                                            />
-
-                                            {umkm.kategori ?? '-'}
-                                        </span>
-                                    </InfoItem>
-
                                     {/* PEMILIK */}
                                     <InfoItem
                                         icon={User}
@@ -557,69 +568,4 @@ function InfoItem({
             </div>
         </div>
     );
-}
-
-/* =========================================================
-   WARNA DIMENSI
-========================================================= */
-
-const PALET_DIMENSI = [
-    [
-        'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
-        'bg-emerald-500',
-    ],
-    [
-        'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-        'bg-amber-500',
-    ],
-    [
-        'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
-        'bg-sky-500',
-    ],
-    [
-        'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
-        'bg-rose-500',
-    ],
-    [
-        'bg-violet-50 text-violet-700 ring-1 ring-violet-200',
-        'bg-violet-500',
-    ],
-    [
-        'bg-orange-50 text-orange-700 ring-1 ring-orange-200',
-        'bg-orange-500',
-    ],
-    [
-        'bg-teal-50 text-teal-700 ring-1 ring-teal-200',
-        'bg-teal-500',
-    ],
-    [
-        'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200',
-        'bg-indigo-500',
-    ],
-];
-
-function warnaDimensi(nama) {
-    const kunci = String(nama ?? '')
-        .trim()
-        .toLowerCase();
-
-    if (!kunci) {
-        return [
-            'bg-muted text-muted-foreground ring-1 ring-border',
-            'bg-muted-foreground',
-        ];
-    }
-
-    let angka = 0;
-
-    for (let i = 0; i < kunci.length; i += 1) {
-        angka =
-            (angka * 31 +
-                kunci.charCodeAt(i)) %
-            9973;
-    }
-
-    return PALET_DIMENSI[
-        angka % PALET_DIMENSI.length
-    ];
 }

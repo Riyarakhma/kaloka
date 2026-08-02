@@ -58,6 +58,35 @@
                     </div>
                 </div>
 
+                <hr class="my-4">
+                <h2 class="h6 mb-3">Informasi Footer (Portal Publik)</h2>
+
+                <div class="mb-3">
+                    <label class="form-label">Alamat</label>
+                    <textarea name="footer_alamat" class="form-control" rows="2">{{ old('footer_alamat', $nilai['footer_alamat']) }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Telepon</label>
+                    <input type="text" name="footer_telepon" class="form-control"
+                           value="{{ old('footer_telepon', $nilai['footer_telepon']) }}"
+                           placeholder="(0276) 000-0000">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="footer_email" class="form-control"
+                           value="{{ old('footer_email', $nilai['footer_email']) }}"
+                           placeholder="perpus.sobokerto@desa.id">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Instagram</label>
+                    <input type="text" name="footer_instagram" class="form-control"
+                           value="{{ old('footer_instagram', $nilai['footer_instagram']) }}"
+                           placeholder="@desa_sobokerto">
+                </div>
+
                 <button class="btn btn-kaloka"><i class="bi bi-save me-1"></i>Simpan Pengaturan</button>
             </form>
         </div>

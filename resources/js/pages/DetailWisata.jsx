@@ -11,18 +11,13 @@ import {
     MapPin,
     Phone,
     Share2,
-    Tag,
     UserRound,
     Utensils,
 } from 'lucide-react';
 
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import {
-    useWisataDetail,
-    warnaKategoriWisata,
-    kategoriEn,
-} from '../lib/wisata-api';
+import { useWisataDetail, kategoriEn } from '../lib/wisata-api';
 
 function InfoCard({ icon: Icon, label, children }) {
     return (
@@ -63,7 +58,7 @@ export default function DetailWisata() {
     if (isLoading) {
         return (
             <div className="min-h-screen bg-background">
-                <Navbar />
+            <Navbar />
 
                 <div className="container-page py-20 text-center text-muted-foreground">
                     {bahasaInggris ? 'Loading...' : 'Memuat...'}
@@ -236,9 +231,7 @@ export default function DetailWisata() {
                             <div className="p-6 md:p-10">
                                 <div className="flex flex-wrap items-center gap-3">
                                     <span
-                                        className={`inline-flex rounded-full px-4 py-1.5 text-sm font-semibold ${warnaKategoriWisata(
-                                            wisata.kategori,
-                                        )}`}
+                                        className="inline-flex rounded-full bg-primary-soft px-4 py-1.5 text-sm font-semibold text-primary"
                                     >
                                         {bahasaInggris
                                             ? kategoriEn(wisata.kategori)
@@ -298,20 +291,6 @@ export default function DetailWisata() {
 
                                     <div className="mt-7 grid gap-5">
                                         <InfoCard
-                                            icon={Tag}
-                                            label={
-                                                bahasaInggris
-                                                    ? 'Category'
-                                                    : 'Kategori'
-                                            }
-                                        >
-                                            {bahasaInggris
-                                                ? kategoriEn(wisata.kategori)
-                                                : wisata.kategori ||
-                                                  'Belum tersedia'}
-                                        </InfoCard>
-
-                                        <InfoCard
                                             icon={MapPin}
                                             label={
                                                 bahasaInggris
@@ -347,20 +326,6 @@ export default function DetailWisata() {
                                                     ? 'Not available'
                                                     : 'Belum tersedia'
                                             )}
-                                        </InfoCard>
-
-                                        <InfoCard
-                                            icon={Clock3}
-                                            label={
-                                                bahasaInggris
-                                                    ? 'Opening Hours'
-                                                    : 'Jam Operasional'
-                                            }
-                                        >
-                                            {jamOperasional ||
-                                                (bahasaInggris
-                                                    ? 'Not available'
-                                                    : 'Belum tersedia')}
                                         </InfoCard>
 
                                         <InfoCard

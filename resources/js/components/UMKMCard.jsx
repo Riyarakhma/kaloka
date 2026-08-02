@@ -5,23 +5,7 @@ import {
     Store,
 } from 'lucide-react';
 
-const WARNA_KATEGORI = {
-    Kerajinan:
-        'bg-purple-100 text-purple-700',
-    Kuliner:
-        'bg-orange-100 text-orange-700',
-    Pertanian:
-        'bg-green-100 text-green-700',
-    Budidaya:
-        'bg-blue-100 text-blue-700',
-};
-
-function warnaKategori(kategori) {
-    return (
-        WARNA_KATEGORI[kategori] ??
-        'bg-primary-soft text-primary'
-    );
-}
+const DIMENSI_BADGE = 'bg-primary-soft text-primary';
 
 export default function UMKMCard({ item }) {
     const detailUrl = `/umkm/${item.slug}`;
@@ -53,9 +37,7 @@ export default function UMKMCard({ item }) {
 
             <div className="flex flex-1 flex-col gap-3 p-5">
                 <span
-                    className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${warnaKategori(
-                        item.kategori,
-                    )}`}
+                    className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${DIMENSI_BADGE}`}
                 >
                     {item.kategori}
                 </span>

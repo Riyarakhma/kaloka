@@ -3,22 +3,33 @@ import {
     Leaf,
     LogIn,
 } from 'lucide-react';
+import { usePengaturan } from '../lib/pengaturan-api';
 
 const SLIMS_URL = 'https://desa.perpus.id';
 
 export default function Navbar() {
+    const { data: pengaturan } = usePengaturan();
+
     return (
         <header className="relative z-50 border-b border-border/70 bg-background/95 backdrop-blur-md">
             <div className="container-page flex min-h-[86px] items-center justify-between gap-4 py-3">
 
                 {/* Logo (Tidak bisa diklik) */}
                 <div className="flex min-w-0 select-none items-center gap-3 sm:gap-4">
-                    <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm sm:size-14">
-                        <Leaf
-                            className="size-6 sm:size-7"
-                            strokeWidth={2}
+                    {pengaturan?.logo ? (
+                        <img
+                            src={pengaturan.logo}
+                            alt="Logo"
+                            className="size-12 shrink-0 rounded-2xl object-cover shadow-sm sm:size-14"
                         />
-                    </div>
+                    ) : (
+                        <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm sm:size-14">
+                            <Leaf
+                                className="size-6 sm:size-7"
+                                strokeWidth={2}
+                            />
+                        </div>
+                    )}
 
                     <div className="min-w-0">
                         <p className="font-display truncate text-xl font-extrabold tracking-[-0.03em] text-primary sm:text-2xl">

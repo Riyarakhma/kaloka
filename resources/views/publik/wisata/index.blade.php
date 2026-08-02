@@ -41,7 +41,7 @@
                             <div class="text-center pt-3"><i class="ikon bi bi-image"></i></div>
                         @endif
                         <div class="card-body">
-                            <span class="badge bg-{{ $w->warnaKategori() }} mb-2">{{ $w->kategori }}</span>
+                            <span class="badge badge-dimensi text-white mb-2">{{ $w->kategori }}</span>
                             <h2 class="h6">{{ $w->nama_spot }}</h2>
                             <p class="small text-muted mb-0">{{ \Illuminate\Support\Str::limit(strip_tags($w->deskripsi), 90) }}</p>
                         </div>

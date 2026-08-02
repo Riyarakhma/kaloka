@@ -109,7 +109,7 @@
                                 <img src="{{ $w->fotoUtama() }}" class="card-img-top" style="height:150px;object-fit:cover;border-radius:1rem 1rem 0 0;">
                             @endif
                             <div class="card-body">
-                                <span class="badge bg-{{ $w->warnaKategori() }} mb-2">{{ $w->kategori }}</span>
+                                <span class="badge badge-dimensi text-white mb-2">{{ $w->kategori }}</span>
                                 <h3 class="h6">{{ $w->nama_spot }}</h3>
                                 <p class="small text-muted mb-0">{{ \Illuminate\Support\Str::limit(strip_tags($w->deskripsi), 80) }}</p>
                             </div>
