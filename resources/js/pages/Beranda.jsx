@@ -372,7 +372,7 @@ const umkmTerbaru = Array.isArray(umkmItems)
             </span>
 
             <h2 className="mt-2 font-display text-3xl md:text-4xl">
-                Galeri UMKM Desa
+                Galeri UMKM 
             </h2>
 
             <p className="mt-2 max-w-2xl text-base text-muted-foreground md:text-lg">
